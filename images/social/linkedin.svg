@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+<symbol  id="bgIn" viewBox="0 -32 32 32">
+	<g id="Layer_1_3_">
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#0C6697" d="M31.05-0.95C31.683-1.583,32-2.333,32-3.2v-25.65
+			c0-0.833-0.317-1.566-0.95-2.2S29.65-32,28.75-32H3.2c-0.9,0-1.65,0.317-2.25,0.95C0.317-30.417,0-29.683,0-28.85V-3.2
+			c0,0.867,0.317,1.617,0.95,2.25C1.55-0.317,2.3,0,3.2,0h25.55C29.65,0,30.417-0.317,31.05-0.95z"/>
+	</g>
+</symbol>
+<symbol  id="inLogo" viewBox="0 -19.6 20.1 19.6">
+	<g id="Layer_1_2_">
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M12.35-6.4c0.833,0.5,1.767,0.75,2.8,0.75
+			c1.5,0,2.684-0.467,3.55-1.4c0.933-1.067,1.4-2.567,1.4-4.5v-8.05h-4.3v7.55c0,0.933-0.167,1.633-0.5,2.1
+			c-0.367,0.567-0.917,0.85-1.65,0.85c-0.566,0-1.05-0.167-1.45-0.5c-0.333-0.267-0.6-0.617-0.8-1.05c-0.066-0.233-0.1-0.6-0.1-1.1
+			v-7.85H7v9.3c0,1.267-0.05,2.733-0.15,4.4h3.75l0.2-1.95h0.1C11.267-7.283,11.75-6.8,12.35-6.4z M4.55-2.1
+			c0-0.633-0.216-1.15-0.65-1.55C3.467-4.083,2.9-4.3,2.2-4.3c-0.633,0-1.167,0.216-1.6,0.65C0.2-3.25,0-2.733,0-2.1
+			c0,0.6,0.2,1.083,0.6,1.45C1.033-0.217,1.6,0,2.3,0c0.667,0,1.2-0.217,1.6-0.65C4.333-1.017,4.55-1.5,4.55-2.1z M4.4-5.9v-13.7
+			H0.1v13.7H4.4z"/>
+	</g>
+</symbol>
+<symbol  id="logoIn" viewBox="0 -32 32 32">
+	<g id="Layer_1_4_">
+		<use xlink:href="#bgIn"  width="32" height="32" id="bg_x5F_mc_1_" y="-32" overflow="visible"/>
+	</g>
+	<g id="Layer_2_2_">
+		
+			<use xlink:href="#inLogo"  width="20.1" height="19.6" id="picto_x5F_mc_1_" y="-19.6" transform="matrix(1 0 0 1 5.8501 -5.7002)" overflow="visible"/>
+	</g>
+</symbol>
+<use xlink:href="#logoIn"  width="32" height="32" id="followIn_x5F_mc" y="-32" transform="matrix(0.9375 0 0 -0.9362 0 0)" overflow="visible"/>
+</svg>

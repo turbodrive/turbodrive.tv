@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="30px" height="30px" viewBox="0 0 30 30" enable-background="new 0 0 30 30" xml:space="preserve">
+<symbol  id="bgTwitter" viewBox="0 -32 32 32">
+	<g id="Layer_1_3_">
+		<polygon fill-rule="evenodd" clip-rule="evenodd" fill="#28A9E0" points="0,-32 0,0 32,0 32,-32 		"/>
+	</g>
+</symbol>
+<symbol  id="logoTwitter" viewBox="0 -32 32 32">
+	<g id="Layer_1_4_">
+		<use xlink:href="#bgTwitter"  width="32" height="32" id="bg_x5F_mc_1_" y="-32" overflow="visible"/>
+	</g>
+	<g id="Layer_2_2_">
+		
+			<use xlink:href="#pictoTwitter"  width="19.55" height="16.324" id="picto_x5F_mc_1_" y="-16.324" transform="matrix(1 0 0 1 6.8501 -7.8501)" overflow="visible"/>
+	</g>
+</symbol>
+<symbol  id="pictoTwitter" viewBox="0 -16.324 19.55 16.324">
+	<g id="Layer_1_2_">
+		<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M19.55-1.9c-0.1-0.267-0.333-0.633-0.7-1.1
+			c-0.367-0.4-0.833-0.767-1.4-1.1c0.066-0.1,0.1-0.2,0.1-0.3c0.034-1.434-0.267-2.967-0.9-4.6c-1.033-2.6-2.6-4.567-4.7-5.9
+			c-2.067-1.167-4.567-1.617-7.5-1.35C2.617-16.05,1.133-15.467,0-14.5c2.1-0.267,4.083,0.3,5.95,1.7
+			C5.083-12.833,4.333-12.567,3.7-12C3-11.467,2.483-10.783,2.15-9.95C2.383-10.017,2.667-10.033,3-10
+			c0.467,0.033,0.783,0.067,0.95,0.1c-1.3,0.433-2.2,1.133-2.7,2.1c-0.3,0.667-0.45,1.333-0.45,2c0.733-0.333,1.333-0.483,1.8-0.45
+			C1.533-5.417,0.95-4.467,0.85-3.4C0.75-2.6,0.9-1.717,1.3-0.75C2.8-2.383,4.367-3.567,6-4.3c1.2-0.5,2.4-0.75,3.6-0.75
+			c-0.167,1.233,0.017,2.267,0.55,3.1c0.567,0.9,1.4,1.5,2.5,1.8c0.733,0.2,1.417,0.2,2.05,0c0.667-0.267,1.233-0.65,1.7-1.15
+			c0.767,0.1,1.633,0.417,2.6,0.95c-0.4-1.1-1-1.85-1.8-2.25C18-2.5,18.783-2.267,19.55-1.9z"/>
+	</g>
+</symbol>
+<use xlink:href="#logoTwitter"  width="32" height="32" id="shareTw_x5F_mc" y="-32" transform="matrix(0.9375 0 0 -0.9375 0 0)" overflow="visible"/>
+</svg>
