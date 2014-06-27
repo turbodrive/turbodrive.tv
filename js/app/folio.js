@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, signals, pageInfo, Sprite3D, Page3D)
+define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D)
 {
     var folio = {};
     
@@ -430,6 +430,25 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
         return page3D
     }
     
+    initSkillsMenu = function()
+    {    
+        
+        var rule = CSSRulePlugin.getRule(".about .skills-field li.editing:after");
+        
+        
+        $("li.skills-button").mouseover(
+            function() {
+                /*var idButton = $(this)[0].id;
+                console.log("idButton >> " +idButton)*/
+                console.log("Hover")
+                
+                /*var rule = CSSRulePlugin.getRule("li."+idbutton+":after"); //get the rule
+                TweenMax.to(rule,0.5,{opacity:1})*/
+            }
+        )
+        //console.table($(".skills-button"))
+    }
+    
     getRatioPxPerfect = function(z) {
         var ratio = (LAYOUT_3D.PX_PERFECT_DISTANCE - (-z))/LAYOUT_3D.PX_PERFECT_DISTANCE;
         return ratio;
@@ -466,6 +485,7 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
         
         scaleList._scaleAboutVisuel = _rX > _rY ? _rX : _rY;
         scaleList._scaleAboutVisuel = scaleList._scaleAboutVisuel.toFixed(3);
+        scaleList._scaleAboutVisuel = Math.min(scaleList._scaleAboutVisuel, 1.2)
         //console.log("scaleBg >> " + scaleBg);
         
         /*var dfX = ((LAYOUT.viewportW-1280)/2)*_scaleVisuel
@@ -553,13 +573,17 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
                 
                 /*var widthSquare = 102;
                 var heightSquare = 102;*/
+                var xT = elInfo.x*LAYOUT.ratioW
                 
                 var xF, yF;
                 if(elInfo.position == pageInfo.ABSOLUTE_P){
-                    //console.log("position >> " + elInfo.x)
                     xF = (LAYOUT.vW2) + (elInfo.x*ratioPx) - (elInfo.width*0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y*ratioPx) - (elInfo.height*0.5);
                     element.setPosition(xF, yF, elInfo.z);
+                }else if(elInfo.position == pageInfo.RES_RC_P){
+                    xF = (LAYOUT.vW2) + (((LAYOUT.viewportW*elInfo.rrcX)+elInfo.rrcXOffset)*ratioPx) - (elInfo.width*0.5)
+                    yF = (LAYOUT.vH2) + (((LAYOUT.viewportH*elInfo.rrcY)+elInfo.rrcYOffset)*ratioPx) - (elInfo.height*0.5)
+                    element.setPosition(Math.round(xF), Math.round(yF), elInfo.z);
                 } else if(elInfo.position == pageInfo.TOPLEFTSCREENRELATIVE_P){
                     xF = tW*(elInfo.x)*ratioPx;
                     yF = tH*(elInfo.y)*ratioPx;
@@ -568,7 +592,7 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
                     element.setPosition(elInfo.x, elInfo.y, elInfo.z);
                 }
                 
-                if(elInfo.rPointX && elInfo.rPointY){
+                if(!isNaN(elInfo.rPointX) && !isNaN(elInfo.rPointY)){
                     element.setRegistrationPoint(elInfo.rPointX, elInfo.rPointY, 0);
                 }else if(elInfo.width && elInfo.height){
                     element.setRegistrationPoint(-elInfo.width*0.5, -elInfo.height*0.5, 0);
@@ -580,11 +604,11 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
                     element.setRotation(elInfo.rX, elInfo.rY, elInfo.rZ);
                 }
                 
-                /*if(elInfo.opacity === null) {
+                if(elInfo.opacity === null) {
                     
                 }else {
                     element.setOpacity(elInfo.opacity);
-                }*/
+                }
                 
                 element.update();
             }
@@ -592,6 +616,10 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
 
         $("#"+idElement).css("width", tW);
         $("#"+idElement).css("height", tH);
+    }
+    
+    getResolutionOffset = function(m){
+        return offset;
     }
     
     prepPgeForTransition = function(pageId) {
@@ -696,7 +724,7 @@ define(["jquery","TweenMax","signals","app/pageInfo", "Sprite3D", "app/Page3D"],
             onCompleteParams : [page.id]
         })
     }   
-    
+    //initSkillsMenu()
     
     return folio;
 });

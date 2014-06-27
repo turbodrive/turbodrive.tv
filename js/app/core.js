@@ -133,7 +133,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     loadFolio = function(pageId){
         gatherTimeline();
-        bindTouchEvents();
+        //bindTouchEvents();
         
         if(!MODULES.folio){
             // show Loader ??
@@ -298,12 +298,19 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         LAYOUT.viewportH = window.innerHeight;
         LAYOUT.viewportW = window.innerWidth;
         LAYOUT.vH2 = LAYOUT.viewportH*0.5;
-        LAYOUT.vW2 = LAYOUT.viewportW*0.5;        
+        LAYOUT.vW2 = LAYOUT.viewportW*0.5;
+        LAYOUT.ratioH = LAYOUT.getRatioH(LAYOUT.viewportH);
+        LAYOUT.ratioW = LAYOUT.getRatioW(LAYOUT.viewportW);
+        LAYOUT._rX = LAYOUT.initW/LAYOUT.viewportW;
+		LAYOUT._rY = LAYOUT.initH/LAYOUT.viewportH;
+        
+        //console.log("ratioH = " + LAYOUT.ratioH + " ratioW = " + LAYOUT.ratioW);
+        //console.log("_rX = " + LAYOUT._rX + " _rY = " + LAYOUT._rY);
         
         var cameraFov = (((LAYOUT.viewportH/LAYOUT.viewportW)*35.130)+20);
         var fovY = cameraFov*Math.PI/180;
         LAYOUT_3D.PX_PERFECT_DISTANCE = -(LAYOUT.viewportH/2) / Math.tan(fovY/2);
-        console.log("PX_PERFECT_DISTANCE >> " + LAYOUT_3D.PX_PERFECT_DISTANCE)
+        //console.log("PX_PERFECT_DISTANCE >> " + LAYOUT_3D.PX_PERFECT_DISTANCE)
 
         
         if(MODULES.header) MODULES.header.resize();

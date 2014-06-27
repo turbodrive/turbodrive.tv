@@ -135,7 +135,7 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
                         element3d.setRotateFirst(false);   
                     }
                     element3d.update();
-                    console.log("elementName >> " + elementName + " + domEl >> " + domEl);
+                    //console.log("elementName >> " + elementName + " + domEl >> " + domEl);
                     this.elementList.push({element3d:element3d, info:elementInfo, id:elementName});
                 }
             }

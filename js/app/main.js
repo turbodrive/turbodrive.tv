@@ -12,7 +12,24 @@
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false};
 
-var LAYOUT = {viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:""};
+var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
+
+
+LAYOUT.getRatioW = function(w){
+    return (Math.max(w, LAYOUT.minW) - LAYOUT.minW) / (LAYOUT.initW - LAYOUT.minW);
+}
+		
+LAYOUT.getRatioH = function(h){
+    return (Math.max(h, LAYOUT.minH) - LAYOUT.minH) / (LAYOUT.initH - LAYOUT.minH);
+}
+
+LAYOUT.getSimpleRatio = function(value, min, max){
+    var ratio = (Math.max(value, min) - min) / (max - min);
+    if (ratio > 1) ratio = 1
+    if (ratio < 0) ratio = 0
+    return ratio
+}
+
 
 var LAYOUT_3D = {
     PX_PERFECT_DISTANCE:0,
@@ -43,6 +60,7 @@ require.config({
         crossroads: 'crossroads.min',
         signals:'signals.min',
         hasher:'hasher.min',
+        CSSRulePlugin:'plugins/CSSRulePlugin.min'
     }
 });
 

@@ -73,7 +73,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         
         header.resize();
         if (duration == null) duration = 0.3;
-        console.trace("idButton >> " + idButton)
+        //console.trace("idButton >> " + idButton)
         
         var yTarget = 0;
         var xTargetContent = 0;

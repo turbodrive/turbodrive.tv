@@ -77,6 +77,7 @@ define(["signals"], function (signals)
     var loadedDefault = false;
     pageInfo.FREE3D_P = "free3dPosition";
     pageInfo.ABSOLUTE_P = "absolutePosition";
+    pageInfo.RES_RC_P = "resolutionRelative-CenteredPosition";
     pageInfo.CENTERSCREENRELATIVE_P = "centerScreenRelativePosition";
     pageInfo.TOPLEFTSCREENRELATIVE_P = "topLeftScreenRelativePosition";
     pageInfo.TOPRIGHTSCREENRELATIVE_P = "topRightScreenRelativePosition";
@@ -92,29 +93,69 @@ define(["signals"], function (signals)
         pictoPlay:{x:-0.28, y:0.25}
     };
     
-    var commonX = -265; //-265
-    var commonY = 0;
+    var cX = -0.20; //-265
+    var cY = -0.12;;
     
     pageInfo.ABOUT_LAYOUT = {
         id:"about-layout",
-        h2:{position:pageInfo.ABSOLUTE_P,
-            x:commonX,y:-195, z:0, rPointX:-103, rPointY:-12, width:206, height:25},
-        h1:{position:pageInfo.ABSOLUTE_P,
-            x:commonX,y:-168, z:-500, rPointX:-295, rPointY:-25, width:590, height:50},
-        p_intro:{position:pageInfo.ABSOLUTE_P,
-            x:commonX,y:-107, z:-1000, rPointX:-295, rPointY:-60, width:590, height:120},
-        h3_skillsFieldTitle:{position:pageInfo.ABSOLUTE_P,
-            x:-466,y:66, z:0, rPointX:-83, rPointY:-18, width:166, height:36},
-        h3_timelineTitle:{position:pageInfo.ABSOLUTE_P,
-            x:372,y:-10, z:0, rPointX:-123, rPointY:-25, width:246, height:50},
-        div_skillsFieldMenu:{position:pageInfo.ABSOLUTE_P,
-            x:-555,y:40, z:-100, rPointX:-310, rPointY:-125, width:620, height:250},
-        a_skillsFieldButton:{position:pageInfo.ABSOLUTE_P,  
-            x:-148,y:216, z:50, rPointX:-69, rPointY:-14, width:138, height:28},
-        a_timelineButton:{position:pageInfo.ABSOLUTE_P,
-            x:487,y:206, z:50, rPointX:-71, rPointY:-14, width:142, height:28},
-        img_background:{src:"mainImage",position:pageInfo.ABSOLUTE_P,
-            x:0, y:0, z:-3500, rPointX:-640, rPointY:-360, width:1280, height:720}
+        h2:{position:pageInfo.RES_RC_P,
+            z:0, rrcX:cX, rrcY:cY, rrcXOffset:-00, rrcYOffset:-90,
+            width:206, height:25},
+        h1:{position:pageInfo.RES_RC_P,
+            z:-500, rrcX:cX, rrcY:cY, rrcXOffset:-00, rrcYOffset:27-90,
+            width:590, height:50},
+        p_intro:{position:pageInfo.RES_RC_P,
+            z:-800, rrcX:cX, rrcY:cY, rrcXOffset:-00, rrcYOffset:88-90,
+            width:590, height:120},
+        h3_skillsFieldTitle:{position:pageInfo.RES_RC_P,
+            z:0, rrcX:-0.38, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
+            width:166, height:36},
+        h3_timelineTitle:{position:pageInfo.RES_RC_P,
+            z:0, rrcX:0.16, rrcY:0.04, rrcXOffset:40, rrcYOffset:0,
+            width:246, height:50},
+        div_skillsFieldMenu:{position:pageInfo.RES_RC_P,
+            z:0, rrcX:-0.38, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
+            width:620, height:250},
+        a_skillsFieldButton:{position:pageInfo.RES_RC_P,  
+            z:50, rrcX:-0.1, rrcY:0.32, rrcXOffset:0, rrcYOffset:0,
+            width:138, height:28},
+        a_timelineButton:{position:pageInfo.RES_RC_P,
+            z:50, rrcX:0.30, rrcY:0.32, rrcXOffset:-40, rrcYOffset:0,
+            width:142, height:28},
+        /*img_background:{src:"mainImage", scale:0.8, position:pageInfo.ABSOLUTE_P,
+            x:-260, y:0, z:-3500, rPointX:0, rPointY:0, width:1280, height:720},*/
+        img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
+            z:-1200,
+            rrcX:0, rrcY:0.1,  rrcXOffset:0, rrcYOffset:-20,
+            rPointX:0, rPointY:0, width:1366, height:665},
+        img_bgOpt:{html:"<img src='images/about_opt.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
+            z:-3000, rrcX:-0.20, rrcY:-0.40, rrcXOffset:-150, rrcYOffset:50,
+            width:739, height:698}
+    };
+    
+    pageInfo.SKILLS_LAYOUT = {
+        id:"skills-layout",
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleAboutVisuel", src:"mainImage",
+            z:-1500, rrcX:0, rrcY:0, rrcXOffset:-40, rrcYOffset:0,
+            rPointX:0, rPointY:0, width:1568, height:641},
+        _skillsMenu:{position:pageInfo.RES_RC_P,
+            z:50, rrcX:0, rrcY:0.18, rrcXOffset:-366, rrcYOffset:0,
+            width:712, height:346},
+        _editingSection:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-195, rrcYOffset:0,
+            width:990, height:268, opacity:0},
+        _researchSection:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
+            width:990, height:268, opacity:0},
+        _compositingSection:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:-40,
+            width:990, height:268, opacity:1},
+        _frontSection:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
+            width:990, height:257, opacity:0},
+        _motionSection:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
+            width:990, height:268, opacity:0},
     };
        
     pageInfo.TIMELINE_LAYOUT = {
@@ -138,31 +179,24 @@ define(["signals"], function (signals)
         
         h3_dateNow:{position:pageInfo.FREE3D_P,
             x:-900,y:1140, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date2012:{position:pageInfo.FREE3D_P,
             x:-900,y:910, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date2006:{position:pageInfo.FREE3D_P,
             x:-900,y:187, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date2004:{position:pageInfo.FREE3D_P,
             x:-900,y:-102, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date2001:{position:pageInfo.FREE3D_P,
             x:-900,y:-449, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date1999:{position:pageInfo.FREE3D_P,
             x:-900,y:-795, z:950,rX:30, rY:60, rZ:-90, scale:4},
-        
         h3_date1997:{position:pageInfo.FREE3D_P,
             x:-900,y:-968, z:950,rX:30, rY:60, rZ:-90, scale:4},
         
         
         img_timeline:{position:pageInfo.FREE3D_P,src:"mainImage",
                       x:-600, y:-1200, z:1400, rX:0, rY:90, rZ:180, scale:3.5},
-         img_tmleBg:{position:pageInfo.FREE3D_P,html:"<img src='images/timeline_0.png'/>",
-                      x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},
-        
+        img_tmleBg:{position:pageInfo.FREE3D_P,html:"<img src='images/timeline_0.png'/>",
+                      x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},  
         img_line01:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
                       x:-850, y:1138, z:1230, rX:0, rY:-40, rZ:0, scale:1},
         img_line02:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
@@ -183,16 +217,7 @@ define(["signals"], function (signals)
     
     /*img_background:{src:"mainImage", x:733, y:755, z:-143, scale:1.87, rX:142.122, rY:3.39142, rZ:237.937}*/
     
-    pageInfo.SKILLS_LAYOUT = {
-        id:"skills-layout",
-        img_background:{position:pageInfo.CENTERSCREENRELATIVE_P, src:"mainImage", x:0, y:0, z:-500, scale:1.2},
-        _skillsMenu:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.3, y:0.15, z:50},
-        _editingSection:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.35, y:-.2, z:-100, opacity:0},
-        _researchSection:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.35, y:-.2, z:-100, opacity:0},
-        _compositingSection:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.35, y:-.2, z:-100, opacity:0},
-        _frontSection:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.35, y:-.2, z:-100, opacity:1},
-        _motionSection:{position:pageInfo.CENTERSCREENRELATIVE_P, x:-0.35, y:-.2, z:-100, opacity:0}
-    };
+    
     
     pageInfo.content = [
         {   
