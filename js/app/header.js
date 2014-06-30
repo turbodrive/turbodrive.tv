@@ -41,7 +41,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         header.resize();
         header.on.initialized.dispatch();
         
-        controlMenuState("share");
+        //controlMenuState("share");
     }
     
     header.show = function() {
@@ -95,7 +95,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             yTarget = -200;
 
             if (currentMenuState == "contact" || currentMenuState == "share") {
-                xTargetContent = -getWidthPanel();
+                xTargetContent = -LAYOUT.viewportW;
             }
 
             currentMenuState = "";
@@ -107,13 +107,13 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
                 yTarget = 0;
             }
             if (idButton == "contact" || idButton == "share") {
-                xTargetContent = -getWidthPanel();;
+                xTargetContent = -LAYOUT.viewportW;
                 hTarget = panelHeight+navMenuHeight;
                 alphaBgTarget = 0;
                 
             } else if (idButton == "") {
                 if (currentMenuState == "contact" || currentMenuState == "share") {
-                    xTargetContent = -getWidthPanel();
+                    xTargetContent = -LAYOUT.viewportW;
                 }
             } else {
                 xTargetContent = 0;
@@ -185,7 +185,8 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         var wB = (vW*0.295)- contentPaddingLeft;
         
         $(".contactPanel").width(vW+100);
-        $(".contactPanel").css("left",vW);
+        $(".contactPanel").css("left",LAYOUT.viewportW);
+        /*$(".menuContent").css("left", -LAYOUT.viewportW)*/
 
         $(".hireMe").width(wA);
         $(".contact").width(wB);
@@ -202,8 +203,8 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         //$(".closeMenu").css("width",wClose);
 
         if(currentMenuState == "contact" || currentMenuState == "share"){
-            TweenMax.set($(".menuContent"),{x: -vW}) 
-        }    
+            TweenMax.set($(".menuContent"),{x: -LAYOUT.viewportW}) 
+        }
     }
     
     return header;
