@@ -240,7 +240,7 @@ div {
 }
 
 
-.button-menu {
+.button-menu, .about-button {
     -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
     transition: .15s;
     
@@ -263,6 +263,8 @@ div {
     -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
+
+.about-button:hover,
 .button-menu:hover{
     color: #CECEC4!important;
 }

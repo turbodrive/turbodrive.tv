@@ -7,11 +7,12 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     var currentMenuState = "--";
     var header = {};
     
-    // Signal Events
+    // header Signal Events
     header.on = {
         initialized : new signals.Signal()
     } 
     
+    /* initialize events and header behaviors */
     header.init = function () {
         var allListElements = $(".buttonSubMenu");
         for(var i=0 ;i<allListElements.length ;i++){
@@ -29,12 +30,10 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
 
         $(".closeMenuPicto").on("click", function (event){
             event.preventDefault();
-            console.log("CLOSE MENU PICTO >> ");
             header.close();
         })
 
         TweenMax.set($(".menu3D"),{height:-280, autoAlpha:1}) 
-        console.log("INIT >> ");
         controlMenuState("",0)
         //setTimeout(controlMenuState, 1500, "contact")        
         header.resize();
@@ -45,17 +44,19 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         TweenMax.to($(".navbar-default"),0.5, {autoAlpha:1});
     }
     
+    /* closing menu header from external module*/
     header.close = function() {
-        console.log("HEADER >> ");
         controlMenuState("");
     }
     
+    /* event handler for tablets*/
     header.onTouchClick = function(element) {
         var className = element.className
         console.log("onTouchClick >> " + className)
-        if(className.indexOf("button-menu")>-1 
-           || className.indexOf("menu-icon")>-1){
-            controlMenuState(element.id)
+        if(className.indexOf("button-menu")>-1 || className.indexOf("menu-icon")>-1){
+            if(className.indexOf("about-button") == -1){
+                controlMenuState(element.id)
+            }
         } else if (className.indexOf("closeMenuPicto")>-1){
             header.close();
             return
