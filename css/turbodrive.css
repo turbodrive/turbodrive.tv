@@ -239,41 +239,6 @@ div {
     margin-top: -10px;    
 }
 
-
-.button-menu, .about-button {
-    -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
-    transition: .15s;
-    
-	display: inline-block!important;
-    overflow: hidden;
-	height:35px;
-	width: 134px;
-	margin-right: 0px;
-    padding-left: 10px!important;
-    padding-right: 10px!important;
-    padding-top: 11px!important;
-	padding-bottom: 35px!important;
-	background-position:0px 10px!important;
-	background-repeat:no-repeat!important;
-    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
-    color: #53444D!important;
-    font-size: 18px;
-    text-transform: uppercase;
-    line-height: 13px!important;
-    -webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-.about-button:hover,
-.button-menu:hover{
-    color: #CECEC4!important;
-}
-
-a.about-button {
-    padding-top: 18px!important;
-    padding-bottom: 20px!important;
-}
-
 /*a.contact-img { background: url('../images/menu_contact.svg');}
 a.share-img { background: url('../images/menu_share.svg');}*/
 
@@ -299,7 +264,7 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 	color: #cecec4;
 }
 .navbar-default .navbar-nav > li > a {
-	color: #cecec4;
+	color: #53444D;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
 	color: #ecece1;
@@ -344,6 +309,45 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 		background-color: #d15f5f;
 	}
 }
+
+.button-menu, .about-button {
+    -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
+    transition: .15s;
+    
+	display: inline-block!important;
+    overflow: hidden;
+	height:35px;
+	width: 134px;
+	margin-right: 0px;
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+    padding-top: 11px!important;
+	padding-bottom: 35px!important;
+	background-position:0px 10px!important;
+	background-repeat:no-repeat!important;
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
+    color: #53444D;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 13px!important;
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.about-button:hover,
+.button-menu:hover{
+    color: #CECEC4;
+}
+
+.navbar a.active {
+    color: #CECEC4!important;
+}
+
+a.about-button {
+    padding-top: 18px!important;
+    padding-bottom: 20px!important;
+}
+
 /***** MENU3D *******/
 .menu3D {
     display: block;
@@ -402,6 +406,8 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 .menuMoreProjects .buttonSubMenu {
     width: 60px;
 }
+
+
 
 .contactPanel {
     background-image: url(../images/bgContactHeader.png);
