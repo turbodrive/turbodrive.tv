@@ -404,30 +404,52 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 }
 
 .contactPanel {
+    background-image: url(../images/bgContactHeader.png);
+    background-position: top right;
+    background-repeat: no-repeat;
     position: absolute;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 0px;
     width:1024px;
     left:1024px;
-    top:-10px;   
+    top:-4px;
+    /*background-color: #251927;*/
+    height: 306px;
 }
 
 .contactPanel h1{
-    font-size: 32px;
-    margin-top: 5px;
-    padding-left: 10px;
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
+    font-size: 34px;
+    margin: 0px;
+    padding: 0px;
+    /*padding-left: 10px;
     padding-top: 10px;
-    padding-right: 10px;
+    padding-right: 10px;*/
     color: #CECEC4;
+    position: static ;
+    letter-spacing: -1px;
 }
 
 .contactPanel h2{
-    font-size: 18px;
+    font-size: 16px;
     font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
     text-transform: uppercase;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: #EFECE1;
+    /*padding-left: 10px;
+    padding-right: 10px;*/
+    color: #CECEC4;
+    position: static;
+    letter-spacing: -0.3px;
+}
+
+.contactPanel p{
+    line-height: 17px;
+    font-size: 11px;
+    padding: 0px;
+    margin: 0px;
+    color: #CECEC4;
+    opacity: 1;
+    width: auto;
+    position: static;
+    left : 1px;
 }
 
 .contactPanel a{
@@ -435,91 +457,166 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     text-decoration: underline;
 }
 
-.contactPanel p{
-    line-height: 17px;
-    padding: 10px;
-    color: #CECEC4;
-    opacity: 1;
-    width: auto;
-}
-
-.hireMe {
+.contactPanel .hireMe {
+    background-image: url(../images/bgHireHeader.png);
+    background-position: top right;
+    background-repeat: no-repeat;
     position: absolute;
-    padding-left: 10px;
-    padding-right:10px;
-    background-color: #d15f5f;
-    width: 350px;
-    height: 240px;
+    padding-left: 20px;
+    padding-top: 45px;
+    min-width: 400px;
+    width: 430px/*350px*/;
+    height: 310px;
     z-index: 202;
 }
 
-.hireMe p{
-    color: #EFECE1;   
-}
-
-.hireMe h1{
-    font-size: 36px;
+.contactPanel .hireMe p{
+    font-size: 12px;
+    margin-top: 16px;
     color: #EFECE1;
 }
+
+.contactPanel .hireMe h1{
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
+    color: #EFECE1;
+    font-size: 47px;
+    margin-bottom: -6px;
+    
+}
+
+.contactPanel .hireMe h2{
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
+    color: #EFECE1;
+    font-size: 24px;
+    letter-spacing: -1px;
+    font-kerning:auto;
+}
+
+a.buttonShare {
+    transition: 0.15s;
+    background-color: #3D2F3A;
+    color: #C4C0C3;
+    display: inline-block;
+    width: 32px;
+    height:32px;
+    text-decoration: none;
+    padding: 8px 0px 0px 1px;
+    margin: 0px 2px;
+}
+
+a.facebook:hover {
+    background-color: #1E4389;
+}
+
+a.twitter:hover {
+    background-color: #28A9E0;
+}
+
+a.linkedin:hover {
+    background-color: #156695;
+}
+
+a.googleplus:hover {
+    background-color: #D5492C;
+}
+
+a.pinterest:hover {
+    background-color: #CD152B;
+}
+
+a.vimeo:hover {
+    background-color: #1EB8EB;
+}
+
+a.buttonShare:hover {
+    color: #FFF;
+    text-decoration: none;
+}
+
+a.github:hover {
+    background-color: #FFFFFF;
+    color: #000000;
+    text-decoration: none;
+}
+
 
 /**********/
 
 .content {
     opacity: 0.25;
+    padding-left: 10px;
+    padding-top: 45px;
+}
+
+.content h1 {
+    height:auto;
+}
+
+.contact > .content > p {
+    margin-top: 25px;
 }
 
 .contact {
     position: absolute;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0px 0px;
     left: 350px;
-    width: 350px;
+    min-width: 290px;
+    /*width: 350px;
     height: 240px;
-    background-color: #251927;
+    background-color: #251927;*/
 }
 
 .listContactContainer {
     width: 100%;
+    margin-top: 20px;
 }
 
 .listContact {
     float: left;
-    width: 110px;
+    width: 100px;
 }
 .listContact2 {
     float: left;
-    width: 180px;
 }
 
 .miniUpCase {
     text-transform: uppercase;
     font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
     font-size: 10px;
+    padding-right: 10px;
 }
 
 .share {
     position: absolute;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0px 0px;
     left: 700px;
-    width: 350px;
+    min-width: 280px;
+    /*width: 350px;
     height: 240px;
-    background-color: #251927;
+    background-color: #251927;*/
 }
 
-.share img{
-    margin: 10px 5px 0px 10px;
+.share p {
+    margin-top: 5px;
+    margin-bottom: 35px;
 }
+
+.share p.share-block {
+    margin-bottom: 8px;
+    margin-top: -15px;
+    text-indent:105px;
+    max-width: 210px;
+}
+
 
 .closeMenu {
     position: absolute;
     left: 950px;
     width: 80px;
-    height: 240px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
     margin: 0px auto;
-    background-color: #251927;
 }
 
 .folioPlayer {
@@ -591,11 +688,6 @@ p{
     margin: 0px;
     /*opacity: 0.8;*/
     width: 340px;
-}
-
-.hireMeAbout {
-    cursor: pointer;
-    pointer-events: auto;
 }
 
 /*.title {

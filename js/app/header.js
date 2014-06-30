@@ -6,6 +6,8 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var currentMenuState = "--";
     var header = {};
+    var panelHeight = 313;
+    var navMenuHeight = 50;
     
     // header Signal Events
     header.on = {
@@ -33,11 +35,13 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             header.close();
         })
 
-        TweenMax.set($(".menu3D"),{height:-280, autoAlpha:1}) 
+        TweenMax.set($(".menu3D"),{height:-panelHeight, autoAlpha:1}) 
         controlMenuState("",0)
         //setTimeout(controlMenuState, 1500, "contact")        
         header.resize();
         header.on.initialized.dispatch();
+        
+        controlMenuState("share");
     }
     
     header.show = function() {
@@ -80,6 +84,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         var xTargetContent = 0;
         var yTargetContent = 0;
         var hTarget = 200;
+        var alphaBgTarget = 0.8
 
         if (idButton == "about") {
             //gotoAbout();
@@ -87,34 +92,36 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
 
         if (currentMenuState == idButton) {
             // toggle
-            yTarget = -200
+            yTarget = -200;
 
             if (currentMenuState == "contact" || currentMenuState == "share") {
-                xTargetContent = -LAYOUT.viewportW
+                xTargetContent = -getWidthPanel();
             }
 
-            currentMenuState = ""
+            currentMenuState = "";
 
         } else {
             if (idButton == "about" || idButton == "") {
-                yTarget = -280;
+                yTarget = -panelHeight;
             } else {
                 yTarget = 0;
             }
             if (idButton == "contact" || idButton == "share") {
-                xTargetContent = -LAYOUT.viewportW
-                hTarget = 280;
+                xTargetContent = -getWidthPanel();;
+                hTarget = panelHeight+navMenuHeight;
+                alphaBgTarget = 0;
+                
             } else if (idButton == "") {
                 if (currentMenuState == "contact" || currentMenuState == "share") {
-                    xTargetContent = -LAYOUT.viewportW
+                    xTargetContent = -getWidthPanel();
                 }
             } else {
-                xTargetContent = 0
+                xTargetContent = 0;
             }
             if (idButton == "moreProjects") {
-                yTargetContent = -150
+                yTargetContent = -150;
             } else {
-                yTargetContent = 0
+                yTargetContent = 0;
             }
             if (currentMenuState == "") {
                 // no transition 
@@ -126,13 +133,13 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             currentMenuState = (idButton == "about") ? "" : idButton
         }
 
-        if (currentMenuState == "contact") {
+        if (currentMenuState == "contact") {            
             TweenMax.to($(".contact .content"), duration, {
                 opacity: 1
             })
         } else {
             TweenMax.to($(".contact .content"), duration, {
-                opacity: 0.25
+                opacity: 0.35
             })
         }
 
@@ -142,7 +149,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             })
         } else {
             TweenMax.to($(".share .content"), duration, {
-                opacity: 0.25
+                opacity: 0.35
             })
         }
         
@@ -151,9 +158,14 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             y: yTargetContent
         })
         TweenMax.to($(".menu3D"), duration, {
+            backgroundColor: "rgba(36,22,37,"+alphaBgTarget+")",
             height: hTarget,
             y: yTarget
         })
+    }
+    
+    var getWidthPanel = function() {
+        return Math.min(LAYOUT.viewportW,1280);
     }
     
     header.resize = function(){
@@ -162,23 +174,35 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         $(".menuSelectedCases .buttonSubMenu").width(wSc);
         $(".menuSelectedCases .buttonSubMenu.backToReel").width(wBtr);
 
-        var wCloseDiv = 80;
-        var w3 = Math.floor(parseInt(LAYOUT.viewportW-wCloseDiv)/3)-20
-        $(".contactPanel").width(LAYOUT.viewportW);
-        $(".contactPanel").css("left",LAYOUT.viewportW);
+        /*var wCloseDiv = 80;
+        var w3 = Math.floor(parseInt(LAYOUT.viewportW-wCloseDiv)/3)-20*/
+        var vW = getWidthPanel();
+        var ratioPaddingW = 60*(1-(1024/LAYOUT.viewportW))
+        var contentPaddingLeft = 10+ratioPaddingW;
+        var hirePadddingLeft = 20+ratioPaddingW;
+        var hirePadddingRight = 70+ratioPaddingW;
+        var wA = (vW*0.41) - (hirePadddingLeft+hirePadddingRight);
+        var wB = (vW*0.295)- contentPaddingLeft;
+        
+        $(".contactPanel").width(vW+100);
+        $(".contactPanel").css("left",vW);
 
-        $(".hireMe").width(w3);
-        $(".contact").width(w3);
-        $(".share").width(w3);
-        $(".contact").css("left",w3+20);
-        $(".share").css("left",((w3+20)*2));
+        $(".hireMe").width(wA);
+        $(".contact").width(wB);
+        $(".share").width(wB);
+        
+        $(".contact").css("left",wA+hirePadddingLeft+hirePadddingRight);
+        $(".share").css("left",(wA+wB+hirePadddingLeft+hirePadddingRight+contentPaddingLeft));
+        $(".content").css("padding-left",contentPaddingLeft);
+        $(".contactPanel .hireMe").css("padding-left",hirePadddingLeft);
+        $(".contactPanel .hireMe").css("padding-right",hirePadddingRight);
 
-        var wClose = LAYOUT.viewportW-((w3)*3);
-        $(".closeMenu").css("left",((w3+20)*3));
-        $(".closeMenu").css("width",wClose);
+        //var wClose = LAYOUT.viewportW-((w3)*3);
+        $(".closeMenu").css("left",(wA+hirePadddingLeft+hirePadddingRight)+((contentPaddingLeft+wB)*2)-80);
+        //$(".closeMenu").css("width",wClose);
 
         if(currentMenuState == "contact" || currentMenuState == "share"){
-            TweenMax.set($(".menuContent"),{x: -LAYOUT.viewportW}) 
+            TweenMax.set($(".menuContent"),{x: -vW}) 
         }    
     }
     

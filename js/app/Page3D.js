@@ -152,7 +152,6 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
             console.log("addchild >> " + this.elementList.length)
             for(var i = 0; i< this.elementList.length ; i++){
                 if(this.elementList[i].info.position == pageInfo.FREE3D_P){
-                    console.log("add Free 3D element >> " + this.elementList[i].id )
                     this.parentSprite3D.addChild(this.elementList[i].element3d);
                 }
             }
