@@ -133,7 +133,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     loadFolio = function(pageId){
         gatherTimeline();
-        //bindTouchEvents();
+        bindTouchEvents();
         
         if(!MODULES.folio){
             // show Loader ??
@@ -310,8 +310,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         var cameraFov = (((LAYOUT.viewportH/LAYOUT.viewportW)*35.130)+20);
         var fovY = cameraFov*Math.PI/180;
         LAYOUT_3D.PX_PERFECT_DISTANCE = -(LAYOUT.viewportH/2) / Math.tan(fovY/2);
-        //console.log("PX_PERFECT_DISTANCE >> " + LAYOUT_3D.PX_PERFECT_DISTANCE)
-
+        /*console.log("PX_PERFECT_DISTANCE >> " + LAYOUT_3D.PX_PERFECT_DISTANCE)
+        console.log("fovY >> " + fovY)*/
+        LAYOUT_3D.fovMult001 = (LAYOUT_3D.PX_PERFECT_DISTANCE+526)/-966;
         
         if(MODULES.header) MODULES.header.resize();
         if(MODULES.reel) MODULES.reel.resize();

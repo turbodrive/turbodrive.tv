@@ -68,7 +68,7 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         
         if(CONFIG.isFirefox){
             var p = String(Number(-LAYOUT.vW2)) + "px " + String(Number(-LAYOUT.vH2)) + "px";
-            console.log(" p > " +  p)            
+            console.log(" change persp > " +  p)            
             $("#folio").css("perspective-origin", p)
         }
 
@@ -556,33 +556,32 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
                 var ratioPx = (getRatioPxPerfect(elInfo.z));
                 //var sc = Math.abs(ratioPx-2)
                 //console.log("elInfo Z = " + elInfo.z + " ->> " + ratioPx + " > ")
-                if(elInfo.scale){
-                    if(isNaN(elInfo.scale)){
-                        var sc = ratioPx*scaleList[elInfo.scale];
-                        element.setScale(sc, sc, 1);
-                    }else{
-                        if(elInfo.position == pageInfo.FREE3D_P) {
-                            element.setScale(elInfo.scale,elInfo.scale,elInfo.scale);
-                        }else {
-                            element.setScale(elInfo.scale*ratioPx, elInfo.scale*ratioPx, 1);
+                if(elInfo.position != pageInfo.FOV_RELATED){
+                    if(elInfo.scale){
+                        if(isNaN(elInfo.scale)){
+                            var sc = ratioPx*scaleList[elInfo.scale];
+                            element.setScale(sc, sc, 1);
+                        }else{
+                            if(elInfo.position == pageInfo.FREE3D_P) {
+                                element.setScale(elInfo.scale,elInfo.scale,elInfo.scale);
+                            }else {
+                                element.setScale(elInfo.scale*ratioPx, elInfo.scale*ratioPx, 1);
+                            }
                         }
+                    } else {
+                        element.setScale(ratioPx,ratioPx,1);
                     }
-                } else {
-                    element.setScale(ratioPx,ratioPx,1);
                 }
                 
-                /*var widthSquare = 102;
-                var heightSquare = 102;*/
-                var xT = elInfo.x*LAYOUT.ratioW
                 
-                var xF, yF;
+                var xF, yF, scaleF;
                 if(elInfo.position == pageInfo.ABSOLUTE_P){
                     xF = (LAYOUT.vW2) + (elInfo.x*ratioPx) - (elInfo.width*0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y*ratioPx) - (elInfo.height*0.5);
                     element.setPosition(xF, yF, elInfo.z);
                 }else if(elInfo.position == pageInfo.RES_RC_P){
-                    xF = (LAYOUT.vW2) + (((LAYOUT.viewportW*elInfo.rrcX)+elInfo.rrcXOffset)*ratioPx) - (elInfo.width*0.5)
-                    yF = (LAYOUT.vH2) + (((LAYOUT.viewportH*elInfo.rrcY)+elInfo.rrcYOffset)*ratioPx) - (elInfo.height*0.5)
+                    xF = (LAYOUT.vW2) + (((LAYOUT.viewportW*elInfo.rrcX)+elInfo.rrcXOffset)*ratioPx) - (elInfo.width*0.5);
+                    yF = (LAYOUT.vH2) + (((LAYOUT.viewportH*elInfo.rrcY)+elInfo.rrcYOffset)*ratioPx) - (elInfo.height*0.5);
                     element.setPosition(Math.round(xF), Math.round(yF), elInfo.z);
                 } else if(elInfo.position == pageInfo.TOPLEFTSCREENRELATIVE_P){
                     xF = tW*(elInfo.x)*ratioPx;
@@ -590,6 +589,23 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
                     element.setPosition(xF, yF, elInfo.z);
                 } else if(elInfo.position == pageInfo.FREE3D_P){
                     element.setPosition(elInfo.x, elInfo.y, elInfo.z);
+                } else if(elInfo.position == pageInfo.FOV_RELATED){
+                    xF = (LAYOUT.vW2) + (getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL)*ratioPx) - (elInfo.width*0.5);
+                    yF = (LAYOUT.vH2) + (getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL)*ratioPx) - (elInfo.height*0.5);
+                    
+                    
+                    /*xF =  getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL);
+                    yF =  getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL);*/
+                    if(elInfo.scale != null && elInfo.scale.minL){
+                        scaleF = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL);
+                        element.setScale(scaleF*ratioPx,scaleF*ratioPx,1);
+                        console.log("ratioPx")
+                    }else {
+                        element.setScale(ratioPx,ratioPx,1);
+                    }
+                    element.setPosition(xF, yF, elInfo.z);
+                    element.update();
+                    //console.log("xF >> " + xF + " scaleF >>" + scaleF);
                 }
                 
                 if(!isNaN(elInfo.rPointX) && !isNaN(elInfo.rPointY)){
@@ -616,6 +632,11 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
 
         $("#"+idElement).css("width", tW);
         $("#"+idElement).css("height", tH);
+    }
+    
+    getRelatedToFovValue = function(minL, maxL)
+    {
+           return minL+(LAYOUT_3D.fovMult001*(maxL-minL));
     }
     
     getResolutionOffset = function(m){

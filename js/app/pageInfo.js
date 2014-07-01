@@ -76,6 +76,7 @@ define(["signals"], function (signals)
     /*** CONTENT ***/
     var loadedDefault = false;
     pageInfo.FREE3D_P = "free3dPosition";
+    pageInfo.FOV_RELATED = "fovRelated";
     pageInfo.ABSOLUTE_P = "absolutePosition";
     pageInfo.RES_RC_P = "resolutionRelative-CenteredPosition";
     pageInfo.CENTERSCREENRELATIVE_P = "centerScreenRelativePosition";
@@ -157,40 +158,55 @@ define(["signals"], function (signals)
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
             width:990, height:268, opacity:0},
     };
-       
+    
+    var scaleH3 = 1.4
+    
     pageInfo.TIMELINE_LAYOUT = {
         id:"timeline-layout",
-        h1:{position:pageInfo.ABSOLUTE_P,
-            x:60,y:-210, z:0, width:356, height:58},
-        p_contentNow:{position:pageInfo.ABSOLUTE_P,
-            x:-460,y:-230, z:0, width:490, height:34},
-        p_content2012:{position:pageInfo.ABSOLUTE_P,
-            x:-438,y:-143, z:0, width:490, height:60},
-        p_content2006:{position:pageInfo.ABSOLUTE_P,
-            x:-250,y:-56, z:0, width:490, height:40},
-        p_content2004:{position:pageInfo.ABSOLUTE_P,
-            x:-172,y:5, z:0, width:490, height:40},
-        p_content2001:{position:pageInfo.ABSOLUTE_P,
-            x:-70,y:78, z:0, width:490, height:20},
-        p_content1999:{position:pageInfo.ABSOLUTE_P,
-            x:33,y:121, z:0, width:490, height:40},
-        p_content1997:{position:pageInfo.ABSOLUTE_P,
-            x:118,y:188, z:0, width:490, height:60},
+        h1:{position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0.32, rrcY:-0.4, rrcXOffset:-180, rrcYOffset:80, width:356, height:58},
+        /*p_contentNow:{position:pageInfo.ABSOLUTE_P,
+            x:-460,y:-230, z:0, width:490, height:34},*/
+        p_contentNow:{position:pageInfo.FOV_RELATED,
+            x:{minL:-208, maxL:-421},y:{minL:-196, maxL:-364}, z:-350,
+            width:490, height:34},
+        p_content2012:{position:pageInfo.FOV_RELATED,
+            x:{minL:-169, maxL:-349},y:{minL:-178, maxL:-322}, z:-300,
+            width:490, height:60},
+        p_content2006:{position:pageInfo.FOV_RELATED,
+            x:{minL:-40, maxL:-86},y:{minL:-118, maxL:-187}, z:-250,
+            width:490, height:40},
+        p_content2004:{position:pageInfo.FOV_RELATED,
+            x:{minL:19, maxL:35},y:{minL:-85, maxL:-127}, z:-200,
+            width:490, height:40},
+        p_content2001:{position:pageInfo.FOV_RELATED,
+            x:{minL:95, maxL:179},y:{minL:-45, maxL:-50}, z:-150,
+            width:490, height:20},
+        p_content1999:{position:pageInfo.FOV_RELATED,
+            x:{minL:179, maxL:336},y:{minL:-08, maxL:30}, z:-100,
+            width:490, height:40},
+        p_content1997:{position:pageInfo.FOV_RELATED,
+            x:{minL:228, maxL:427},y:{minL:20, maxL:71}, z:-50,
+            width:490, height:60},
+        /*img_timelinehelper:{position:pageInfo.FOV_RELATED,
+            html:"<img src='images/timeline_helper_001.png'/>",
+            x:{minL:-91, maxL:-199},y:{minL:46, maxL:72}, z:0,
+            scale:{minL:0.52, maxL:1}, width:919, height:497, rPointX:0, rPointY:0},*/
         
         h3_dateNow:{position:pageInfo.FREE3D_P,
-            x:-900,y:1140, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:1140, z:940,rX:30, rY:60, rZ:-90, rPointX:-200, scale:scaleH3},
         h3_date2012:{position:pageInfo.FREE3D_P,
-            x:-900,y:910, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:890, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date2006:{position:pageInfo.FREE3D_P,
-            x:-900,y:187, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:132, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date2004:{position:pageInfo.FREE3D_P,
-            x:-900,y:-102, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:-170, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date2001:{position:pageInfo.FREE3D_P,
-            x:-900,y:-449, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:-530, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date1999:{position:pageInfo.FREE3D_P,
-            x:-900,y:-795, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:-885, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date1997:{position:pageInfo.FREE3D_P,
-            x:-900,y:-968, z:950,rX:30, rY:60, rZ:-90, scale:4},
+            x:-900,y:-1068, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         
         
         img_timeline:{position:pageInfo.FREE3D_P,src:"mainImage",
