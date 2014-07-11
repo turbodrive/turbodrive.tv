@@ -17,6 +17,7 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
     Page3D.prototype.contentSprite3D = {};
     Page3D.prototype.initProps = {};
     Page3D.prototype.elementList = [];
+    Page3D.prototype.sectionsList = [];
     
     // Sprite3D content //
     
@@ -134,6 +135,12 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
                     }else {
                         element3d.setRotateFirst(false);   
                     }
+                    
+                    if(elementInfo.sectionId){
+                        element3d.sectionId = elementInfo.sectionId;
+                        this.sectionsList.push(element3d);
+                    }
+                    
                     element3d.update();
                     //console.log("elementName >> " + elementName + " + domEl >> " + domEl);
                     this.elementList.push({element3d:element3d, info:elementInfo, id:elementName});
@@ -144,6 +151,11 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
             //page3D.contentSprite3D.push(title, client, redLine,bg, textPlane, projectContent, pictoPlay)
                 
         return this;
+    }
+    
+    Page3D.prototype.getSections = function()
+    {
+        return this.sectionsList;
     }
     
     Page3D.prototype.addFree3dElement = function()

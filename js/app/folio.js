@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D)
+define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D)
 {
     var folio = {};
     
@@ -13,6 +13,8 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
     
     var scene3DBuilt = false;
     var currentPageId = "", currentPage3D, previousPage3D;
+    var currentSectionId;
+    var tmpSectionId;
     var tmpPageId;
     var stage, interactContainer, container;
     var pages3D = [];
@@ -30,30 +32,30 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         // delete all pages
     }
     
-    folio.init = function(pageId) {
+    folio.init = function(pageId, sectionId) {
         collectContent();
         buildTimelines();
         buildScene();
         pageInfo.on.imagesLoaded.add(onImageLoaded);
-        folio.on.initialized.dispatch(pageId);
+        folio.on.initialized.dispatch(pageId, sectionId);
         folio.resize();
     }
     
-    folio.load = function (pageId) {
+    folio.load = function (pageId, sectionId) {
         var page = pageInfo.getPageInfo(pageId);
         if(!page) return
         console.log(page.id + " - loaded ? >> " + page.loaded)
         if(!page.loaded){            
-            pageInfo.loadImage(pageId);
+            pageInfo.loadImage(pageId, sectionId);
         } else {
-            folio.on.pageLoaded.dispatch(pageId);
+            folio.on.pageLoaded.dispatch(pageId, sectionId);
         }
     }
     
-    this.onImageLoaded = function(pageId) {
+    this.onImageLoaded = function(pageId, sectionId) {
         //pageInfo.on.imagesLoaded.remove(onImageLoaded);
         console.log("FOLIO >> " + pageId + " loaded !");
-        folio.on.pageLoaded.dispatch(pageId);
+        folio.on.pageLoaded.dispatch(pageId, sectionId);
     }
     
     folio.resize = function () {
@@ -148,7 +150,7 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         return res;        
     };
     
-    setTweenPosition = function(pageId) {
+    setTweenPosition = function(pageId, sectionId) {
         interactTx = startx = 0
         touchEnd = touchEnd2 = false; 
         console.log("setTweenPosition >> " + pageId);
@@ -161,7 +163,11 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         console.log("3 setTweenPosition >> " + objTmx.twPos);
         //onUpdateTmx();
         currentPageId = pageId;
-        folio.on.twPositionDefined.dispatch(currentPageId)
+        if(sectionId){
+            currentSectionId = sectionId;
+        }
+        //console.log("currentSectionId >> " + currentSectionId);  
+        folio.on.twPositionDefined.dispatch(currentPageId, currentSectionId)
     }
     
     onUpdateTmx = function() {
@@ -425,28 +431,35 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         page3D.setParentSprite(container);
         pages3D.push(page3D);
         page.built = true;
-        //console.log(page.id + " is Built");
+        console.log(page.id + " is Built");
+        
+        if(page.id == "skillsfield" || page.id == "about"){
+            initSkillsMenu(page.id);
+        }
         
         return page3D
     }
     
-    initSkillsMenu = function()
+    initSkillsMenu = function(idPage)
     {    
+        $("."+idPage+"-menu li").mouseenter(function(){
+            var ruleId = $(this).attr("class");
+            var ruleString = "."+idPage+"-menu li."+ruleId+":after";
+            var rule = CSSRulePlugin.getRule("."+idPage+"-menu li."+ruleId+":after");
+            TweenMax.to(rule, 0.3, {cssRule:{opacity:1}});
+        })
         
-        var rule = CSSRulePlugin.getRule(".about .skills-field li.editing:after");
+        $("."+idPage+"-menu li").mouseleave(function(){
+            var ruleId = $(this).attr("class");
+            var rule = CSSRulePlugin.getRule("."+idPage+"-menu li."+ruleId+":after");
+            TweenMax.to(rule, 0.3, {cssRule:{opacity:0}});
+        });
         
-        
-        $("li.skills-button").mouseover(
-            function() {
-                /*var idButton = $(this)[0].id;
-                console.log("idButton >> " +idButton)*/
-                console.log("Hover")
-                
-                /*var rule = CSSRulePlugin.getRule("li."+idbutton+":after"); //get the rule
-                TweenMax.to(rule,0.5,{opacity:1})*/
-            }
-        )
-        //console.table($(".skills-button"))
+        /*$("."+idPage+"-menu li").onclick(function(){
+            var ruleId = $(this).attr("class");
+            var rule = CSSRulePlugin.getRule("."+idPage+"-menu li."+ruleId+":after");
+            TweenMax.to(rule, 0.3, {cssRule:{opacity:0}});
+        });*/
     }
     
     getRatioPxPerfect = function(z) {
@@ -634,6 +647,19 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         $("#"+idElement).css("height", tH);
     }
     
+    updateSection = function(page3d, sectionId){
+        console.log("updateSection >> " + sectionId)
+        var sectionsList = page3d.getSections();
+        for(var i=0; i<sectionsList.length; i++){
+            var section = sectionsList[i];
+            if(section.sectionId == sectionId){
+                section.setOpacity(1);
+            }else{
+                section.setOpacity(0);  
+            }
+        }
+    }
+    
     getRelatedToFovValue = function(minL, maxL)
     {
            return minL+(LAYOUT_3D.fovMult001*(maxL-minL));
@@ -643,7 +669,7 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         return offset;
     }
     
-    prepPgeForTransition = function(pageId) {
+    prepPgeForTransition = function(pageId, sectionId) {
         var page = pageInfo.getPageInfo(pageId);        
         if(currentPage3D) previousPage3D = currentPage3D;
         
@@ -654,17 +680,26 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
         }
         
         updatePage3D(currentPage3D, page);
+        if(sectionId) updateSection(currentPage3D, sectionId)
         return page;
     }
     
-    folio.startTransition = function(pageId) {
+    folio.startTransition = function(pageId, sectionId) {
+        console.log("startTransition >> + " + sectionId);
         startRendering();
+        tmpSectionId = sectionId
         if(currentPageId == pageId){
-            console.log("allready uptoDate >> " + pageId)
-            return
+            if(sectionId && currentSectionId != sectionId){
+                console.log("update section")
+                updateSection(currentPage3D, sectionId)
+                return
+            }else {
+                console.log("allready uptoDate >> " + pageId)
+                return
+            }
         }
         
-        var page = prepPgeForTransition(pageId); 
+        var page = prepPgeForTransition(pageId, sectionId); 
         
         if(!previousPage3D){
             // transition depuis HyperSPACE
@@ -708,9 +743,10 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
     }
     
     transitionComplete = function(pageId){
-        console.log("transitionComplete >> " + pageId); 
+        console.log("transitionComplete >> " + pageId);
         transitionStarted = false;
-        setTweenPosition(pageId);
+        setTweenPosition(pageId, tmpSectionId);
+        tmpSectionId = null;
         previousPage3D = null;
     }
     
@@ -745,7 +781,6 @@ define(["jquery","TweenMax", "CSSRulePlugin", "signals","app/pageInfo", "Sprite3
             onCompleteParams : [page.id]
         })
     }   
-    //initSkillsMenu()
     
     return folio;
 });

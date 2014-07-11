@@ -47,21 +47,45 @@ function msg(t) {
 
 
 require.config({
+    /*shim: {
+        'cssPlugin2': {
+            //These script dependencies should be loaded before loading
+            //backbone.js
+            deps: ['TweenMax'],
+            //Once loaded, use the global 'Backbone' as the
+            //module value.
+            exports: 'CssPlugin'
+        },
+        'cssRulePlugin2': {
+            //These script dependencies should be loaded before loading
+            //backbone.js
+            deps: ['TweenMax', 'cssPlugin2'],
+            //Once loaded, use the global 'Backbone' as the
+            //module value.
+            exports: 'CssRulePlugin'
+        }
+        /*'CssRulePlugin': ['TweenMax','CssPlugin']
+    },*/
+    
     baseUrl: 'js/',
     paths: {
         jquery: 'jquery.min',
         jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',
         bootstrap: 'bootstrap.min',
+        /*TweenLite:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenLite.min',*/
         TweenMax:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenMax.min',
+        /*TweenLite:'TweenLite',
+        cssPlugin2:'plugins/CSSPlugin',
+        cssRulePlugin2:'plugins/CSSRulePlugin',*/
         modernizr:'modernizr.custom.55142',
         requestAnimationFrame:'RequestAnimationFrame',
         Sprite3D: 'Sprite3D',
         edgeCta: 'gmdpng_edgePreload',
         crossroads: 'crossroads.min',
         signals:'signals.min',
-        hasher:'hasher.min',
-        CSSRulePlugin:'plugins/CSSRulePlugin.min'
+        hasher:'hasher.min'
     }
+    
 });
 
 require(['js/app/core.js']);

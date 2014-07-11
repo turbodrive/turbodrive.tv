@@ -816,13 +816,15 @@ h3.timelineDate {
 /******************* ABOUT - Skills Field menu *************************/
 /***********************************************************************/
 
-.about .skills-field ul {
+.about-menu ul {
     display: block;
     height: 242px;
     padding: 0px;
 }
 
-.about .skills-field li {
+.about-menu li {
+    transition: 0.15s;
+    cursor: pointer;
     display: block;
     position:relative;
     float: left;
@@ -840,7 +842,11 @@ h3.timelineDate {
     line-height: 10px;
 }
 
-.about .skills-field li:after {
+.about-menu li:hover{
+   color: #EFECE1; 
+}
+
+.about-menu li:after {
     background-image: url(../images/menu_about.png);
     top: 0;
     left: 0;
@@ -853,17 +859,13 @@ h3.timelineDate {
     only screen and (-o-min-device-pixel-ratio: 3/2),
     only screen and (min--moz-device-pixel-ratio: 1.5),
     only screen and (min-device-pixel-ratio: 1.5) {
-        .about .skills-field li, .about .skills-field li:after {
+        .about-menu li, .about-menu li:after {
             background-image: url(../images/menu_about@2x.png);
             background-size: 600px 400px;
         }
 }
 
-li.skills-button {
-    cursor: pointer ;
-}
-
-.about .skills-field li > span.skill-icon {
+.about-menu li > span.skill-icon {
     display: block;
     position: relative;
     padding: 0px;
@@ -873,18 +875,20 @@ li.skills-button {
     line-height: 5px;
     z-index: 2;
 }
-.about .skills-field li a.skill-text {
+.skillsfield-menu li a.skill-text,
+.about-menu li a.skill-text {
     z-index: 2;
     display: block;
     position: relative;
     color: inherit;
 }
 
-.about .skills-field li a.skill-text:hover {
+.skillsfield-menu li a.skill-text:hover,
+.about-menu li a.skill-text:hover {
     text-decoration: none;
 }
 
-.about .skills-field li.editing {
+.about-menu li.editing {
     background-position: 0px -32px;
     width: 118px;
     height: 98px;
@@ -893,21 +897,21 @@ li.skills-button {
     top: 144px;
 }
 
-.about .skills-field li.editing:after {
+.about-menu li.editing:after {
     background-position: 0px -162px;
     width: 118px;
     height: 98px;
     opacity: 0;
 }
     
-.about .skills-field li.three {
+.about-menu li.three {
     background-position: -118px 0px;
     width: 79px;
     height: 108px;
     top: 112px;
 }
 
-.about .skills-field li.three:after {
+.about-menu li.three:after {
     background-position: -118px -130px;
     width: 79px;
     height: 108px;
@@ -915,59 +919,59 @@ li.skills-button {
 }
 
 
-.about .skills-field li.research {
+.about-menu li.research {
     background-position: -197px -97px;
     width: 84px;
     height: 133px;
     top: 97px;
 }
 
-.about .skills-field li.research:after {
+.about-menu li.research:after {
     background-position: -197px -240px;
     width: 84px;
     height: 133px;
     opacity: 0;
 }
-.about .skills-field li.research > span.skill-icon {
+.about-menu li.research > span.skill-icon {
     margin-top: 48px;
 }
 
-.about .skills-field li.compositing {
+.about-menu li.compositing {
     background-position: -281px -61px;
     width: 88px;
     height: 135px;
     top: 61px;
 }
 
-.about .skills-field li.compositing:after {
+.about-menu li.compositing:after {
     background-position: -281px -204px;
      width: 88px;
     height: 135px;
     opacity: 0;
 }
-.about .skills-field li.compositing > span.skill-icon {
+.about-menu li.compositing > span.skill-icon {
     margin-top: 55px;
 }
 
-.about .skills-field li.front {
+.about-menu li.front {
     background-position: -369px -23px;
     width: 91px;
     height: 136px;
     top: 23px;
 }
 
-.about .skills-field li.front:after {
+.about-menu li.front:after {
     background-position: -369px -166px;
     width: 91px;
     height: 136px;
     opacity: 0;
 }
 
-.about .skills-field li.front > span.skill-icon {
+.about-menu li.front > span.skill-icon {
     margin-top: 48px;
 }
 
-.about .skills-field li.motion {
+.about-menu li.motion {
     background-position: -460px 0px;
     width: 140px;
     height: 122px;
@@ -975,7 +979,7 @@ li.skills-button {
     padding-right: 40px;
 }
 
-.about .skills-field li.motion:after {
+.about-menu li.motion:after {
     background-position: -460px -143px;
     width: 140px;
     height: 122px;
@@ -1090,17 +1094,17 @@ li.skills-button {
 /******************* SKILLS - Menu *************************/
 /***********************************************************************/
 
-.skill-menu ul {
+.skillsfield-menu ul {
     display: block;
     height: 346px;
     padding: 0px;
 }
 
-.skill-menu [data-icon]:before {
+.skillsfield-menu [data-icon]:before {
     font-size: 44px;
 }
 
-.skill-menu li {
+.skillsfield-menu li {
     display: block;
     position:relative;
     float: left;
@@ -1118,7 +1122,7 @@ li.skills-button {
     line-height: 12px;
 }
 
-.skill-menu li:after {
+.skillsfield-menu li:after {
     background-image: url(../images/menu_skills.png);
     top: 0;
     left: 0;
@@ -1131,13 +1135,22 @@ li.skills-button {
     only screen and (-o-min-device-pixel-ratio: 3/2),
     only screen and (min--moz-device-pixel-ratio: 1.5),
     only screen and (min-device-pixel-ratio: 1.5) {
-        .skill-menu li, .skill-menu li:after {
+        .skillsfield-menu li, .skillsfield-menu li:after {
                 background-image: url(../images/menu_skills@2x.png);
                 background-size: 800px 400px;
         }
 }
 
-.skill-menu li > span.skill-icon {
+.skillsfield-menu li {
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.skillsfield-menu li:hover {
+    color: #EFECE1;
+}
+
+.skillsfield-menu li > span.skill-icon {
     display: block;
     position: relative;
     padding: 0px;
@@ -1147,13 +1160,13 @@ li.skills-button {
     line-height: 5px;
     z-index: 2;
 }
-.skill-menu li > span.skill-text {
+.skillsfield-menu li > span.skill-text {
     z-index: 2;
     display: block;
     position: relative;
 }
 
-.skill-menu li.editing {
+.skillsfield-menu li.editing {
     background-position: 0px -14px;
     width: 128px;
     height: 89px;
@@ -1162,21 +1175,21 @@ li.skills-button {
     top: 49px;
 }
 
-.skill-menu li.editing:after {
+.skillsfield-menu li.editing:after {
     background-position: 0px -134px;
     width: 128px;
     height: 89px;
     opacity: 0;
 }
     
-.skill-menu li.three {
+.skillsfield-menu li.three {
     background-position: -128px 0px;
     width: 108px;
     height: 93px;
     top: 35px;
 }
 
-.skill-menu li.three:after {
+.skillsfield-menu li.three:after {
     background-position: -128px -120px;
     width: 108px;
     height: 93px;
@@ -1184,59 +1197,59 @@ li.skills-button {
 }
 
 
-.skill-menu li.research {
+.skillsfield-menu li.research {
     background-position: -236px -40px;
     width: 106px;
     height: 106px;
     top: 40px;
 }
 
-.skill-menu li.research:after {
+.skillsfield-menu li.research:after {
     background-position: -236px -185px;
     width: 106px;
     height: 106px;
     opacity: 0;
 }
-.skill-menu li.research > span.skill-icon {
+.skillsfield-menu li.research > span.skill-icon {
     margin-top: 36px;
 }
 
-.skill-menu li.compositing {
+.skillsfield-menu li.compositing {
     background-position: -342px -26px;
     width: 105px;
     height: 106px;
     top: 26px;
 }
 
-.skill-menu li.compositing:after {
+.skillsfield-menu li.compositing:after {
     background-position: -342px -171px;
     width: 105px;
     height: 106px;
     opacity: 0;
 }
-.skill-menu li.compositing > span.skill-icon {
+.skillsfield-menu li.compositing > span.skill-icon {
     margin-top: 45px;
 }
 
-.skill-menu li.front {
+.skillsfield-menu li.front {
     background-position: -447px -12px;
     width: 109px;
     height: 106px;
     top: 12px;
 }
 
-.skill-menu li.front:after {
+.skillsfield-menu li.front:after {
     background-position: -447px -157px;
     width: 109px;
     height: 106px;
     opacity: 0;
 }
 
-.skill-menu li.front > span.skill-icon {
+.skillsfield-menu li.front > span.skill-icon {
     margin-top: 36px;
 }
 
-.skill-menu li.motion {
+.skillsfield-menu li.motion {
     background-position: -556px 0px;
     width: 156px;
     height: 106px;
@@ -1244,14 +1257,14 @@ li.skills-button {
     padding-right: 40px;
 }
 
-.skill-menu li.motion:after {
+.skillsfield-menu li.motion:after {
     background-position: -556px -145px;
     width: 156px;
     height: 106px;
     opacity: 0;
 }
 
-.skill-menu li.motion > span.skill-icon {
+.skillsfield-menu li.motion > span.skill-icon {
     margin-top: 40px;
 }
 

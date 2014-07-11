@@ -52,7 +52,7 @@ define(["signals"], function (signals)
     
     
     /*** ASSETS LOADER ***/    
-    pageInfo.loadImage = function(id){
+    pageInfo.loadImage = function(id, sectionId){
         var page = pageInfo.getPageInfo(id);
         page.mainImage = new Image();
         page.mainImage.id = id
@@ -61,7 +61,7 @@ define(["signals"], function (signals)
             var pageI = pageInfo.getPageInfo(img.id);
             img.removeEventListener("load", pageI.loadedHandler);
             pageI.loaded = true;
-            pageInfo.on.imagesLoaded.dispatch(pageI.id);
+            pageInfo.on.imagesLoaded.dispatch(pageI.id, sectionId);
             img.id = null;
         }
         page.mainImage.addEventListener("load", page.loadedHandler);
@@ -144,19 +144,19 @@ define(["signals"], function (signals)
             width:712, height:346},
         _editingSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-195, rrcYOffset:0,
-            width:990, height:268, opacity:0},
+            width:990, height:268, opacity:0, sectionId:"editing-3d"},
         _researchSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
-            width:990, height:268, opacity:0},
+            width:990, height:268, opacity:0, sectionId:"research"},
         _compositingSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:-40,
-            width:990, height:268, opacity:1},
+            width:990, height:268, opacity:0, sectionId:"compositing"},
         _frontSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
-            width:990, height:257, opacity:0},
+            width:990, height:257, opacity:0, sectionId:"front"},
         _motionSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.1, rrcXOffset:-445, rrcYOffset:0,
-            width:990, height:268, opacity:0},
+            width:990, height:268, opacity:1, sectionId:"motion"},
     };
     
     var scaleH3 = 1.4

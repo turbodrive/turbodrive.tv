@@ -39,6 +39,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         CONFIG.isFirefox = Modernizr.firefox;
         
         crossroads.addRoute('/{env}/{page}/', switchPage);
+        crossroads.addRoute('/{env}/{page}/{section}/', switchPageSection);
         
         //loadCss("http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css");
         if(CONFIG.debug){
@@ -83,26 +84,34 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         crossroads.parse(newHash);
     }
     
-    switchPage = function(env, page){
+    switchPageSection = function(env, page, section) {
+        console.log("switchPageSection env > " + env + " page > " + page + " section > " + section);
+        switchPage(env, page, section);
+    }
+    
+    switchPage = function(env, page, section){
         
         //if(env == ABOUT_ENV && page == undefined) page = "about"
-        console.log("env > " + env + " page > " + page);
+        console.log("env > " + env + " page > " + page + " section > " + section);
         
         var isFolio = (env == FOLIO_ENV);
         
         if(MODULES.header) MODULES.header.close();
         if(currentEnv == env) {
-            if (page == currentPage) return
+            if (page == currentPage){
+                if(!section) return
+                loadFolio(page, section)   
+            }
             if (isFolio) {
                 // switch3D ?
-                loadFolio(page);
+                loadFolio(page, section);
             }else {
                 // seek youtube video
             }
         }else if(currentEnv == ""){
             if (isFolio) {
                 showHeader();
-                loadFolio(page);
+                loadFolio(page, section);
             } else {
                 loadReel();
             }
@@ -110,7 +119,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             // transition between both Env
             if (isFolio) {
                 /*showHeader();
-                loadFolio(page);*/
+                loadFolio(page, section);*/
                 // From Reel to Folio
             }else {
                 // From Folio to Reel
@@ -131,7 +140,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         return timelineDiv
     }
     
-    loadFolio = function(pageId){
+    loadFolio = function(pageId, sectionId){
         gatherTimeline();
         bindTouchEvents();
         
@@ -143,30 +152,35 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.folio = folio;
                 MODULES.folio.on.initialized.add(onFolioInitialized);
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
-                MODULES.folio.init(pageId);
+                MODULES.folio.init(pageId, sectionId);
             })
         }else{
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
-            MODULES.folio.load(pageId);
+            MODULES.folio.load(pageId, sectionId);
         }
     }
     
-    onFolioInitialized = function(pageId){
+    onFolioInitialized = function(pageId, sectionId){
         // transition between REEL and FOLIO if REEL AND FOLIO are initialized
         //console.log("FOLIO onFolioInitialized >> " + pageId);
         MODULES.folio.on.initialized.remove(onFolioInitialized);
         MODULES.folio.on.pageLoaded.add(onPageLoaded);
-        MODULES.folio.load(pageId);
+        MODULES.folio.load(pageId, sectionId);
     }
     
-    onTwPositionDefined = function(pageId){
-        hasher.setHash("folio",pageId+"/");
+    onTwPositionDefined = function(pageId,sectionId){
+        // passer la section ?
+        if(sectionId) {
+            hasher.setHash("folio",pageId+"/"+sectionId+"/");
+        }else {
+            hasher.setHash("folio",pageId+"/");
+        }
     }
     
-    onPageLoaded = function(pageId){
+    onPageLoaded = function(pageId, sectionId){
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
         console.log("FOLIO onPageLoaded >> " + pageId);
-        MODULES.folio.startTransition(pageId)
+        MODULES.folio.startTransition(pageId, sectionId)
         overlay.hide();
     }
     
