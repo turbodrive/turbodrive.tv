@@ -632,16 +632,21 @@ a.github:hover {
     z-index: 300;
 }
 
-/***** SPRITE 3D ****/
+/***** HYPERDRIVE 3D ****/
 
 .hyperdrive-particle {
     display: block;
-    width: 500px;
+    width: 1200px;
     height: 20px;
-    background-image: url(../images/hyperdrive_beam.png);
-    opacity: 0.6;
 }
 
+.hyperdrive-particle-texture {
+    display: block;
+    background-image: url(../images/hyperdrive_beam.png);
+    background-size: 100% 100%;
+    height: 15px;
+    width: 800px;
+}
 /***** SPRITE 3D ****/
 
 .grid {

@@ -634,10 +634,12 @@ define([], function() {
         //var rX = 0//-tY/180;
         //var tX /=2 
         //var tY /=20
-        var cX = this.translateOffsetX+tX;
-        var cY = this.translateOffsetY+tY;
+        this.x = this.translateOffsetX+tX;
+        this.y = this.translateOffsetY+tY;
+        /*var cX = this.translateOffsetX+tX;
+        var cY = this.translateOffsetY+tY;*/
 
-        this.style[this._transformProperty] = "translate3d(" + cX+ "px," + cY + "px, 0px) rotateX(" + this.rotationX +"deg) rotateY(" + this.rotationY +"deg) rotateZ(" + this.rotationZ +"deg) translateZ("+this.z+"px)";
+        this.style[this._transformProperty] = "translate3d(" + this.x+ "px," + this.y + "px, 0px) rotateX(" + this.rotationX +"deg) rotateY(" + this.rotationY +"deg) rotateZ(" + this.rotationZ +"deg) translateZ("+this.z+"px)";
         //console.log( "apply 2D transforms using " + this._transformProperty );
 
         return this;
