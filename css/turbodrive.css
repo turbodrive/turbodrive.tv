@@ -634,6 +634,16 @@ a.github:hover {
 
 /***** SPRITE 3D ****/
 
+.hyperdrive-particle {
+    display: block;
+    width: 500px;
+    height: 20px;
+    background-image: url(../images/hyperdrive_beam.png);
+    opacity: 0.6;
+}
+
+/***** SPRITE 3D ****/
+
 .grid {
 	width: 1280px;
 	height: 1280px;

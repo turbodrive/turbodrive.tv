@@ -630,14 +630,14 @@ define([], function() {
     /**
      */
     Sprite3D.prototype.translate2D = function(tX, tY) {
-        var rY = 0//tX/100;
-        var rX = 0//-tY/180;
+        //var rY = 0//tX/100;
+        //var rX = 0//-tY/180;
         //var tX /=2 
         //var tY /=20
         var cX = this.translateOffsetX+tX;
         var cY = this.translateOffsetY+tY;
 
-        this.style[this._transformProperty] = "translate3d(" + cX+ "px," + cY + "px, 0px) rotateX(" + rX +"deg) rotateY(" + rY +"deg) translateZ(0px)";
+        this.style[this._transformProperty] = "translate3d(" + cX+ "px," + cY + "px, 0px) rotateX(" + this.rotationX +"deg) rotateY(" + this.rotationY +"deg) rotateZ(" + this.rotationZ +"deg) translateZ("+this.z+"px)";
         //console.log( "apply 2D transforms using " + this._transformProperty );
 
         return this;

@@ -17,6 +17,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals","app/pageI
     var tmpSectionId;
     var tmpPageId;
     var stage, interactContainer, container;
+    var hyperdriveContainer;
     var pages3D = [];
     var transitionStarted;
     
@@ -82,8 +83,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals","app/pageI
         
         
         
-        if(currentPage3D) updatePage3D(currentPage3D)
-        if(previousPage3D) updatePage3D(previousPage3D)
+        if(currentPage3D) updatePage3D(currentPage3D);
+        if(previousPage3D) updatePage3D(previousPage3D);
         // update camera position depending on the sprite's position and size
         //if(currentTarget) startTransition(currentTarget,0)
         //}
@@ -399,12 +400,111 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals","app/pageI
         stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE)
         stage.addChild(interactContainer);
         
+        buildHyperDriveScene()
         // grid
         buildGridTile(0,1);
         //buildGridTile(-1,1);
         //buildGridTile(1,1);
         
         scene3DBuilt = true;
+    }
+    
+    
+    var hyperDriveInterval;
+    var particles = []
+    var nbrParticles = 200;
+    var rangeDepth = 8000;
+    var speedInit = 300;
+    var speedPrtcle = speedInit;
+    var frameRateInit = 25;
+    var currentFrameRate = 30; // value must change depending on the device
+    
+    startHyperDrive = function(){
+        var ratioFramerate = frameRateInit/currentFrameRate;
+        speedPrtcle = speedInit*ratioFramerate;
+        hyperDriveInterval = setInterval(enterFrameHyperDrive,1000/currentFrameRate);
+    }
+    
+    enterFrameHyperDrive = function() {
+        for(var i = nbrParticles-1; i >= 0; i--){
+            var prtcle = particles[i];
+            prtcle.moveZ(speedPrtcle).update();
+            if(prtcle.z > 1500){
+                prtcle.setZ(-rangeDepth*.5);
+            }
+        }
+    }
+    
+    stopHyperDrive = function(){
+        clearInterval(hyperDriveInterval);
+    }
+    
+    buildHyperDriveScene = function() {
+        var initZ = -100000;
+        
+        hyperdriveContainer = new Sprite3D()
+            .setId("hyperdriveContainer")
+            .setRegistrationPoint(0,0,0);
+        interactContainer.addChild(hyperdriveContainer);
+        interactContainer.setPosition(-LAYOUT.vW2,-LAYOUT.vH2,initZ);
+        interactContainer.setRotationZ(180);
+        interactContainer.update();
+        
+        hyperdriveContainer.setPosition(-LAYOUT.vW2,0,-initZ-1000);
+        hyperdriveContainer.update();
+        hyperdriveContainer.setRotateFirst(false)
+        
+        
+        var rangeWidth = 2000;
+        var rangeHeight = 1500;
+        var splitWidth = 400;
+        var splitHeight = 400;
+    
+			if(randY > -splitHeight && randY < splitHeight && randX > -splitWidth && randX < splitWidth){
+				if(randY > -splitHeight && randY < splitHeight){
+					if(randY > 0){
+						randY += splitHeight
+					}else{
+						randY -= splitHeight
+					}
+				}
+				if(randX > -splitWidth && randX < splitWidth){
+					if(randX > 0){
+						randX += splitWidth
+					}else{
+						randX -= splitWidth
+					}
+				}
+			}
+        
+        for(var i = 0; i< nbrParticles; i++){
+            var particle = new Sprite3D()
+            particle.setInnerHTML("<div class='hyperdrive-particle'></div>");
+            var randX = Math.random() * rangeWidth - (rangeWidth>>1);
+            var randY = Math.random() * rangeHeight - (rangeHeight>>1);
+            var randZ = Math.random() * rangeDepth - (rangeDepth>>1);
+            particle.setRotateFirst(false);
+            particle.setPosition(randX,randY,randZ);
+            
+            var rotX = (Math.atan2(randY,randX)*180/Math.PI);
+            particle.setRotation(-rotX,90,0);
+            particle.update();
+            particles.push(particle)
+            
+            hyperdriveContainer.addChild(particle);
+        }
+        
+        startHyperDrive();
+        
+        TweenMax.to(interactContainer, 3, {delay:1,
+            z: 0, x:-LAYOUT.vW2,y:-LAYOUT.vH2, rotationZ:0,
+            onUpdate:function() {
+                interactContainer.update(); 
+                hyperdriveContainer.setZ(-interactContainer.z-1000)
+                hyperdriveContainer.update();
+                // TODO : changer, les particules doivent être déplacées, pas le conteneur. Ensuite on calcul la position des particules par rapport à l'interactContainer.
+            }
+        })
     }
     
     buildGridTile = function(indexX, indexY) {
@@ -612,7 +712,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals","app/pageI
                     if(elInfo.scale != null && elInfo.scale.minL){
                         scaleF = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL);
                         element.setScale(scaleF*ratioPx,scaleF*ratioPx,1);
-                        console.log("ratioPx")
+                        //console.log("ratioPx")
                     }else {
                         element.setScale(ratioPx,ratioPx,1);
                     }
