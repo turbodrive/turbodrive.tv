@@ -7,7 +7,7 @@ define(["jquery","TweenMax"], function ($,TweenMax){
         MAIN : "main"
     };    
     
-    var currentEl = overlay.LOADER;
+    var currentElName = overlay.LOADER;
     
     var loader = $(".loader-overlay");
     var ctaMobile = $(".start-overlay");
@@ -54,7 +54,8 @@ define(["jquery","TweenMax"], function ($,TweenMax){
     
     overlay.show = function(element, showBackground){
         showMain();
-        overlay.hide(currentEl);
+        var newEl = getAssociatedElement(element)
+        overlay.hide(currentElName);
         
         if(showBackground){
             TweenMax.to(bg, 0.5, {autoAlpha:1})
@@ -66,11 +67,12 @@ define(["jquery","TweenMax"], function ($,TweenMax){
             enablePointer();
         }
         
-        if(element == overlay.GETMOREDETAILS){
-            TweenMax.set(getAssociatedElement(element), {autoAlpha:1})
+        if(element == overlay.GETMOREDETAILS || element == overlay.CTA_MOBILE){
+            TweenMax.set(newEl, {autoAlpha:1})
         }else {
-            TweenMax.to(getAssociatedElement(element), 0.5, {autoAlpha:1})
-        }     
+            TweenMax.to(newEl, 0.5, {autoAlpha:1})
+        }
+        currentElName = element;
     }
     
     overlay.hide = function(element){

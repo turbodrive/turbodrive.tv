@@ -12,7 +12,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     if(CONFIG.debug){
         volumeReel = 0;
-        DEFAULT_HASH = "folio/";
+        DEFAULT_HASH = "reel/";
     }
 
     initCore = function() {
@@ -113,6 +113,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 showHeader();
                 loadFolio(page, section);
             } else {
+                hideFolioContent();
                 loadReel();
             }
         }else {
@@ -128,7 +129,11 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
         currentPage = page
         currentEnv = env
-    }    
+    }  
+    
+    hideFolioContent = function() {
+        $("#folioContent").css("visibility", "hidden")
+    }
         
     /******* FOLIO MODULE *******/
     
@@ -193,7 +198,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             require(["app/reelPlayer"], function(reelPlayer){
                 console.log("reelplayer loaded");
                 MODULES.reel = reelPlayer;
-                MODULES.reel.on.initialized.add(onReelInitialized)
+                MODULES.reel.on.initialized.add(onReelInitialized);
+                MODULES.reel.on.readyToPlay.add(onReadyToPlay);
+                MODULES.reel.on.playStarted.add(onPlayStarted);
                 MODULES.reel.init(gatherTimeline());
             })
         }else{
@@ -201,22 +208,27 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
     }   
     
-    onReelInitialized = function(){        
-        // transition between REEL and FOLIO if REEL AND FOLIO are initialized
-        /*if(MODULES.folio) {
-               
-        }*/
-        // or if(there ar no FOLIO, check if tablet and show CTA when needed)
-        MODULES.reel.on.initialized.remove(onReelInitialized)
-        console.log("signals >> onReelInitialized")
-        playReel();
+    onReadyToPlay = function(){        
+        MODULES.reel.on.readyToPlay.remove(onReadyToPlay);
+        overlay.show(overlay.CTA_MOBILE);
     }
     
-     playReel = function(){
+    onReelInitialized = function(){        
+        MODULES.reel.on.initialized.remove(onReelInitialized);
+        
+    }
+    
+    onPlayStarted = function(){        
+        MODULES.reel.on.playStarted.remove(onPlayStarted);
+        overlay.hide();
+        console.log("onPlayStarted")
+    }
+    
+    /*playReel = function(){
         //MODULES.reel.appendTimelineDiv();
         MODULES.reel.play();
         overlay.hide();
-    }
+    }*/
     
     /******* HEADER MODULE *******/
     

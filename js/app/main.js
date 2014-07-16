@@ -11,7 +11,7 @@
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:false};
+hyperDriveTransition:true, volumeReel:0};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
 
@@ -46,6 +46,7 @@ function msg(t) {
     document.getElementById("debugText").innerHTML = tTemp
 }
 
+var GLOBAL_ACCESS = this;
 
 require.config({
     /*shim: {

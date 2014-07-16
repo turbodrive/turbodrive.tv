@@ -15,30 +15,129 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timelineIsCreated = false;
     var twTmlePanel, twTmleAngle, twAlphaTmleBg;
     var timelineEl;
+    //
+    var ytReelPlayer;
+    var videoInitialized = false;
 
     // Signal Events
     reelPlayer.on = {
-        initialized : new signals.Signal()
+        initialized : new signals.Signal(),
+        readyToPlay : new signals.Signal(),
+        playStarted : new signals.Signal()
     }        
 
     reelPlayer.init = function (timelineDiv) {
         timelineEl = timelineDiv
-        createTimeline();        
-        reelPlayer.resize();
-        reelPlayer.on.initialized.dispatch();
+        loadYTPlayer();
+        //createTimeline();
     }
     
     reelPlayer.resize = function () {
-        updateP3Pos();
-        if(timelineIsCreated) bgTimeline.attr("width",LAYOUT.viewportW)
-        $("#footerGradient").attr("width",LAYOUT.viewportW);
-        $("#hexagrid").attr("width",LAYOUT.viewportW);
+        
+        if(timelineIsCreated){
+            updateP3Pos();
+            bgTimeline.attr("width",LAYOUT.viewportW)
+            $("#footerGradient").attr("width",LAYOUT.viewportW);
+            $("#hexagrid").attr("width",LAYOUT.viewportW);
+        }
     }
     
     reelPlayer.play = function () {
-       // play youtube reel
+       if(ytReelPlayer) ytReelPlayer.playVideo();
     }
     
+    /******************************/ 
+    /********** TIMELINE **********/
+    /******************************/
+    
+    var loadYTPlayer = function()
+    {
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+
+    GLOBAL_ACCESS.onYouTubeIframeAPIReady = function () {
+        console.log("youtubeAPIReady")
+        //startCheckPlayHead();
+        
+        ytReelPlayer = new YT.Player('ytPlayer', {
+            width: '100%',
+            height: '100%',
+            videoId: '0n_m_LJQ6zo',
+            playerVars: {
+                playsinline: 0,
+                html5: 1,
+                showinfo: 0,
+                controls: 0,
+                enablejsapi: 1,
+                modestbranding: 1,
+                autoplay:1,
+                hd: 1
+            },
+            events: {
+              'onReady': onYTPlayerReady
+            }
+        });
+    }
+    
+    var onYTPlayerReady = function(event) {
+        console.log("onPlayerReady >> CONFIG.isMobile = " + CONFIG.isMobile)
+        ytReelPlayer.addEventListener('onStateChange', onPlayerStateChange)
+        ytReelPlayer.removeEventListener('onReady', onYTPlayerReady)
+        
+        
+        
+        if(CONFIG.isMobile){
+            ytReelPlayer.pauseVideo();
+            reelPlayer.on.readyToPlay.dispatch();
+        }else{
+            //ytReelPlayer.playVideo();
+        }
+        
+        reelPlayer.resize();
+        reelPlayer.on.initialized.dispatch();
+        // ready to receive interaction
+    }
+    
+    var onPlayerStateChange = function(event){
+        console.log("2. onPlayerStateChange >> " + event.data);
+        switch (event.data) { // idCode = event.data
+            case -1:
+                //enableClickVideoOverlay();
+                TweenMax.to($('#startExperience'),0.3, {autoAlpha:0});
+                break;
+            case 1:
+                //enableClickVideoOverlay();
+                setTimeout(initVideo, 1200);
+                break;
+            case 2:
+                console.log("gotoAbout ?")
+                break;
+        }
+    }
+    
+    var initVideo = function() {
+        console.log("initVideo")
+        
+        ytReelPlayer.setVolume(CONFIG.volumeReel);
+        reelPlayer.on.playStarted.dispatch();
+        //if(videoInitialized) return
+        
+        //removeCTATablet();
+        //startCheckPlayHead();
+
+        // in case of FlashPlayer used instead of HTML5 in the frame
+        // allow the overlays
+        $('iframe[src^="//www.youtube.com/embed"').each(function(){
+            var url = $(this).attr("src");
+            var separator = (url.indexOf('?') > 0) ? '&' : '?';
+            $(this).attr('src', url + separator + 'wmode=opaque');
+        });
+        videoInitialized = true
+    }
     
     /******************************/ 
     /********** TIMELINE **********/
