@@ -16,8 +16,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var twTmlePanel, twTmleAngle, twAlphaTmleBg;
     var timelineEl;
     //
-    var ytReelPlayer;
+    var video;
     var videoInitialized = false;
+    var playButton;
 
     // Signal Events
     reelPlayer.on = {
@@ -28,7 +29,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
 
     reelPlayer.init = function (timelineDiv) {
         timelineEl = timelineDiv
-        loadYTPlayer();
+        initVideoPlayer();
         //createTimeline();
     }
     
@@ -43,100 +44,98 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     reelPlayer.play = function () {
-       if(ytReelPlayer) ytReelPlayer.playVideo();
+       video.play();
     }
     
     /******************************/ 
-    /********** TIMELINE **********/
+    /************ VIDEO ***********/
     /******************************/
     
-    var loadYTPlayer = function()
-    {
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    }
-
-
-    GLOBAL_ACCESS.onYouTubeIframeAPIReady = function () {
-        console.log("youtubeAPIReady")
-        //startCheckPlayHead();
+    var autoPlay = true;
+    var initVideoPlayer = function(){
+        video = $("#video")[0];
+        video.muted = true;
         
-        ytReelPlayer = new YT.Player('ytPlayer', {
-            width: '100%',
-            height: '100%',
-            videoId: '0n_m_LJQ6zo',
-            playerVars: {
-                playsinline: 0,
-                html5: 1,
-                showinfo: 0,
-                controls: 0,
-                enablejsapi: 1,
-                modestbranding: 1,
-                autoplay:1,
-                hd: 1
-            },
-            events: {
-              'onReady': onYTPlayerReady
-            }
+        playButton = $("#play-pause");
+        
+        
+        playButton.on("click", function() {
+          if (video.paused) {
+              video.play();
+              fadeButtonText();
+          } else {
+              video.pause();
+          }
         });
-    }
-    
-    var onYTPlayerReady = function(event) {
-        console.log("onPlayerReady >> CONFIG.isMobile = " + CONFIG.isMobile)
-        ytReelPlayer.addEventListener('onStateChange', onPlayerStateChange)
-        ytReelPlayer.removeEventListener('onReady', onYTPlayerReady)
         
         
+        video.addEventListener("playing", function() {
+            reelPlayer.on.playStarted.dispatch();
+            fadeButton();
+        });
+        
+        video.addEventListener("loadstart", function() {
+            console.log("loadstart")
+        });
+        
+        video.addEventListener("durationchange", function() {
+            console.log("durationchange")
+        });
         
         if(CONFIG.isMobile){
-            ytReelPlayer.pauseVideo();
-            reelPlayer.on.readyToPlay.dispatch();
+            video.addEventListener("progress", mobileReady);
+            video.addEventListener("canplaythrough", mobileReady);
         }else{
-            //ytReelPlayer.playVideo();
+            video.addEventListener("canplaythrough", function() {
+                console.log("canplaythrough Desktop");
+                playButton.remove();
+                playButton = null;
+                video.play();
+            });
         }
         
-        reelPlayer.resize();
-        reelPlayer.on.initialized.dispatch();
-        // ready to receive interaction
-    }
-    
-    var onPlayerStateChange = function(event){
-        console.log("2. onPlayerStateChange >> " + event.data);
-        switch (event.data) { // idCode = event.data
-            case -1:
-                //enableClickVideoOverlay();
-                TweenMax.to($('#startExperience'),0.3, {autoAlpha:0});
-                break;
-            case 1:
-                //enableClickVideoOverlay();
-                setTimeout(initVideo, 1200);
-                break;
-            case 2:
-                console.log("gotoAbout ?")
-                break;
-        }
-    }
-    
-    var initVideo = function() {
-        console.log("initVideo")
-        
-        ytReelPlayer.setVolume(CONFIG.volumeReel);
-        reelPlayer.on.playStarted.dispatch();
-        //if(videoInitialized) return
-        
-        //removeCTATablet();
-        //startCheckPlayHead();
-
-        // in case of FlashPlayer used instead of HTML5 in the frame
-        // allow the overlays
-        $('iframe[src^="//www.youtube.com/embed"').each(function(){
-            var url = $(this).attr("src");
-            var separator = (url.indexOf('?') > 0) ? '&' : '?';
-            $(this).attr('src', url + separator + 'wmode=opaque');
+        video.addEventListener("loadstart", function() {
+            console.log("loadstart")
         });
-        videoInitialized = true
+        
+        video.addEventListener("progress", function() {
+            console.log("progress")
+        });
+        
+        video.addEventListener("canplaythrough", function() {
+            console.log("canplaythrough")
+        });
+        
+        videoInitialized = true;
+        console.log(" >> videoInitialized");
+        video.play();
+    }
+    
+    var mobileReady = function(event) {
+        autoPlay = false;
+        video.removeEventListener("progress", mobileReady);
+        video.removeEventListener("canplaythrough", mobileReady);
+        console.log("progress - Mobile");
+        playButton.css("visibility", "visible");
+        reelPlayer.on.initialized.dispatch();
+    }
+    
+    var fadeButtonText = function() {
+        TweenMax.to(playButton, 0.3, {
+            textShadow:"1px 1px 1px rgba(255, 255, 255, 0)",
+            color:"rgba(255,255,255,0)"});
+    }
+    
+    var fadeButton = function() {
+        if(!playButton) return;
+        TweenMax.to(playButton,0.2, {
+            delay:1.3,
+            opacity:0,
+            onComplete:function(){
+                playButton.remove();
+                playButton = null;
+            }
+        })
     }
     
     /******************************/ 

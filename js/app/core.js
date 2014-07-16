@@ -132,7 +132,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }  
     
     hideFolioContent = function() {
-        $("#folioContent").css("visibility", "hidden")
+        $("#folioContent").css("visibility", "hidden");
     }
         
     /******* FOLIO MODULE *******/
@@ -210,12 +210,12 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     onReadyToPlay = function(){        
         MODULES.reel.on.readyToPlay.remove(onReadyToPlay);
-        overlay.show(overlay.CTA_MOBILE);
+        
     }
     
     onReelInitialized = function(){        
         MODULES.reel.on.initialized.remove(onReelInitialized);
-        
+        overlay.show(overlay.CTA_MOBILE);
     }
     
     onPlayStarted = function(){        
