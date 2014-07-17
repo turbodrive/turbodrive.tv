@@ -28,7 +28,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         playStarted : new signals.Signal(),
         showHeader : new signals.Signal(),
         showGmd : new signals.Signal(),
-        hideGmd : new signals.Signal()
+        hideGmd : new signals.Signal(),
+        videoComplete : new signals.Signal()
     }        
 
     reelPlayer.init = function (timelineDiv) {
@@ -103,9 +104,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         startAt: 500
     }];
     
+    var nbrChapters = timelineChapters.length;
     var timeGmd = [0, 28, 44, 57, 71, 92, 105, 123, 137];
     var currentGmd = 0;
-    var timeHeader = 38;
+    var timeHeader = 5; //38
     var timeTimeline = 32;
     var timeTimeline2 = 173;
     var gmdShown = false;
@@ -174,7 +176,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         video.addEventListener("ended", function() {
             // gotoAbout
-            //window.location("#folio/about/");
+            reelPlayer.on.videoComplete.dispatch();
         });
         
         video.addEventListener("timeupdate", onTimeUpdate);
@@ -216,12 +218,13 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         cTime = video.currentTime;
         
-        for (var i = 0; i < timelineChapters.length; i++) {
+        for (var i = nbrChapters-2; i >= 0; i--) {
             var chapter = timelineChapters[i];
             var nextChapter = timelineChapters[i + 1];
             if (cTime >= chapter.startAt && cTime < nextChapter.startAt) {
                 if (currentChapter == null || currentChapter.id != chapter.id) {
                     currentChapter = chapter;
+                    console.log("currentChapter > " + currentChapter.id)
                     if (i > 0) {
                         cTimeGmd = timeGmd[i];
                     }
@@ -260,14 +263,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
 
         if (gmdDuration > 0) {
             if (cTime > cTimeGmd && cTime < (cTimeGmd + gmdDuration)) {
-                console.log("REEL >> PLAY GMD");
-                playGmd()
+                playGmd();
             } else {
-                console.log("REEL >> HIDE GMD");
                 hideGmd();
             }
         }
-        
     }
     
     function playGmd() {
@@ -281,7 +281,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         if (gmdShown) {
             force = (typeof force !== 'undefined') ? force : false;
             reelPlayer.on.hideGmd.dispatch(force);
-            gmdShown = false
+            gmdShown = false;
         }
     }
     

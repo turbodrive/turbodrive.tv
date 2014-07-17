@@ -203,6 +203,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.showHeader.add(onShowHeader);
                 MODULES.reel.on.showGmd.add(onShowGmd);
                 MODULES.reel.on.hideGmd.add(onHideGmd);
+                MODULES.reel.on.videoComplete.add(onVideoComplete);
                 MODULES.reel.init(gatherTimeline());
                 
                 if(CONFIG.isMobile){
@@ -225,7 +226,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     onShowHeader = function() {
-        showHeader();
+        showHeader(true);
     }
     
     onShowGmd = function() {
@@ -236,6 +237,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         overlay.hide(overlay.GETMOREDETAILS, force);
     }
     
+    onVideoComplete = function() {
+        hasher.setHash("folio","about/");
+    }
+    
     /*playReel = function(){
         //MODULES.reel.appendTimelineDiv();
         MODULES.reel.play();
@@ -244,15 +249,15 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     /******* HEADER MODULE *******/
     
-    showHeader = function(){
+    showHeader = function(stealthMode){
         if(!MODULES.header){
             require(["app/header"], function(header){
                 MODULES.header = header;
                 MODULES.header.init();
-                MODULES.header.show();
+                MODULES.header.show(stealthMode);
             })
         }else{
-            MODULES.header.show();
+            MODULES.header.show(stealthMode);
         }        
     }
     

@@ -66,7 +66,6 @@ define(["jquery","TweenMax"], function ($,TweenMax){
         }else{
             enablePointer();
         }*/
-        console.log("showOverlay >> " + element);
         if(element == overlay.GETMOREDETAILS){
             TweenMax.set(newEl, {autoAlpha:1});
             gmdAnimation.play()
@@ -77,9 +76,7 @@ define(["jquery","TweenMax"], function ($,TweenMax){
     }
     
     overlay.hide = function(element, force){
-        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;
-        console.log("hideOverlay >> " + element);
-        
+        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;       
         if(element == null) {
             for(var i = 0 ;i< listElements.length; i++){
                 overlay.hide(listElements[i], force);

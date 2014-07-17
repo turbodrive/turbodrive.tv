@@ -348,6 +348,36 @@ a.about-button {
     padding-bottom: 20px!important;
 }
 
+.navbar-stealth {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    transition: 0.3s;
+}
+
+.navbar-stealth:hover {
+    background-color: #241625;
+    border-bottom-color: #262223;
+}
+
+.navbar-stealth .container {
+    opacity: 0.6;
+    transition: 0.4s;
+}
+
+.navbar-stealth .navbar-header,
+.navbar-stealth .button-contact {
+    transition: 0.4s;
+    opacity: 0;
+}
+
+.navbar-stealth:hover .navbar-header,
+.navbar-stealth:hover .container,
+.navbar-stealth:hover .button-contact {
+   opacity: 1;
+}
+
+
+
 /***** MENU3D *******/
 .menu3D {
     display: block;

@@ -44,8 +44,13 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         //controlMenuState("share");
     }
     
-    header.show = function() {
+    header.show = function(stealthMode) {
         TweenMax.to($(".navbar-default"),0.5, {autoAlpha:1});
+        if(stealthMode) {
+            $(".navbar-default").addClass("navbar-stealth");
+        }else {
+            $(".navbar-default").removeClass("navbar-stealth");
+        }
     }
     
     /* closing menu header from external module*/
