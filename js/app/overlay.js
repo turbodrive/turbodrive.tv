@@ -1,86 +1,94 @@
 define(["jquery","TweenMax"], function ($,TweenMax){
     
-    var overlay = {
-        LOADER : "loader",
-        CTA_MOBILE : "callToActionMobile",
-        GETMOREDETAILS : "getMoreDetails",
-        MAIN : "main"
-    };    
-    
-    var currentElName = overlay.LOADER;
-    
     var loader = $(".loader-overlay");
-    var ctaMobile = $(".start-overlay");
     var main = $(".video-overlay");
     var gmd = $(".getmore-overlay");
-    var bg = $(".blackBg-overlay");
     
-    enablePointer = function(){
+    var listElements = ["loader","getMoreDetails"];
+    var overlay = {
+        LOADER : listElements[0],
+        GETMOREDETAILS : listElements[1]
+    };
+    
+    var currentElName = overlay.LOADER;
+    var gmdAnimation;
+    
+    /*enablePointer = function(){
         main.css("pointer-events", "auto");
-        ctaMobile.css("pointer-events", "auto");
         bg.css("pointer-events", "auto");
     }
     
     disablePointer = function(){
         main.css("pointer-events", "none");
-        ctaMobile.css("pointer-events", "none");
         bg.css("pointer-events", "none");
-    }
+    }*/
     
-    showMain = function(){
+    var showMain = function(){
         main.css("opacity", 1);
         main.css("visibility", "show");
     }
     
-    getAssociatedElement = function(key){
+    var getAssociatedElement = function(key){
         switch(key){
-            case overlay.CTA_MOBILE :
-                return ctaMobile;
-                break;
             case overlay.LOADER :
                 return loader;
                 break;
             case overlay.GETMOREDETAILS :
                 return gmd;
                 break;
-            case overlay.MAIN :
-                return ctaMobile;
-                break;
-            default :
-                return null;
         }
         return null;
     }
     
-    overlay.show = function(element, showBackground){
+    
+    GLOBAL_ACCESS.gmdReady = function(sym){
+        gmdAnimation = sym;
+    }
+    
+    overlay.loadGmd = function(){
+        require(["GmdEdge"], function(GmdEdge){
+            console.log("firstScript getMoreDetails loaded");
+        });
+    }
+    
+    overlay.removeGmd = function(){
+        $(gmdAnimation).remove();
+        console.log("removed GMD");
+    }
+    
+    overlay.show = function(element){
         showMain();
-        var newEl = getAssociatedElement(element)
-        overlay.hide(currentElName);
+        var newEl = getAssociatedElement(element);
+        if(currentElName != "") overlay.hide(currentElName);
         
-        if(showBackground){
-            TweenMax.to(bg, 0.5, {autoAlpha:1})
-        }
-        
-        if(element == overlay.CTA_MOBILE){
+        /*if(element == overlay.CTA_MOBILE){
             disablePointer();
         }else{
             enablePointer();
-        }
-        
-        if(element == overlay.GETMOREDETAILS || element == overlay.CTA_MOBILE){
-            TweenMax.set(newEl, {autoAlpha:1})
+        }*/
+        console.log("showOverlay >> " + element);
+        if(element == overlay.GETMOREDETAILS){
+            TweenMax.set(newEl, {autoAlpha:1});
+            gmdAnimation.play()
         }else {
-            TweenMax.to(newEl, 0.5, {autoAlpha:1})
+            TweenMax.to(newEl, 0.5, {autoAlpha:1});
         }
         currentElName = element;
     }
     
-    overlay.hide = function(element){
+    overlay.hide = function(element, force){
+        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;
+        console.log("hideOverlay >> " + element);
+        
         if(element == null) {
-            TweenMax.to(main, 0.5, {autoAlpha:0});
+            for(var i = 0 ;i< listElements.length; i++){
+                overlay.hide(listElements[i], force);
+            }
         } else {
-            TweenMax.to(getAssociatedElement(element), 0.5, {autoAlpha:0})
-        }        
+            TweenMax.to(getAssociatedElement(element), duration, {autoAlpha:0});
+        }
+        
+        if(element == currentElName) currentElName = "";
     }    
     
     return overlay;

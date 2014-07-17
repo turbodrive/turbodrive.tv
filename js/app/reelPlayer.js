@@ -12,29 +12,34 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var twObjects = {};
     twObjects.wBg = 0
     twObjects.p2Rotation = 0
+    
+    var timelineIsInitialized = false;
     var timelineIsCreated = false;
     var twTmlePanel, twTmleAngle, twAlphaTmleBg;
     var timelineEl;
-    //
+    
     var video;
     var videoInitialized = false;
     var playButton;
-
+    
     // Signal Events
     reelPlayer.on = {
-        initialized : new signals.Signal(),
-        readyToPlay : new signals.Signal(),
-        playStarted : new signals.Signal()
+        mobileCTAReady : new signals.Signal(),
+        playStarted : new signals.Signal(),
+        showHeader : new signals.Signal(),
+        showGmd : new signals.Signal(),
+        hideGmd : new signals.Signal()
     }        
 
     reelPlayer.init = function (timelineDiv) {
         timelineEl = timelineDiv
-        initVideoPlayer();
+        //reelPlayer.on.initialized.dispatch();
         //createTimeline();
+        initVideoPlayer();
     }
     
-    reelPlayer.resize = function () {
-        
+    reelPlayer.resize = function ()
+    {
         if(timelineIsCreated){
             updateP3Pos();
             bgTimeline.attr("width",LAYOUT.viewportW)
@@ -47,6 +52,68 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
        video.play();
     }
     
+    /******************************/
+    /******** VARS & DATA *********/
+    /******************************/
+    
+    var currentChapter;
+    var timelineChapters = [
+    {
+        id: "preInto",
+        startAt: 0,
+        gmdDuration: 0
+    }, {
+        id: "intro",
+        startAt: 12,
+        gmdDuration: 2
+    }, {
+        id: "tot",
+        projectIndex: 0,
+        startAt: 39
+    }, {
+        id: "ikaf",
+        projectIndex: 1,
+        startAt: 55
+    }, {
+        id: "borgia",
+        projectIndex: 2,
+        startAt: 69
+    }, {
+        id: "gs",
+        projectIndex: 3,
+        startAt: 89
+    }, {
+        id: "tl",
+        projectIndex: 4,
+        startAt: 103
+    }, {
+        id: "greetings",
+        projectIndex: 5,
+        startAt: 118
+    }, {
+        id: "ikaf2",
+        projectIndex: 6,
+        startAt: 133
+    }, {
+        id: "outro",
+        projectIndex: 7,
+        startAt: 164
+    }, {
+        id: "end",
+        startAt: 500
+    }];
+    
+    var timeGmd = [0, 28, 44, 57, 71, 92, 105, 123, 137];
+    var currentGmd = 0;
+    var timeHeader = 38;
+    var timeTimeline = 32;
+    var timeTimeline2 = 173;
+    var gmdShown = false;
+    var timeDetectRange = 2;
+    var defaultGmdDuration = 8;
+    var cTime = 0;
+    var cTimeGmd = -1;
+    
     /******************************/ 
     /************ VIDEO ***********/
     /******************************/
@@ -57,7 +124,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         video.muted = true;
         
         playButton = $("#play-pause");
-        
         
         playButton.on("click", function() {
           if (video.paused) {
@@ -75,11 +141,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         });
         
         video.addEventListener("loadstart", function() {
-            console.log("loadstart")
+            console.log("loadstart");
         });
         
         video.addEventListener("durationchange", function() {
-            console.log("durationchange")
+            console.log("durationchange");
         });
         
         if(CONFIG.isMobile){
@@ -95,16 +161,23 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
         
         video.addEventListener("loadstart", function() {
-            console.log("loadstart")
+            console.log("loadstart");
         });
         
-        video.addEventListener("progress", function() {
+        /*video.addEventListener("progress", function() {
             console.log("progress")
-        });
+        });*/
         
         video.addEventListener("canplaythrough", function() {
             console.log("canplaythrough")
         });
+        
+        video.addEventListener("ended", function() {
+            // gotoAbout
+            //window.location("#folio/about/");
+        });
+        
+        video.addEventListener("timeupdate", onTimeUpdate);
         
         videoInitialized = true;
         console.log(" >> videoInitialized");
@@ -117,7 +190,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         video.removeEventListener("canplaythrough", mobileReady);
         console.log("progress - Mobile");
         playButton.css("visibility", "visible");
-        reelPlayer.on.initialized.dispatch();
+        reelPlayer.on.mobileCTAReady.dispatch();
     }
     
     var fadeButtonText = function() {
@@ -132,10 +205,84 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             delay:1.3,
             opacity:0,
             onComplete:function(){
+                if(!playButton) return;
                 playButton.remove();
                 playButton = null;
             }
         })
+    }
+    
+    var onTimeUpdate = function(event) {
+        
+        cTime = video.currentTime;
+        
+        for (var i = 0; i < timelineChapters.length; i++) {
+            var chapter = timelineChapters[i];
+            var nextChapter = timelineChapters[i + 1];
+            if (cTime >= chapter.startAt && cTime < nextChapter.startAt) {
+                if (currentChapter == null || currentChapter.id != chapter.id) {
+                    currentChapter = chapter;
+                    if (i > 0) {
+                        cTimeGmd = timeGmd[i];
+                    }
+                    if (typeof chapter.gmdDuration !== 'undefined') {
+                        gmdDuration = chapter.gmdDuration;
+                    } else {
+                        gmdDuration = defaultGmdDuration;
+                    }
+                }
+                break;
+            }
+        }
+        
+        if(cTime > 31) {
+            createTimeline();
+        }
+
+        /*if(currentChapter.id == timelineChapters[0].id){
+            globalVideoOverlay.css("cursor", "auto");   
+        }else{
+            globalVideoOverlay.css("cursor", "pointer");
+        }*/
+
+        if (cTime < timeGmd[0] && currentGmd > 0) currentGmd = 0
+        if (cTime > timeHeader && cTime < timeHeader + timeDetectRange) {
+            reelPlayer.on.showHeader.dispatch();
+        }
+        
+        /*if (cTime > timeTimeline && cTime < timeTimeline + timeDetectRange) {
+            //showAndHideTimeline();
+        }
+
+        if (cTime > timeTimeline2 && cTime < timeTimeline2 + timeDetectRange) {
+            //showAndHideTimeline();
+        }*/
+
+        if (gmdDuration > 0) {
+            if (cTime > cTimeGmd && cTime < (cTimeGmd + gmdDuration)) {
+                console.log("REEL >> PLAY GMD");
+                playGmd()
+            } else {
+                console.log("REEL >> HIDE GMD");
+                hideGmd();
+            }
+        }
+        
+    }
+    
+    function playGmd() {
+        if (!gmdShown) {
+            gmdShown = true;
+            reelPlayer.on.showGmd.dispatch();
+        }
+    }
+
+    function hideGmd(force) {
+        if (gmdShown) {
+            force = (typeof force !== 'undefined') ? force : false;
+            reelPlayer.on.hideGmd.dispatch(force);
+            gmdShown = false
+        }
     }
     
     /******************************/ 
@@ -164,6 +311,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var createTimeline = function () {
+        if(timelineIsInitialized) return
         appendTimelineDiv();
         
         p2 = $("#timelineP2");
@@ -171,15 +319,14 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         p2Y = p2.attr("y");
         p3 = $("#timelineP3");
         bgTimeline = $("#bgTimeline");
-        $(".timeline").on("mouseover", mouseOverTimelineHandler)
-        $(".timeline").on("mouseout", mouseOutTimelineHandler)
-        $("#bgTimeline").on("click", clickTimelineHandler)
+        $(".timeline").on("mouseover", mouseOverTimelineHandler);
+        $(".timeline").on("mouseout", mouseOutTimelineHandler);
+        $("#bgTimeline").on("click", clickTimelineHandler);
         
         progTimeline = $("#bgProgress");
         bgTimeline.attr("width",twObjects.wBg)
-        progTimeline.attr("width",0)  
-        
-        openTimeline(true)
+        progTimeline.attr("width",0);        
+        openTimeline(true);
         TweenMax.to(twObjects,1,{delay:1, wBg:LAYOUT.viewportW, ease:Linear.easeNone,
             onUpdate:function(){
                 bgTimeline.attr("width",twObjects.wBg);
@@ -189,13 +336,15 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             }
         });        
         
-        setTimeout(closeTimeline, 2500) 
+        setTimeout(closeTimeline, 2500)
+        timelineIsInitialized = true;
     }
     
     var openTimeline = function(first) {        
         if(first){
-            twObjects.p2Rotation = -52
-            $(".timeline").css("bottom",0)
+            twObjects.p2Rotation = -52;
+            $(".timeline").css("bottom",0);
+            updateP3Pos();
         }else{
             if(twTmlePanel) twTmlePanel.pause();
             if(twTmleAngle) twTmleAngle.pause();

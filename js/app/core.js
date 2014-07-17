@@ -194,34 +194,46 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     loadReel = function(){
         unBindTouchEvents();
         if(!MODULES.reel){
-            // show Loader ??            
+            // show Loader ??
+            overlay.loadGmd();
             require(["app/reelPlayer"], function(reelPlayer){
                 console.log("reelplayer loaded");
                 MODULES.reel = reelPlayer;
-                MODULES.reel.on.initialized.add(onReelInitialized);
-                MODULES.reel.on.readyToPlay.add(onReadyToPlay);
                 MODULES.reel.on.playStarted.add(onPlayStarted);
+                MODULES.reel.on.showHeader.add(onShowHeader);
+                MODULES.reel.on.showGmd.add(onShowGmd);
+                MODULES.reel.on.hideGmd.add(onHideGmd);
                 MODULES.reel.init(gatherTimeline());
+                
+                if(CONFIG.isMobile){
+                    MODULES.reel.on.mobileCTAReady.add(onReelMobileReady);
+                }
             })
         }else{
             playReel();
         }
     }   
     
-    onReadyToPlay = function(){        
-        MODULES.reel.on.readyToPlay.remove(onReadyToPlay);
-        
-    }
-    
-    onReelInitialized = function(){        
-        MODULES.reel.on.initialized.remove(onReelInitialized);
-        overlay.show(overlay.CTA_MOBILE);
+    onReelMobileReady = function(){        
+        MODULES.reel.on.initialized.remove(onReelMobileReady);
+        overlay.hide();
     }
     
     onPlayStarted = function(){        
         MODULES.reel.on.playStarted.remove(onPlayStarted);
         overlay.hide();
-        console.log("onPlayStarted")
+    }
+    
+    onShowHeader = function() {
+        showHeader();
+    }
+    
+    onShowGmd = function() {
+        overlay.show(overlay.GETMOREDETAILS);
+    }
+    
+    onHideGmd = function(force) {
+        overlay.hide(overlay.GETMOREDETAILS, force);
     }
     
     /*playReel = function(){
