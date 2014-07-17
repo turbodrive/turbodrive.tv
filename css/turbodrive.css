@@ -366,15 +366,13 @@ a.about-button {
     transition: 0.4s;
 }
 
-.navbar-stealth .navbar-header,
-.navbar-stealth .button-contact {
+.navbar-stealth .navbar-header {
     transition: 0.4s;
     opacity: 0;
 }
 
 .navbar-stealth:hover .navbar-header,
-.navbar-stealth:hover .container,
-.navbar-stealth:hover .button-contact {
+.navbar-stealth:hover .container {
    opacity: 1;
 }
 

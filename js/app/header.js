@@ -8,6 +8,8 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     var header = {};
     var panelHeight = 313;
     var navMenuHeight = 50;
+    var stealthEnabled = false;
+    var isOpen = false;
     
     // header Signal Events
     header.on = {
@@ -46,11 +48,21 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         //controlMenuState("share");
     }
     
+    header.isOpen = function() {
+        return isOpen;
+    }
+
     header.show = function(stealthMode) {
         TweenMax.to($(".navbar-default"),0.5, {autoAlpha:1});
-        if(stealthMode) {
+        stealthEnabled = stealthMode;
+        updateStealthStatus();
+        
+    }
+    
+    var updateStealthStatus = function(){
+        if(stealthEnabled && !isOpen) {
             $(".navbar-default").addClass("navbar-stealth");
-        }else {
+        } else {
             $(".navbar-default").removeClass("navbar-stealth");
         }
     }
@@ -172,9 +184,12 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         
         if(yTarget == -panelHeight){
             header.on.close.dispatch();
+            isOpen = false;
         }else {
             header.on.open.dispatch();
+            isOpen = true;
         }
+        updateStealthStatus();
     }
     
     var getWidthPanel = function() {

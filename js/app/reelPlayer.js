@@ -142,8 +142,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var nbrChapters = timelineChapters.length;
     var timeGmd = [0, 28, 44, 57, 71, 92, 105, 123, 137];
     var currentGmd = 0;
-    var timeHeader = 5; //38
-    var timeTimeline = 32;
+    var timeHeader = 38;
     var timeTimeline2 = 173;
     var gmdIsPlaying = false;
     var timeDetectRange = 2;
@@ -252,7 +251,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             }
         }
         
-        if(cTime > 3) { /**/
+        if(cTime > 31) {
             createTimeline();
         }
 

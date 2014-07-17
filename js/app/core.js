@@ -67,7 +67,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onClickMainOverlay = function() {
-        if(MODULES.reel){
+        if(MODULES.header && MODULES.header.isOpen()){
+            MODULES.header.close();   
+        }else if(MODULES.reel){
             var currentChapter = MODULES.reel.getCurrentChapter();
             if(currentChapter && currentChapter.link){
                 window.location.hash = currentChapter.link;
