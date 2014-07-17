@@ -62,7 +62,17 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         $(window).resize(resizeWindowHandler);
         resizeWindowHandler(null);
         
-        // hide loader
+        // overlay
+        overlay.on.clickMainOverlay.add(onClickMainOverlay);
+    }
+    
+    var onClickMainOverlay = function() {
+        if(MODULES.reel){
+            var currentChapter = MODULES.reel.getCurrentChapter();
+            if(currentChapter && currentChapter.link){
+                window.location.hash = currentChapter.link;
+            }
+        }
     }
     
     loadCss = function(url) {
@@ -106,7 +116,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 // switch3D ?
                 loadFolio(page, section);
             }else {
-                // seek youtube video
+                console.log("seek TO >> " + page)
+                MODULES.reel.seekToChapter(page)
             }
         }else if(currentEnv == ""){
             if (isFolio) {
@@ -201,7 +212,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel = reelPlayer;
                 MODULES.reel.on.playStarted.add(onPlayStarted);
                 MODULES.reel.on.showHeader.add(onShowHeader);
-                MODULES.reel.on.showGmd.add(onShowGmd);
+                MODULES.reel.on.playGmd.add(onPlayGmd);
                 MODULES.reel.on.hideGmd.add(onHideGmd);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
                 MODULES.reel.init(gatherTimeline());
@@ -216,7 +227,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }   
     
     onReelMobileReady = function(){        
-        MODULES.reel.on.initialized.remove(onReelMobileReady);
+        MODULES.reel.on.mobileCTAReady.remove(onReelMobileReady);
         overlay.hide();
     }
     
@@ -229,7 +240,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         showHeader(true);
     }
     
-    onShowGmd = function() {
+    onPlayGmd = function() {
         overlay.show(overlay.GETMOREDETAILS);
     }
     
@@ -253,12 +264,24 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         if(!MODULES.header){
             require(["app/header"], function(header){
                 MODULES.header = header;
+                MODULES.header.on.close.add(onCloseHeader)
+                MODULES.header.on.open.add(onOpenHeader)
                 MODULES.header.init();
                 MODULES.header.show(stealthMode);
             })
         }else{
             MODULES.header.show(stealthMode);
         }        
+    }
+    
+    var onCloseHeader = function(){
+        if(MODULES.reel) MODULES.reel.resume();
+        overlay.resumeGmd();
+    }
+    
+    var onOpenHeader = function(){
+        if(MODULES.reel) MODULES.reel.pause();
+        overlay.pauseGmd();
     }
     
     /******* EVENT HANDLERS ******/

@@ -11,7 +11,9 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     
     // header Signal Events
     header.on = {
-        initialized : new signals.Signal()
+        initialized : new signals.Signal(),
+        open : new signals.Signal(),
+        close : new signals.Signal(),
     } 
     
     /* initialize events and header behaviors */
@@ -97,7 +99,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
 
         if (currentMenuState == idButton) {
             // toggle
-            yTarget = -200;
+            yTarget = -panelHeight;
 
             if (currentMenuState == "contact" || currentMenuState == "share") {
                 xTargetContent = -LAYOUT.viewportW;
@@ -167,6 +169,12 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             height: hTarget,
             y: yTarget
         })
+        
+        if(yTarget == -panelHeight){
+            header.on.close.dispatch();
+        }else {
+            header.on.open.dispatch();
+        }
     }
     
     var getWidthPanel = function() {

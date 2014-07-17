@@ -108,6 +108,7 @@ div {
     width:100%;
     height: 100px;
     bottom: 0px;
+    z-index: 90500;
 }
 
 #timelineSvg {
@@ -150,7 +151,8 @@ div {
     /*font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
     font-size: 30px;    
     text-transform:uppercase;*/
-    z-index: 20000;
+    z-index: 90000;
+    /*cursor: pointer;*/
 }
     .loader-overlay {
         position: absolute;
@@ -388,7 +390,7 @@ a.about-button {
     background-color: rgba(36,22,37,0.80);
     padding-top: 50px;
     overflow: hidden;
-    z-index: 200;
+    z-index: 90000;
 }
 
 .menuSelectedCases{

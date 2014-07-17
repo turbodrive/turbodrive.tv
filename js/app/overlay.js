@@ -1,4 +1,4 @@
-define(["jquery","TweenMax"], function ($,TweenMax){
+define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     
     var loader = $(".loader-overlay");
     var main = $(".video-overlay");
@@ -23,10 +23,20 @@ define(["jquery","TweenMax"], function ($,TweenMax){
         bg.css("pointer-events", "none");
     }*/
     
+    overlay.on = {
+        clickMainOverlay: new signals.Signal()
+    }
+    
     var showMain = function(){
         main.css("opacity", 1);
-        main.css("visibility", "show");
+        main.css("visibility", "show"); 
     }
+    
+    
+     main.click(function(event) {
+        overlay.on.clickMainOverlay.dispatch();
+    });
+    
     
     var getAssociatedElement = function(key){
         switch(key){
@@ -86,7 +96,23 @@ define(["jquery","TweenMax"], function ($,TweenMax){
         }
         
         if(element == currentElName) currentElName = "";
-    }    
+    }
+    
+    var pausedAnimation = false;
+    
+    overlay.pauseGmd = function(){
+        if(gmdAnimation.isPlaying()){
+            gmdAnimation.stop();
+            pausedAnimation = true;
+        }
+    }
+    
+    overlay.resumeGmd = function(){
+        if(pausedAnimation){
+            gmdAnimation.play();
+            pausedAnimation = false;
+        }
+    }
     
     return overlay;
 });

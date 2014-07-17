@@ -21,13 +21,14 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var video;
     var videoInitialized = false;
     var playButton;
+    var pausedVideo = false;
     
     // Signal Events
     reelPlayer.on = {
         mobileCTAReady : new signals.Signal(),
         playStarted : new signals.Signal(),
         showHeader : new signals.Signal(),
-        showGmd : new signals.Signal(),
+        playGmd : new signals.Signal(),
         hideGmd : new signals.Signal(),
         videoComplete : new signals.Signal()
     }        
@@ -49,8 +50,32 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
     }
     
+    reelPlayer.getCurrentChapter = function() {
+        return currentChapter;
+    }
+    
     reelPlayer.play = function () {
        video.play();
+    }
+    
+    reelPlayer.resume = function () {
+        if(!pausedVideo) return
+        video.play();
+        pausedVideo = false;
+    }
+    
+    reelPlayer.pause = function () {
+        video.pause();
+        pausedVideo = true;
+    }
+    
+    reelPlayer.seekToChapter = function(chapterId) {
+        for(var i = 0; i<timelineChapters.length ; i++){
+            var chapterInfo = timelineChapters[i];
+            if(chapterInfo.id == chapterId){
+                video.currentTime = chapterInfo.startAt;
+            }
+        }
     }
     
     /******************************/
@@ -62,43 +87,53 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     {
         id: "preInto",
         startAt: 0,
-        gmdDuration: 0
+        gmdDuration: 0,
+        link:null
     }, {
         id: "intro",
         startAt: 12,
-        gmdDuration: 2
+        gmdDuration: 2,
+        link:"#/reel/tot/"
     }, {
         id: "tot",
         projectIndex: 0,
-        startAt: 39
+        startAt: 39,
+        link:"#/folio/tot/"
     }, {
         id: "ikaf",
         projectIndex: 1,
-        startAt: 55
+        startAt: 55,
+        link:"#/folio/ikaf/"
     }, {
         id: "borgia",
         projectIndex: 2,
-        startAt: 69
+        startAt: 69,
+        link:"#/folio/borgia/"
     }, {
         id: "gs",
         projectIndex: 3,
-        startAt: 89
+        startAt: 89,
+        link:"#/folio/gs/"
     }, {
         id: "tl",
         projectIndex: 4,
-        startAt: 103
+        startAt: 103,
+        link:"#/folio/tl/"
     }, {
         id: "greetings",
         projectIndex: 5,
-        startAt: 118
+        startAt: 118,
+        link:"#/folio/greetings/"
     }, {
         id: "ikaf2",
         projectIndex: 6,
-        startAt: 133
+        startAt: 133,
+        link:"#/folio/ikaf2/"
     }, {
         id: "outro",
         projectIndex: 7,
-        startAt: 164
+        startAt: 164,
+        link:"#/folio/about/"
     }, {
         id: "end",
         startAt: 500
@@ -110,17 +145,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timeHeader = 5; //38
     var timeTimeline = 32;
     var timeTimeline2 = 173;
-    var gmdShown = false;
+    var gmdIsPlaying = false;
     var timeDetectRange = 2;
     var defaultGmdDuration = 8;
     var cTime = 0;
     var cTimeGmd = -1;
+    var globalVideoOverlay;
     
     /******************************/ 
     /************ VIDEO ***********/
     /******************************/
     
-    var autoPlay = true;
     var initVideoPlayer = function(){
         video = $("#video")[0];
         video.muted = true;
@@ -142,57 +177,37 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             fadeButton();
         });
         
-        video.addEventListener("loadstart", function() {
-            console.log("loadstart");
-        });
-        
-        video.addEventListener("durationchange", function() {
-            console.log("durationchange");
-        });
-        
         if(CONFIG.isMobile){
             video.addEventListener("progress", mobileReady);
             video.addEventListener("canplaythrough", mobileReady);
         }else{
-            video.addEventListener("canplaythrough", function() {
-                console.log("canplaythrough Desktop");
-                playButton.remove();
-                playButton = null;
-                video.play();
-            });
+            video.addEventListener("canplaythrough", dektopReady);
         }
-        
-        video.addEventListener("loadstart", function() {
-            console.log("loadstart");
-        });
-        
-        /*video.addEventListener("progress", function() {
-            console.log("progress")
-        });*/
-        
-        video.addEventListener("canplaythrough", function() {
-            console.log("canplaythrough")
-        });
-        
+
+        video.addEventListener("timeupdate", onTimeUpdate);
         video.addEventListener("ended", function() {
-            // gotoAbout
             reelPlayer.on.videoComplete.dispatch();
         });
         
-        video.addEventListener("timeupdate", onTimeUpdate);
-        
         videoInitialized = true;
-        console.log(" >> videoInitialized");
         video.play();
+        
+        globalVideoOverlay = $(".video-overlay");
     }
     
     var mobileReady = function(event) {
-        autoPlay = false;
         video.removeEventListener("progress", mobileReady);
         video.removeEventListener("canplaythrough", mobileReady);
-        console.log("progress - Mobile");
         playButton.css("visibility", "visible");
         reelPlayer.on.mobileCTAReady.dispatch();
+    }
+    
+    var dektopReady = function(event) {
+        video.removeEventListener("canplaythrough", dektopReady);
+        console.log("canplaythrough Desktop");
+        playButton.remove();
+        playButton = null;
+        video.play();
     }
     
     var fadeButtonText = function() {
@@ -224,7 +239,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             if (cTime >= chapter.startAt && cTime < nextChapter.startAt) {
                 if (currentChapter == null || currentChapter.id != chapter.id) {
                     currentChapter = chapter;
-                    console.log("currentChapter > " + currentChapter.id)
                     if (i > 0) {
                         cTimeGmd = timeGmd[i];
                     }
@@ -238,15 +252,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             }
         }
         
-        if(cTime > 31) {
+        if(cTime > 3) { /**/
             createTimeline();
         }
 
-        /*if(currentChapter.id == timelineChapters[0].id){
-            globalVideoOverlay.css("cursor", "auto");   
+        if(currentChapter.id == timelineChapters[0].id){
+            globalVideoOverlay.css("cursor", "auto");
+            globalVideoOverlay.css("pointer-events", "none");
         }else{
             globalVideoOverlay.css("cursor", "pointer");
-        }*/
+            globalVideoOverlay.css("pointer-events", "auto");
+        }
 
         if (cTime < timeGmd[0] && currentGmd > 0) currentGmd = 0
         if (cTime > timeHeader && cTime < timeHeader + timeDetectRange) {
@@ -270,18 +286,18 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
     }
     
-    function playGmd() {
-        if (!gmdShown) {
-            gmdShown = true;
-            reelPlayer.on.showGmd.dispatch();
+    var playGmd = function() {
+        if (!gmdIsPlaying) {
+            gmdIsPlaying = true;
+            reelPlayer.on.playGmd.dispatch();
         }
     }
 
-    function hideGmd(force) {
-        if (gmdShown) {
+    var hideGmd = function(force) {
+        if (gmdIsPlaying) {
             force = (typeof force !== 'undefined') ? force : false;
             reelPlayer.on.hideGmd.dispatch(force);
-            gmdShown = false;
+            gmdIsPlaying = false;
         }
     }
     
@@ -295,6 +311,20 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var mouseOutTimelineHandler = function(e){
         closeTimeline()
+    }
+    
+    var mouseDownTimelineHandler = function(event){
+        var pageX = event.pageX;
+        console.log("pageX = " + pageX);
+        if(pageX < p3X) {
+            console.log("nothing to do");
+        }else {
+            var scaleTime = (Number(pageX) - Number(p3X))/(Number(LAYOUT.viewportW) - Number(p3X));
+            var seektime = scaleTime*video.duration;
+            video.currentTime = seektime
+            console.log("get ratio > " + seektime);
+            console.log("get ratio > " + scaleTime);
+        }
     }
     
     var clickTimelineHandler = function(e){
@@ -320,6 +350,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         p3 = $("#timelineP3");
         bgTimeline = $("#bgTimeline");
         $(".timeline").on("mouseover", mouseOverTimelineHandler);
+        $(".timeline").on("mousedown", mouseDownTimelineHandler);
         $(".timeline").on("mouseout", mouseOutTimelineHandler);
         $("#bgTimeline").on("click", clickTimelineHandler);
         
