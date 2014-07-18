@@ -32,6 +32,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     folio.on = {
         initialized: new signals.Signal(),
         pageLoaded: new signals.Signal(),
+        readyForIntroTransition: new signals.Signal(),
         twPositionDefined: new signals.Signal()
     }
 
@@ -76,20 +77,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);
         stage.translate2D(LAYOUT.vW2, LAYOUT.vH2);
 
-
-        if (CONFIG.isFirefox) {
+        console.log("!! perspOrigin > " + $("#folio").css("perspective-origin"))
+        
+        if (CONFIG.isFirefox || CONFIG.isChrome36) {
+            // attention aux anciennes version de chrome (avant v36)!
             var p = String(Number(-LAYOUT.vW2)) + "px " + String(Number(-LAYOUT.vH2)) + "px";
-            console.log(" change persp > " + p)
-            $("#folio").css("perspective-origin", p)
+            $("#folio").css("perspective-origin", p);
         }
-
+        
+        console.log("!! perspOrigin2 > " + $("#folio").css("perspective-origin")) 
+            
         //if(currentPage3d) {
         interactContainer.translateOffsetX = -LAYOUT.vW2;
         interactContainer.translateOffsetY = -LAYOUT.vH2;
         interactContainer.translate2D(0, 0);
         //interactContainer.update();
-
-
 
         if (currentPage3D) updatePage3D(currentPage3D);
         if (previousPage3D) updatePage3D(previousPage3D);
@@ -436,9 +438,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var alphaPrtcle = 1;
     var prevIntZ = 0;
     
-    var countWidth = 0
-    var countFilter = 2;
-    var containersVars = {rotationX:-12,rotationY:-37};
+    //var countWidth = 0
+    //var countFilter = 2;
+    var initZ = -50000;
+    var translateObject = {z:initZ};
     
     /*startHyperDrive = function () {
         var ratioFramerate = frameRateInit / currentFrameRate;
@@ -486,7 +489,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         var rangeHeight = 2000; //2000
         var splitWidth = 100;
         var splitHeight = 100;
-        var initZ = -50000;
         
         if(CONFIG.isMobile) {
             // mobile-tablets only
@@ -502,12 +504,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             .setRegistrationPoint(0, 0, 0);
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
-        interactContainer.setRotationZ(70);
-        interactContainer.update();
+        /*interactContainer.setRotationY(-90);
+        interactContainer.setRotationZ(-70);*/
+        interactContainer.setRotation(0,-90,-70).update();
 
         
 
-        hyperdriveContainer.setPosition(-400, -10, 0 /*-initZ*/ );
+        hyperdriveContainer.setPosition(-400, -10, 0);
         hyperdriveContainer.setRotateFirst(false);
         hyperdriveContainer.update();
 
@@ -564,42 +567,45 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         //countWidth = 0;
         
-        var delay = 3;
+        var delay = 1;
         var duration = 5;
         var endDuration = 1.2;
         var total = (delay+duration);
         var endDelay = total-endDuration;
-        
-        //startHyperDrive();
-        stage.setRotation(-20,-33,0).update();
-        
-        TweenMax.to(stage, 1.5, {
-            delay: delay,
-            rotationX: 0,
-            rotationY: 0,
-            ease:Power1.easeInOut,
-            onUpdate: function () {
-                stage.update();
-            }
-        })
-        
-        
+                
         TweenMax.to(interactContainer, duration, {
+            onStart: fireReadyForIntroTransition,
             delay: delay,
             z: 0,
-            rotationZ: 0,
             onUpdate: function () {
-                interactContainer.update();
+                interactContainer.updateZLast();
+                enterFrameHyperDrive();
+            },
+            ease:Power2.easeOut
+        })
+        
+        TweenMax.to(interactContainer, 2, {delay: delay+0.2,rotationY: 0,ease:Power1.easeInOut});
+        TweenMax.to(interactContainer, 3.6, {delay: delay+1.3,rotationZ: 0,ease:Power1.easeInOut});
+        
+        /*TweenMax.to(translateObject, duration, {
+            delay: delay,
+            z: 0,
+            onUpdate: function () {
+                interactContainer.updateZLast();
                 enterFrameHyperDrive();
             }
-        })
+        })*/
         
         TweenMax.fromTo($("#contentContainer"), endDuration*2,
                         {opacity:0},{delay:endDelay-endDuration,opacity:1});
         TweenMax.fromTo($("#hyperdriveContainer"), endDuration/2,
                         {opacity:1},{delay:endDelay-(endDuration/2),opacity:0});
     }
-
+    
+    var fireReadyForIntroTransition = function(){
+        folio.on.readyForIntroTransition.dispatch();
+    }
+    
     buildGridTile = function (indexX, indexY) {
         var grid = new Sprite3D()
             .setClassName("grid")

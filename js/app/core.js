@@ -11,11 +11,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var touchEventsBinded = false;
     
     if(CONFIG.debug){
-        volumeReel = 0;
         DEFAULT_HASH = "reel/";
     }
 
-    initCore = function() {
+    var initCore = function() {
         Modernizr.addTest('highresdisplay', function(){ 
             if (window.matchMedia) { 
                 var mq = window.matchMedia("only screen and (-moz-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen  and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)");
@@ -32,12 +31,17 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         Modernizr.addTest('appleios', function () {return (Modernizr.ipad || Modernizr.ipod || Modernizr.iphone);});
         Modernizr.addTest('mobile', function () {return (Modernizr.appleios || Modernizr.android);});
         Modernizr.addTest('firefox', function () {return (navigator.userAgent.toLowerCase().indexOf('firefox') > -1);});
-
+        Modernizr.addTest('chrome36', function () {
+            if(navigator.userAgent.toLowerCase().indexOf('chrome') == -1) return false;            
+            return (parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10) > 35);
+        });
+        
         CONFIG.isRetina = Modernizr.highresdisplay;
         CONFIG.isiOs = Modernizr.appleios;
         CONFIG.isMobile = Modernizr.mobile;
         CONFIG.isFirefox = Modernizr.firefox;
-        
+        CONFIG.isChrome36 = Modernizr.chrome36;
+                
         crossroads.addRoute('/{env}/{page}/', switchPage);
         crossroads.addRoute('/{env}/{page}/{section}/', switchPageSection);
         
@@ -71,13 +75,19 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             MODULES.header.close();   
         }else if(MODULES.reel){
             var currentChapter = MODULES.reel.getCurrentChapter();
-            if(currentChapter && currentChapter.link){
-                window.location.hash = currentChapter.link;
+            console.log("chapter >> " + currentChapter.link);
+            
+            if(currentChapter){
+                if(currentChapter.link){
+                    window.location.hash = currentChapter.link;
+                }else if(CONFIG.debug && currentChapter.debugLink){
+                    window.location.hash = currentChapter.debugLink;
+                }
             }
         }
     }
     
-    loadCss = function(url) {
+    var loadCss = function(url) {
         var link = document.createElement("link");
         link.type = "text/css";
         link.rel = "stylesheet";
@@ -87,7 +97,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         lnk[0].parentNode.insertBefore(lnk[lnk.length-1], lnk[0]);
     }
     
-    parseHash = function(newHash, oldHash){
+    var parseHash = function(newHash, oldHash){
         console.log("parseHash >> " + newHash)
         if(newHash == "") hasher.setHash(DEFAULT_HASH);
         if(newHash == "reel/") newHash = "reel/preintro/";
@@ -96,17 +106,17 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         crossroads.parse(newHash);
     }
     
-    switchPageSection = function(env, page, section) {
+    var switchPageSection = function(env, page, section) {
         console.log("switchPageSection env > " + env + " page > " + page + " section > " + section);
         switchPage(env, page, section);
     }
     
-    switchPage = function(env, page, section){
+    var switchPage = function(env, page, section){
         
         //if(env == ABOUT_ENV && page == undefined) page = "about"
         console.log("env > " + env + " page > " + page + " section > " + section);
         
-        var isFolio = (env == FOLIO_ENV);
+        var newEnvIsFolio = (env == FOLIO_ENV);
         
         if(MODULES.header) MODULES.header.close();
         if(currentEnv == env) {
@@ -114,16 +124,15 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 if(!section) return
                 loadFolio(page, section)   
             }
-            if (isFolio) {
-                // switch3D ?
+            if (newEnvIsFolio) {
                 loadFolio(page, section);
             }else {
-                console.log("seek TO >> " + page)
                 MODULES.reel.seekToChapter(page)
             }
         }else if(currentEnv == ""){
-            if (isFolio) {
+            if (newEnvIsFolio) {
                 showHeader();
+                $("#reel").css("visibility", "hidden");
                 loadFolio(page, section);
             } else {
                 hideFolioContent();
@@ -131,26 +140,52 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             }
         }else {
             // transition between both Env
-            if (isFolio) {
-                /*showHeader();
-                loadFolio(page, section);*/
-                // From Reel to Folio
+            if (newEnvIsFolio) {
+                loadFolio(page, section, onReadyForTransitionToFolio);
+                overlay.disable();
+                if(MODULES.header){
+                    //MODULES.reel.pauseEnv();
+                    showHeader(false);
+                }else {
+                    showHeader(false, onHeaderInitialized);
+                }
             }else {
-                // From Folio to Reel
+                /*showHeader(true);*/
+                loadReel(page, onReadyForTransitionToReel);
             }
-            
         }
         currentPage = page
         currentEnv = env
     }  
     
-    hideFolioContent = function() {
+    var onReadyForTransitionToReel = function() {
+        MODULES.reel.on.readyToPlayAfterSeek.remove(onReadyForTransitionToReel)
+        MODULES.reel.startTransition(false);
+        MODULES.reel.resume();
+        showHeader(true);
+    }
+    
+    var onReadyForTransitionToFolio = function() {
+        MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
+        console.log("readyForTransition !")
+        MODULES.reel.pauseEnv();
+        MODULES.reel.startTransition(true)
+    }
+    
+    var onHeaderInitialized = function() {
+        MODULES.header.on.initialized.remove(onHeaderInitialized);
+        MODULES.reel.pauseEnv();
+        console.log("header init ! - pause video")
+    }
+    
+    
+    var hideFolioContent = function() {
         $("#folioContent").css("visibility", "hidden");
     }
         
     /******* FOLIO MODULE *******/
     
-    gatherTimeline = function() {
+    var gatherTimeline = function() {
         if(!timelineDiv){
             timelineDiv = $(".timeline");
             timelineDiv.remove();
@@ -158,7 +193,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         return timelineDiv
     }
     
-    loadFolio = function(pageId, sectionId){
+    var loadFolio = function(pageId, sectionId, initloadFunc2){
         gatherTimeline();
         bindTouchEvents();
         
@@ -166,27 +201,32 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             // show Loader ??
             overlay.show(overlay.LOADER, false);
             require(["app/folio"], function(folio){
-                //console.log("folio loaded");
                 MODULES.folio = folio;
                 MODULES.folio.on.initialized.add(onFolioInitialized);
+                if(initloadFunc2){
+                    MODULES.folio.on.readyForIntroTransition.add(initloadFunc2)
+                }
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.init(pageId, sectionId);
             })
         }else{
+            if(initloadFunc2){
+                MODULES.folio.on.readyForIntroTransition.add(initloadFunc2)
+            }
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
             MODULES.folio.load(pageId, sectionId);
         }
     }
     
-    onFolioInitialized = function(pageId, sectionId){
+    var onFolioInitialized = function(pageId, sectionId){
         // transition between REEL and FOLIO if REEL AND FOLIO are initialized
-        //console.log("FOLIO onFolioInitialized >> " + pageId);
+        console.log("FOLIO onFolioInitialized >> " + pageId);
         MODULES.folio.on.initialized.remove(onFolioInitialized);
         MODULES.folio.on.pageLoaded.add(onPageLoaded);
         MODULES.folio.load(pageId, sectionId);
     }
     
-    onTwPositionDefined = function(pageId,sectionId){
+    var onTwPositionDefined = function(pageId,sectionId){
         // passer la section ?
         if(sectionId) {
             hasher.setHash("folio",pageId+"/"+sectionId+"/");
@@ -195,7 +235,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
     }
     
-    onPageLoaded = function(pageId, sectionId){
+    var onPageLoaded = function(pageId, sectionId){
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
         console.log("FOLIO onPageLoaded >> " + pageId);
         MODULES.folio.startTransition(pageId, sectionId)
@@ -204,7 +244,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     /******* REEL MODULE *******/
     
-    loadReel = function(){
+    var loadReel = function(chapter, seekFunction){
         unBindTouchEvents();
         if(!MODULES.reel){
             // show Loader ??
@@ -216,41 +256,51 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.showHeader.add(onShowHeader);
                 MODULES.reel.on.playGmd.add(onPlayGmd);
                 MODULES.reel.on.hideGmd.add(onHideGmd);
+                MODULES.reel.on.enableOverlayClicks.add(overlay.enableClicks);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
-                MODULES.reel.init(gatherTimeline());
+                if(seekFunction){
+                    MODULES.reel.on.readyToPlayAfterSeek.add(onReadyForTransitionToReel);  
+                }
+                MODULES.reel.init(gatherTimeline(),chapter);
+
                 
                 if(CONFIG.isMobile){
                     MODULES.reel.on.mobileCTAReady.add(onReelMobileReady);
                 }
             })
         }else{
-            playReel();
+            if(!chapter || !seekFunction){
+                throw new Error("no chapter or handlerFunction defined");
+            }else {
+                MODULES.reel.on.readyToPlayAfterSeek.add(onReadyForTransitionToReel);
+                MODULES.reel.seekToChapterAndPause();
+            }
         }
     }   
     
-    onReelMobileReady = function(){        
+    var onReelMobileReady = function(){        
         MODULES.reel.on.mobileCTAReady.remove(onReelMobileReady);
         overlay.hide();
     }
     
-    onPlayStarted = function(){        
+    var onPlayStarted = function(){        
         MODULES.reel.on.playStarted.remove(onPlayStarted);
         overlay.hide();
     }
     
-    onShowHeader = function() {
+    var onShowHeader = function() {
         showHeader(true);
     }
     
-    onPlayGmd = function() {
+    var onPlayGmd = function() {
         overlay.show(overlay.GETMOREDETAILS);
     }
     
-    onHideGmd = function(force) {
+    var onHideGmd = function(force) {
         overlay.hide(overlay.GETMOREDETAILS, force);
     }
     
-    onVideoComplete = function() {
+    var onVideoComplete = function() {
         hasher.setHash("folio","about/");
     }
     
@@ -262,11 +312,12 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     /******* HEADER MODULE *******/
     
-    showHeader = function(stealthMode){
+    var showHeader = function(stealthMode, initFunc){
         if(!MODULES.header){
             require(["app/header"], function(header){
                 MODULES.header = header;
                 MODULES.header.on.close.add(onCloseHeader)
+                if(initFunc) MODULES.header.on.initialized.add(initFunc);
                 MODULES.header.on.open.add(onOpenHeader)
                 MODULES.header.init();
                 MODULES.header.show(stealthMode);
@@ -277,13 +328,13 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onCloseHeader = function(){
-        if(MODULES.reel) MODULES.reel.resume();
-        overlay.resumeGmd();
+        if(MODULES.reel && MODULES.reel.isActive()) MODULES.reel.resume();
+        if(overlay.gmdLoaded()) overlay.resumeGmd();
     }
     
     var onOpenHeader = function(){
-        if(MODULES.reel) MODULES.reel.pause();
-        overlay.pauseGmd();
+        if(MODULES.reel && MODULES.reel.isActive()) MODULES.reel.pause();
+        if(overlay.gmdLoaded()) overlay.pauseGmd();
     }
     
     /******* EVENT HANDLERS ******/
@@ -291,14 +342,14 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var targetTouch;  
     
-    unBindTouchEvents = function(){
+    var unBindTouchEvents = function(){
         document.removeEventListener("touchstart", onTouchStart, true );
         document.removeEventListener("touchmove", onTouchMove, true );
         document.removeEventListener("touchend", onTouchEnd, true );
         touchEventsBinded = false
     }   
 
-    bindTouchEvents = function(){
+    var bindTouchEvents = function(){
         if(!touchEventsBinded){
             document.addEventListener("touchstart", onTouchStart, true );
             document.addEventListener("touchmove", onTouchMove, true );
@@ -307,7 +358,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
     }
     
-    processRegularLink = function(element)
+    var processRegularLink = function(element)
     {
         // simple link
         if($(element).is("a")){
@@ -336,18 +387,18 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }*/
     }    
     
-    onTouchStart = function(event){
+    var onTouchStart = function(event){
         targetTouch = event.target        
         event.preventDefault();
         if(MODULES.folio) MODULES.folio.onTouchStart(event);
     }
     
-    onTouchMove = function(event){
+    var onTouchMove = function(event){
         event.preventDefault();
         if(MODULES.folio) MODULES.folio.onTouchMove(event);
     }
     
-    onTouchEnd = function(event){
+    var onTouchEnd = function(event){
         event.preventDefault();
         var target = event.target;               
         if(MODULES.folio) MODULES.folio.onTouchEnd(event);
@@ -362,7 +413,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     /******* RESIZE EVENT *******/
     
-    resizeWindowHandler = function(event) {
+    var resizeWindowHandler = function(event) {
         LAYOUT.viewportH = window.innerHeight;
         LAYOUT.viewportW = window.innerWidth;
         LAYOUT.vH2 = LAYOUT.viewportH*0.5;

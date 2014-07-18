@@ -148,11 +148,7 @@ div {
     height: 100%;
     top: 0px;
     left: 0px;
-    /*font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
-    font-size: 30px;    
-    text-transform:uppercase;*/
     z-index: 90000;
-    /*cursor: pointer;*/
 }
     .loader-overlay {
         position: absolute;

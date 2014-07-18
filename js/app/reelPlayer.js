@@ -18,10 +18,12 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var twTmlePanel, twTmleAngle, twAlphaTmleBg;
     var timelineEl;
     
+    var reelContainer;
     var video;
     var videoInitialized = false;
     var playButton;
     var pausedVideo = false;
+    var active = false;
     
     // Signal Events
     reelPlayer.on = {
@@ -30,6 +32,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         showHeader : new signals.Signal(),
         playGmd : new signals.Signal(),
         hideGmd : new signals.Signal(),
+        enableOverlayClicks : new signals.Signal(),
+        readyToPlayAfterSeek : new signals.Signal(),
         videoComplete : new signals.Signal()
     }        
 
@@ -38,6 +42,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         //reelPlayer.on.initialized.dispatch();
         //createTimeline();
         initVideoPlayer();
+    }
+    
+    reelPlayer.isActive = function(){
+        return active;
     }
     
     reelPlayer.resize = function ()
@@ -78,6 +86,29 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
     }
     
+    // pause the reel and everything related
+    reelPlayer.pauseEnv = function() {
+        active = false;
+        reelPlayer.pause();
+        removeTimeline();
+        firedOverlayClickable = false;
+    }
+    
+    reelPlayer.startTransition = function(hide) {
+        if(hide){
+            TweenMax.to(reelContainer,1,{delay:0.1, y:-LAYOUT.viewportH, ease:Power2.easeInOut, onComplete:function(){
+            reelContainer.css("visibility", "hidden");
+        }})
+            
+            
+        }else{
+            reelContainer.css("visibility", "visible");
+            TweenMax.fromTo(reelContainer,1,
+                {y:-LAYOUT.viewportH},
+                {delay:0.1, y:0, ease:Power2.easeInOut}
+            );
+    }
+    
     /******************************/
     /******** VARS & DATA *********/
     /******************************/
@@ -88,7 +119,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         id: "preInto",
         startAt: 0,
         gmdDuration: 0,
-        link:null
+        link:null,
+        debugLink:"#/folio/tot/"
     }, {
         id: "intro",
         startAt: 12,
@@ -150,14 +182,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var cTime = 0;
     var cTimeGmd = -1;
     var globalVideoOverlay;
+    var timeOverlayClickable = CONFIG.debug ? timelineChapters[0].startAt : timelineChapters[1].startAt;
+    var firedOverlayClickable = false;
     
     /******************************/ 
     /************ VIDEO ***********/
     /******************************/
     
     var initVideoPlayer = function(){
+        reelContainer = $("#reel");
         video = $("#video")[0];
-        video.muted = true;
+        video.muted = CONFIG.debug ? true : false;
         
         playButton = $("#play-pause");
         
@@ -170,9 +205,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
           }
         });
         
-        
         video.addEventListener("playing", function() {
             reelPlayer.on.playStarted.dispatch();
+            active = true;
             fadeButton();
         });
         
@@ -254,15 +289,13 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         if(cTime > 31) {
             createTimeline();
         }
-
-        if(currentChapter.id == timelineChapters[0].id){
-            globalVideoOverlay.css("cursor", "auto");
-            globalVideoOverlay.css("pointer-events", "none");
-        }else{
-            globalVideoOverlay.css("cursor", "pointer");
-            globalVideoOverlay.css("pointer-events", "auto");
+        
+        
+        if(cTime > timeOverlayClickable && !firedOverlayClickable){
+            firedOverlayClickable = true;
+            reelPlayer.on.enableOverlayClicks.dispatch();
         }
-
+    
         if (cTime < timeGmd[0] && currentGmd > 0) currentGmd = 0
         if (cTime > timeHeader && cTime < timeHeader + timeDetectRange) {
             reelPlayer.on.showHeader.dispatch();
@@ -314,15 +347,12 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var mouseDownTimelineHandler = function(event){
         var pageX = event.pageX;
-        console.log("pageX = " + pageX);
         if(pageX < p3X) {
-            console.log("nothing to do");
+            // disabled
         }else {
             var scaleTime = (Number(pageX) - Number(p3X))/(Number(LAYOUT.viewportW) - Number(p3X));
             var seektime = scaleTime*video.duration;
             video.currentTime = seektime
-            console.log("get ratio > " + seektime);
-            console.log("get ratio > " + scaleTime);
         }
     }
     
@@ -340,8 +370,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var createTimeline = function () {
-        if(timelineIsInitialized) return
+        
         appendTimelineDiv();
+        
+        if(timelineIsInitialized) return
         
         p2 = $("#timelineP2");
         p2X = p2.attr("x");
@@ -397,6 +429,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {delay:0.2, autoAlpha:0});
         
     }
+    
+    var removeTimeline = function(){
+        $(".timeline").remove();
+    }
+    
 
     var updateP3Pos = function () {
         // adaptation depuis la version actionscript;

@@ -644,6 +644,14 @@ define([], function() {
 
         return this;
     };
+    
+     /**
+     */
+    Sprite3D.prototype.updateZLast = function() {
+        this.style[this._transformProperty] = "translate3d(" + this.x+ "px," + this.y + "px, 0px) rotateX(" + this.rotationX +"deg) rotateY(" + this.rotationY +"deg) rotateZ(" + this.rotationZ +"deg) translateZ("+this.z+"px)";
+        //console.log( "apply 2D transforms using " + this._transformProperty );
+        return this;
+    };
 
 
 

@@ -13,16 +13,6 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     var currentElName = overlay.LOADER;
     var gmdAnimation;
     
-    /*enablePointer = function(){
-        main.css("pointer-events", "auto");
-        bg.css("pointer-events", "auto");
-    }
-    
-    disablePointer = function(){
-        main.css("pointer-events", "none");
-        bg.css("pointer-events", "none");
-    }*/
-    
     overlay.on = {
         clickMainOverlay: new signals.Signal()
     }
@@ -32,11 +22,9 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         main.css("visibility", "show"); 
     }
     
-    
-     main.click(function(event) {
+    main.click(function(event) {
         overlay.on.clickMainOverlay.dispatch();
     });
-    
     
     var getAssociatedElement = function(key){
         switch(key){
@@ -50,20 +38,23 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         return null;
     }
     
-    
     GLOBAL_ACCESS.gmdReady = function(sym){
         gmdAnimation = sym;
     }
     
     overlay.loadGmd = function(){
         require(["GmdEdge"], function(GmdEdge){
-            console.log("firstScript getMoreDetails loaded");
+            //console.log("firstScript getMoreDetails loaded");
         });
+    }
+    
+    overlay.gmdLoaded = function(){
+       return Boolean(gmdAnimation)
     }
     
     overlay.removeGmd = function(){
         $(gmdAnimation).remove();
-        console.log("removed GMD");
+        //console.log("removed GMD");
     }
     
     overlay.show = function(element){
@@ -71,11 +62,6 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         var newEl = getAssociatedElement(element);
         if(currentElName != "") overlay.hide(currentElName);
         
-        /*if(element == overlay.CTA_MOBILE){
-            disablePointer();
-        }else{
-            enablePointer();
-        }*/
         if(element == overlay.GETMOREDETAILS){
             TweenMax.set(newEl, {autoAlpha:1});
             gmdAnimation.play()
@@ -96,6 +82,22 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         }
         
         if(element == currentElName) currentElName = "";
+    }
+    
+    overlay.enableClicks = function(){
+        main.css("cursor", "pointer");
+        main.css("pointer-events", "auto");
+    }
+    
+    overlay.disableClicks = function(){
+        main.css("cursor", "auto");
+        main.css("pointer-events", "none");
+    }
+    
+    overlay.disable = function(){
+        overlay.hide();
+        main.css("visibility", "hidden");
+        overlay.disableClicks();
     }
     
     var pausedAnimation = false;
