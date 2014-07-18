@@ -437,6 +437,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var rangeHeight = 2000;
     var splitWidth = 100;
     var splitHeight = 100;
+    var timeParticleCreation = 125;
+    var intervalParticlesCreation;
+    var bunchQuantity = 40;
     
     if(CONFIG.isMobile) {
         // mobile-tablets only
@@ -445,6 +448,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         rangeDepth = 6000;
         rangeWidth = rangeHeight = 700;
         splitHeight = splitWidth = 60;
+        timeParticleCreation = 1000;
+        bunchQuantity = 5
     }
 
     enterFrameHyperDrive = function () {
@@ -469,9 +474,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
         interactContainer.setRotation(0,-90,-70).update();
-
         
-
         hyperdriveContainer.setPosition(-400, -10, 0);
         hyperdriveContainer.setRotateFirst(false);
         hyperdriveContainer.update();
@@ -479,11 +482,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         $(".hyperdrive-particle").css("width", widthPrtcle + "px");
         $(".hyperdrive-particle").css("height", heightPrtcle + "px"); 
         
-        intervalParticlesCreation = setInterval(createBunchOfParticles,250)
+        intervalParticlesCreation = setInterval(createBunchOfParticles,timeParticleCreation)
     }
     
-    var intervalParticlesCreation; 
-    var bunchQuantity = 20;
+    
         
     var createBunchOfParticles = function() {
         if(particles.length >= nbrParticles){
@@ -493,6 +495,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             console.log("create" + bunchQuantity + " particles");
             for (var i = 0; i < bunchQuantity; i++) {
                 var particle = new Sprite3D();
+                particle.setId("prtcle"+i+"")
                 particle.setInnerHTML("<div class='hyperdrive-particle-texture'></div>");
                 particle.addClassName("hyperdrive-particle")
                 var randX = (Math.random() * rangeWidth) - (rangeWidth >> 1);
@@ -532,7 +535,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     var startHyperdriveAnimation = function() {
-        var delay = 5;
+        var delay = 0.5;
         var duration = 5;
         var endDuration = 1.2;
         var total = (delay+duration);

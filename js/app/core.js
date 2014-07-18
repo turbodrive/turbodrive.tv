@@ -139,16 +139,11 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 loadReel();
             }
         }else {
-            // transition between both Env
+            // transition between both of Env
             if (newEnvIsFolio) {
+                if(CONFIG.isMobile) MODULES.reel.pause();
                 loadFolio(page, section, onReadyForTransitionToFolio);
                 overlay.disable();
-                if(MODULES.header){
-                    //MODULES.reel.pauseEnv();
-                    showHeader(false);
-                }else {
-                    showHeader(false, onHeaderInitialized);
-                }
             }else {
                 /*showHeader(true);*/
                 loadReel(page, onReadyForTransitionToReel);
@@ -169,6 +164,12 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
         MODULES.reel.pauseEnv();
         MODULES.reel.startTransition(true)
+        if(MODULES.header){
+            //MODULES.reel.pauseEnv();
+            showHeader(false);
+        }else {
+            showHeader(false, onHeaderInitialized);
+        }
     }
     
     var onHeaderInitialized = function() {
@@ -222,7 +223,15 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         console.log("FOLIO onFolioInitialized >> " + pageId);
         MODULES.folio.on.initialized.remove(onFolioInitialized);
         MODULES.folio.on.pageLoaded.add(onPageLoaded);
+        if(CONFIG.hyperDriveTransition){
+            MODULES.folio.on.readyForIntroTransition.add(onHideOverlay);
+        }
         MODULES.folio.load(pageId, sectionId);
+    }
+    
+    var onHideOverlay = function(){
+        MODULES.folio.on.readyForIntroTransition.remove(onHideOverlay)
+        overlay.hide();
     }
     
     var onTwPositionDefined = function(pageId,sectionId){
@@ -238,7 +247,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
         console.log("FOLIO onPageLoaded >> " + pageId);
         MODULES.folio.startTransition(pageId, sectionId)
-        overlay.hide();
+        if(!CONFIG.hyperDriveTransition) overlay.hide();
     }
     
     /******* REEL MODULE *******/
@@ -261,8 +270,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                     MODULES.reel.on.readyToPlayAfterSeek.add(onReadyForTransitionToReel);  
                 }
                 MODULES.reel.init(gatherTimeline(),chapter);
-
-                
                 if(CONFIG.isMobile){
                     MODULES.reel.on.mobileCTAReady.add(onReelMobileReady);
                 }
