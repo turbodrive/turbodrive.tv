@@ -16,6 +16,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         initialized : new signals.Signal(),
         open : new signals.Signal(),
         close : new signals.Signal(),
+        toggleTimeline : new signals.Signal()
     } 
     
     /* initialize events and header behaviors */
@@ -94,6 +95,10 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     
     controlMenuState = function (idButton, duration) {
         if(currentMenuState == "" && idButton == "") return
+        if(idButton == "toggleTimeline"){
+            header.on.toggleTimeline.dispatch();
+            return
+        }
         
         header.resize();
         if (duration == null) duration = 0.3;

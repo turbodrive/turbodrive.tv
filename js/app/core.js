@@ -11,7 +11,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var touchEventsBinded = false;
     
     if(CONFIG.debug){
-        DEFAULT_HASH = "reel/";
+        //DEFAULT_HASH = "folio/ikaf2/";
     }
 
     var initCore = function() {
@@ -167,7 +167,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var onReadyForTransitionToFolio = function() {
         MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
-        console.log("readyForTransition !")
         MODULES.reel.pauseEnv();
         MODULES.reel.startTransition(true)
     }
@@ -319,6 +318,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.header.on.close.add(onCloseHeader)
                 if(initFunc) MODULES.header.on.initialized.add(initFunc);
                 MODULES.header.on.open.add(onOpenHeader)
+                if(MODULES.reel)MODULES.header.on.toggleTimeline.add(MODULES.reel.toggleTimeline)
                 MODULES.header.init();
                 MODULES.header.show(stealthMode);
             })

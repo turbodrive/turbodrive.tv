@@ -49,6 +49,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }
     
     overlay.gmdLoaded = function(){
+        console.log("gmdLoaded !")
        return Boolean(gmdAnimation)
     }
     

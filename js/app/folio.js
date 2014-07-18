@@ -76,16 +76,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         $("#folio").css("top", LAYOUT.vH2)
         stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);
         stage.translate2D(LAYOUT.vW2, LAYOUT.vH2);
-
-        console.log("!! perspOrigin > " + $("#folio").css("perspective-origin"))
         
         if (CONFIG.isFirefox || CONFIG.isChrome36) {
             // attention aux anciennes version de chrome (avant v36)!
             var p = String(Number(-LAYOUT.vW2)) + "px " + String(Number(-LAYOUT.vH2)) + "px";
             $("#folio").css("perspective-origin", p);
         }
-        
-        console.log("!! perspOrigin2 > " + $("#folio").css("perspective-origin")) 
             
         //if(currentPage3d) {
         interactContainer.translateOffsetX = -LAYOUT.vW2;
@@ -228,7 +224,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             var prg = isNaN(positionTmx.totalProgress()) ? numTargets : positionTmx.totalProgress() * numTargets;
             //progressSlider.slider("value", prg);
             $("#timeValue").html("val: " + prg.toFixed(2) + " - tweenPositionValue: " + objTmx.twPos);
-            //msg("progress >> " + positionTmx.totalProgress())
         }
     }
 
@@ -427,27 +422,30 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         scene3DBuilt = true;
     }
 
-//  var hyperDriveInterval;
     var particles = []
     var nbrParticles = 400; // 400 desktop, même si range Depth est faible /80 tablettes
-    //var speedPrtcleInit = 200;
-    //var speedPrtcle = speedPrtcleInit;
-    var rangeDepth = 10000; //10000 desktop, 7000 tablets
+    var rangeDepth = 10000;
     var widthPrtcle = 800;
     var heightPrtcle = 20;
     var alphaPrtcle = 1;
     var prevIntZ = 0;
-    
-    //var countWidth = 0
-    //var countFilter = 2;
+
     var initZ = -50000;
     var translateObject = {z:initZ};
     
-    /*startHyperDrive = function () {
-        var ratioFramerate = frameRateInit / currentFrameRate;
-        speedPrtcle = speedPrtcleInit * ratioFramerate;
-        hyperDriveInterval = setInterval(enterFrameHyperDrive, 1000 / currentFrameRate);
-    }*/
+    var rangeWidth = 2000;
+    var rangeHeight = 2000;
+    var splitWidth = 100;
+    var splitHeight = 100;
+    
+    if(CONFIG.isMobile) {
+        // mobile-tablets only
+        initZ = -40000;
+        nbrParticles = 80;
+        rangeDepth = 6000;
+        rangeWidth = rangeHeight = 700;
+        splitHeight = splitWidth = 60;
+    }
 
     enterFrameHyperDrive = function () {
         var interactZ = interactContainer.z
@@ -455,57 +453,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         var speedIntZ = interactZ - prevIntZ;
         var factSpeed = speedIntZ / 60;
         
-        /*countWidth ++;
-        if(countWidth / countFilter == Math.round(countWidth / countFilter)){
-            if (speedIntZ > 0) {
-                speedPrtcle = (factSpeed) * speedPrtcleInit;
-                widthPrtcle = Math.round(30 + (factSpeed) * 300);
-                if (widthPrtcle > 800) widthPrtcle = 800;
-                //alphaPrtcle = (factSpeed)+0.1;
-                $(".hyperdrive-particle-texture").css("width", widthPrtcle + "px");
-            }
-        }*/
-        
-        //$("#hyperdriveContainer").css("opacity", alphaPrtcle)
-        //console.log("speedIntZ >> " + speedIntZ)
-
         for (var i = nbrParticles - 1; i >= 0; i--) {
             var prtcle = particles[i];
             if (interactZ + prtcle.z > widthPrtcle) {
                 prtcle.setZ(newZ).update();
-            }/*else {
-                prtcle.moveZ(speedPrtcle).update();
-            }*/
+            }
         }
         prevIntZ = interactZ;
     }
-
-    /*stopHyperDrive = function () {
-        clearInterval(hyperDriveInterval);
-    }*/
-
-    buildHyperDriveScene = function () {
-        var rangeWidth = 2000; //2000 desktop
-        var rangeHeight = 2000; //2000
-        var splitWidth = 100;
-        var splitHeight = 100;
-        
-        if(CONFIG.isMobile) {
-            // mobile-tablets only
-            initZ = -40000;
-            nbrParticles = 80;
-            rangeDepth = 6000;
-            rangeWidth = rangeHeight = 700;
-            splitHeight = splitWidth = 60;
-        }
-        
+    
+    buildHyperDriveScene = function () {        
         hyperdriveContainer = new Sprite3D()
             .setId("hyperdriveContainer")
             .setRegistrationPoint(0, 0, 0);
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
-        /*interactContainer.setRotationY(-90);
-        interactContainer.setRotationZ(-70);*/
         interactContainer.setRotation(0,-90,-70).update();
 
         
@@ -513,61 +475,64 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         hyperdriveContainer.setPosition(-400, -10, 0);
         hyperdriveContainer.setRotateFirst(false);
         hyperdriveContainer.update();
-
-
-        for (var i = 0; i < nbrParticles; i++) {
-            var particle = new Sprite3D();
-            particle.setInnerHTML("<div class='hyperdrive-particle-texture'></div>");
-            particle.addClassName("hyperdrive-particle")
-            var randX = (Math.random() * rangeWidth) - (rangeWidth >> 1);
-            var randY = (Math.random() * rangeHeight) - (rangeHeight >> 1);
-            var randZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth) + (Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
-            particle.setRotateFirst(false);
-
-
-            if (randY > -splitHeight && randY < splitHeight && randX > -splitWidth && randX < splitWidth) {
-                if (randY > -splitHeight && randY < splitHeight) {
-                    if (randY > 0) {
-                        randY += splitHeight;
-                    } else {
-                        randY -= splitHeight;
-                    }
-                }
-                if (randX > -splitWidth && randX < splitWidth) {
-                    if (randX > 0) {
-                        randX += splitWidth;
-                    } else {
-                        randX -= splitWidth;
-                    }
-                }
-            }
-
-            /*if(interactContainer.z + prtcle.z > widthPrtcle) {
-                randZ - = newZ).update();
-            }*/
-
-            particle.setPosition(randX, randY, randZ);
-            particle.setOpacity((0.1 + Math.random()*0.9));
-            var rotX = (Math.atan2(randY, randX) * 180 / Math.PI);
-            particle.setRotation(-rotX, 90, 0);
-            particle.update();
-            particles.push(particle)
-
-            //console.log(particle.x + " - " + particle.y + " - " + particle.z);
-            hyperdriveContainer.addChild(particle);
-            
-        }
-        /*hyperdriveContainer.addChild(new Sprite3D().setPosition(-10000,-10000,0).addClassName("fix-hyperdrive").update());*/
         
-        //#hyperdriveContainer$("#hyperdriveContainer").css("width", "1000px")
         $(".hyperdrive-particle").css("width", widthPrtcle + "px");
-        $(".hyperdrive-particle").css("height", heightPrtcle + "px");
-        //$("#contentContainer").css("visibility", "hidden ");
-        //$("#contentContainer").css("opacity", "0.5");
+        $(".hyperdrive-particle").css("height", heightPrtcle + "px"); 
         
-        //countWidth = 0;
+        intervalParticlesCreation = setInterval(createBunchOfParticles,250)
+    }
+    
+    var intervalParticlesCreation; 
+    var bunchQuantity = 20;
         
-        var delay = 1;
+    var createBunchOfParticles = function() {
+        if(particles.length >= nbrParticles){
+            clearInterval(intervalParticlesCreation);
+            startHyperdriveAnimation();
+        }else{
+            console.log("create" + bunchQuantity + " particles");
+            for (var i = 0; i < bunchQuantity; i++) {
+                var particle = new Sprite3D();
+                particle.setInnerHTML("<div class='hyperdrive-particle-texture'></div>");
+                particle.addClassName("hyperdrive-particle")
+                var randX = (Math.random() * rangeWidth) - (rangeWidth >> 1);
+                var randY = (Math.random() * rangeHeight) - (rangeHeight >> 1);
+                var randZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth) + (Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
+                particle.setRotateFirst(false);
+
+
+                if (randY > -splitHeight && randY < splitHeight && randX > -splitWidth && randX < splitWidth) {
+                    if (randY > -splitHeight && randY < splitHeight) {
+                        if (randY > 0) {
+                            randY += splitHeight;
+                        } else {
+                            randY -= splitHeight;
+                        }
+                    }
+                    if (randX > -splitWidth && randX < splitWidth) {
+                        if (randX > 0) {
+                            randX += splitWidth;
+                        } else {
+                            randX -= splitWidth;
+                        }
+                    }
+                }
+
+                particle.setPosition(randX, randY, randZ);
+                particle.setOpacity((0.1 + Math.random()*0.9));
+                var rotX = (Math.atan2(randY, randX) * 180 / Math.PI);
+                particle.setRotation(-rotX, 90, 0);
+                particle.update();
+                particles.push(particle)
+
+                //console.log(particle.x + " - " + particle.y + " - " + particle.z);
+                hyperdriveContainer.addChild(particle); 
+            }
+        }
+    }
+    
+    var startHyperdriveAnimation = function() {
+        var delay = 5;
         var duration = 5;
         var endDuration = 1.2;
         var total = (delay+duration);
@@ -731,8 +696,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             //.setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)
             .setScale(scaleList._scaleVisuel, scaleList._scaleVisuel, 1)
                 .update();
-            msg("scaleVisuel >> " + scaleList._scaleVisuel)
-            msg("zVisuel >> " + zVisuel)
 
             // PICTOPLAY
             page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), 0).update();

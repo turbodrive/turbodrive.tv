@@ -16,7 +16,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timelineIsInitialized = false;
     var timelineIsCreated = false;
     var twTmlePanel, twTmleAngle, twAlphaTmleBg;
-    var timelineEl;
+    var timelineEl = $('<div class="timeline"><div id="timelineSvg"><svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><g><clipPath id="timelineMask"><rect x="0" y="60" width="91" height="5"/><rect id="timelineP2" x="88" y="60" width="40" height="5" transform="rotate(-30,235,52)"/><rect id="timelineP3" x="271" y="60" width="500" height="5"/></clipPath></g><g><rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64"/><rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/></g></svg></div><div id="timelineBg"><img id="footerGradient" src="images/gradient_timelineFooter.png"><img id="hexagrid" src="images/hexagrid_lcd.png"></div></div>');
     
     var reelContainer;
     var video;
@@ -37,8 +37,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         videoComplete : new signals.Signal()
     }        
 
-    reelPlayer.init = function (timelineDiv) {
-        timelineEl = timelineDiv
+    reelPlayer.init = function () {
         //reelPlayer.on.initialized.dispatch();
         //createTimeline();
         initVideoPlayer();
@@ -88,9 +87,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     // pause the reel and everything related
     reelPlayer.pauseEnv = function() {
+        removeTimeline();
         active = false;
         reelPlayer.pause();
-        removeTimeline();
         firedOverlayClickable = false;
     }
     
@@ -107,6 +106,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
                 {y:-LAYOUT.viewportH},
                 {delay:0.1, y:0, ease:Power2.easeInOut}
             );
+        }
     }
     
     /******************************/
@@ -120,7 +120,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         startAt: 0,
         gmdDuration: 0,
         link:null,
-        debugLink:"#/folio/tot/"
+        debugLink:"#/reel/ikaf/"
     }, {
         id: "intro",
         startAt: 12,
@@ -184,6 +184,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var globalVideoOverlay;
     var timeOverlayClickable = CONFIG.debug ? timelineChapters[0].startAt : timelineChapters[1].startAt;
     var firedOverlayClickable = false;
+    var firedShowHeader = false;
     
     /******************************/ 
     /************ VIDEO ***********/
@@ -192,7 +193,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var initVideoPlayer = function(){
         reelContainer = $("#reel");
         video = $("#video")[0];
-        video.muted = CONFIG.debug ? true : false;
+        video.muted = CONFIG.debug;
         
         playButton = $("#play-pause");
         
@@ -297,7 +298,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
     
         if (cTime < timeGmd[0] && currentGmd > 0) currentGmd = 0
-        if (cTime > timeHeader && cTime < timeHeader + timeDetectRange) {
+        if (cTime > timeHeader && !firedShowHeader) {
+            firedShowHeader = true;
             reelPlayer.on.showHeader.dispatch();
         }
         
@@ -363,17 +365,35 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         console.log("ratio > " + ratioSeek);
     }
     
+    reelPlayer.toggleTimeline = function() {
+        if(timelineAdded){
+            removeTimelineDiv();      
+        }else {
+            appendTimelineDiv();
+        }
+    }
+    
+    var jqueryTimeline;
+    var timelineAdded = false;
+    
     var appendTimelineDiv = function () {
-        if(! $.contains(document.body, timelineEl)){
+        if(!timelineAdded){
+            console.trace("appendTimelineDiv - " + timelineEl)
             $(document.body).append(timelineEl);
+            timelineAdded = true;
+        }
+    }
+    
+    var removeTimelineDiv = function () {
+        if(timelineAdded){
+            timelineEl.remove();
+            timelineAdded = false;
         }
     }
     
     var createTimeline = function () {
-        
-        appendTimelineDiv();
-        
         if(timelineIsInitialized) return
+        appendTimelineDiv();
         
         p2 = $("#timelineP2");
         p2X = p2.attr("x");
@@ -427,14 +447,15 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         twTmleAngle = TweenMax.to(twObjects,0.5,{delay:0.2, p2Rotation:0, ease:Quart.EaseOut, onUpdate:updateP3Pos});
         
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {delay:0.2, autoAlpha:0});
-        
     }
     
     var removeTimeline = function(){
+        console.log(">> tmle " + $(".timeline"));
         $(".timeline").remove();
+        console.log(">> tmle remove" + $(".timeline"));
+        console.log(">> tmle parent" + $(".timeline").parent());
     }
     
-
     var updateP3Pos = function () {
         // adaptation depuis la version actionscript;
         var rX = parseInt(p2X)+1;

@@ -165,6 +165,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                        <a href="#" class="button-menu" id="toggleTimeline">Toggle
+                            <br/>Timeline</a>
+                    </li>
+                    
+                    <li>
                         <a href="#" class="button-menu" id="selectedCases">Selected
                             <br/>Cases</a>
                     </li>
@@ -394,8 +399,7 @@
                 <h3>Skills Fields</h3>
                 <h4>Motion Design</h4>
                 <div class="twocols-content">
-                    <p>I'm deeply interested on each motion graphic technique. You know, not only the different way to create a tween, generate spritesheets or gather bunch of keyframes and ease equations in any software.</p><p>I'd rather mean the way to make sense via movement and contribute to the mood in a project. I like to find the appropriate rythm or the right camera movement and try to offer the best transitions and rollovers to fit with the art director's vision.</p><p>I'm familiar with programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics. Prerender or in realtime.</p><p>
-    I know particle systems (Trapcode Particular, the built-in engine in Away3D 4 for example) and used to work a bit with physics engine.<br/>Definitely not afraid to figure out and learn more.</p></div>      
+                    <p>I'm deeply interested on each motion graphic technique. You know, not only the different way to create a tween, generate spritesheets or gather bunch of keyframes and ease equations in any software.</p><p>I'd rather mean the way to make sense via movement and contribute to the mood in a project. I like to find the appropriate rythm or the right camera movement and try to offer the best transitions and rollovers to fit with the art director's vision.</p><p>I'm familiar with programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics. Prerender or in realtime.</p><p>I know particle systems (Trapcode Particular, the built-in engine in Away3D 4 for example) and used to work a bit with physics engine.<br/>Definitely not afraid to figure out and learn more.</p></div>      
             </div>
         </div>
     </div>
@@ -411,28 +415,6 @@
           <div id="video-controls">
             <button type="button" id="play-pause">Tap here<br/>to start</button>
           </div>
-        </div>
-    </div>
-    <div class="timeline">        
-        <div id="timelineSvg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100">
-                <g>
-                    <clipPath id="timelineMask">
-                        <rect x="0" y="60" width="91" height="5"/>
-                        <rect id="timelineP2" x="88" y="60" width="40" height="5" transform="rotate(-30,235,52)"/>
-                        <rect id="timelineP3" x="271" y="60" width="500" height="5"/>
-                    </clipPath>
-                </g>
-                <g>
-                    <rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64"/>
-                    <rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/>
-                </g>
-            </svg>
-       </div>
-    
-        <div id="timelineBg">
-            <img id="footerGradient" src="images/gradient_timelineFooter.png">
-            <img id="hexagrid" src="images/hexagrid_lcd.png">
         </div>
     </div>
     <!--<div id="debug">

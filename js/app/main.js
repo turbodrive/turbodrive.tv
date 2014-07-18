@@ -39,12 +39,12 @@ var LAYOUT_3D = {
     }
 }
 
-var tTemp = "";
+/*var tTemp = "";
 function msg(t) {
     if(!CONFIG.debug) return
     tTemp += t + "<br/>"
     document.getElementById("debugText").innerHTML = tTemp
-}
+}*/
 
 var GLOBAL_ACCESS = this;
 
