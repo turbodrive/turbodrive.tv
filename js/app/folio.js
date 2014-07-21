@@ -178,6 +178,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         currentPageId = pageId;
         if (sectionId) {
             currentSectionId = sectionId;
+        }else {
+            currentSectionId = null;   
         }
         //console.log("currentSectionId >> " + currentSectionId);  
         folio.on.twPositionDefined.dispatch(currentPageId, currentSectionId)
