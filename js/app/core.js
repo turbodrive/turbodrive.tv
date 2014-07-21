@@ -178,7 +178,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         console.log("header init ! - pause video")
     }
     
-    
     var hideFolioContent = function() {
         $("#folioContent").css("visibility", "hidden");
     }

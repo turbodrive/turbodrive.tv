@@ -102,6 +102,10 @@ div {
     pointer-events:auto;
 }
 
+a:focus {
+  outline: none; /*firefox*/
+}
+
 .timeline{
     position:absolute;
     display: block;
@@ -569,6 +573,24 @@ a.github:hover {
     text-decoration: none;
 }
 
+/*** TOOLTIPS ***/
+
+.tooltip {
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif; 
+    font-size: 11px;
+}
+
+.tooltip-inner{
+    color:#53444D;
+    background-color:#EFECE1;
+    letter-spacing: -0.15px;
+    border-radius:2px;
+    text-transform: uppercase;
+}
+
+.tooltip.top .tooltip-arrow {
+    border-top-color: #EFECE1;
+}
 
 /**********/
 
@@ -905,9 +927,16 @@ h3.timelineDate {
 }
 
 .about-menu li a:hover ,
-.skillsfield-menu li a:hover {
+.skillsfield-menu li a:hover,
+.about-menu li a:visited ,
+.skillsfield-menu li a:visited,
+.about-menu li a:focus ,
+.skillsfield-menu li a:focus,
+.about-menu li a:active ,
+.skillsfield-menu li a:active {
     text-decoration: none;
 }
+
 
 .about-menu li > span.skill-icon {
     display: block;
@@ -925,12 +954,6 @@ h3.timelineDate {
     position: relative;
     color: inherit;
 }
-
-.skillsfield-menu li span.skill-text:hover,
-.about-menu li span.skill-text:hover {
-    text-decoration: none;
-}
-
 
 .skill-bg-out {
     display: block;

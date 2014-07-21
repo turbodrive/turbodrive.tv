@@ -53,7 +53,8 @@ require.config({
     paths: {
         jquery: 'jquery.min',
         jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',
-        bootstrap: 'bootstrap.min',
+        /*bootstrap: 'bootstrap.min',*/
+        tooltips: 'tooltips.min',
         TweenMax:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenMax.min',
         modernizr:'modernizr.custom.55142',
         requestAnimationFrame:'RequestAnimationFrame',

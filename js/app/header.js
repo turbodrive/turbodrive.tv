@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
+define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, signals, tooltips) {
     
     var currentMenuState = "--";
     var header = {};
@@ -39,14 +39,23 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             event.preventDefault();
             header.close();
         })
+        
+        $(".contactPanel .share .content").mouseover(function(event){
+            highlightContactPanel("share",0.3)
+        })
+        
+        $(".contactPanel .contact").mouseover(function(event){
+            highlightContactPanel("contact",0.3)
+        });
 
-        TweenMax.set($(".menu3D"),{height:-panelHeight, autoAlpha:1}) 
-        controlMenuState("",0)
-        //setTimeout(controlMenuState, 1500, "contact")        
+        TweenMax.set($(".menu3D"),{height:-panelHeight, autoAlpha:1})
+        controlMenuState("",0)   
         header.resize();
         header.on.initialized.dispatch();
         
-        //controlMenuState("share");
+        $(function () { $("[data-toggle='tooltip']").tooltip(); });
+        
+        //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
     }
     
     header.isOpen = function() {
@@ -157,25 +166,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             currentMenuState = (idButton == "about") ? "" : idButton
         }
 
-        if (currentMenuState == "contact") {            
-            TweenMax.to($(".contact .content"), duration, {
-                opacity: 1
-            })
-        } else {
-            TweenMax.to($(".contact .content"), duration, {
-                opacity: 0.35
-            })
-        }
-
-        if (currentMenuState == "share") {
-            TweenMax.to($(".share .content"), duration, {
-                opacity: 1
-            })
-        } else {
-            TweenMax.to($(".share .content"), duration, {
-                opacity: 0.35
-            })
-        }
+        highlightContactPanel(currentMenuState, duration);
         
         TweenMax.to($(".menuContent"), duration, {
             x: xTargetContent,
@@ -195,6 +186,28 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             isOpen = true;
         }
         updateStealthStatus();
+    }
+    
+    var highlightContactPanel = function(section, duration) {
+        if (section == "contact") {            
+            TweenMax.to($(".contact .content"), duration, {
+                opacity: 1
+            })
+        } else {
+            TweenMax.to($(".contact .content"), duration, {
+                opacity: 0.35
+            })
+        }
+
+        if (section == "share") {
+            TweenMax.to($(".share .content"), duration, {
+                opacity: 1
+            })
+        } else {
+            TweenMax.to($(".share .content"), duration, {
+                opacity: 0.35
+            })
+        }
     }
     
     var getWidthPanel = function() {
