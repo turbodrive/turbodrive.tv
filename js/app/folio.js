@@ -609,31 +609,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     initSkillsMenu = function (idPage) {
         $("." + idPage + "-menu li").mouseenter(function () {
-            var ruleId = $(this).attr("class");
-            var ruleString = "." + idPage + "-menu li." + ruleId + ":after";
-            var rule = CSSRulePlugin.getRule("." + idPage + "-menu li." + ruleId + ":after");
-            TweenMax.to(rule, 0.3, {
-                cssRule: {
-                    opacity: 1
-                }
-            });
+            TweenMax.to($(this).find(".skill-bg-over"),0.3,{autoAlpha:1, ease:Power2.easeOut});
+        }).mouseleave(function () {
+            TweenMax.to($(this).find(".skill-bg-over"),0.5,{autoAlpha:0, ease:Power2.easeOut});
+        }).mousedown(function(){
+            TweenMax.set($(this).find(".skill-bg-over"),{autoAlpha:0.6});
+        }).mouseup(function(){
+            TweenMax.set($(this).find(".skill-bg-over"),{autoAlpha:1});
+        }).click(function(){
+            window.location.hash = $(this).children("a").attr("href");
         })
-
-        $("." + idPage + "-menu li").mouseleave(function () {
-            var ruleId = $(this).attr("class");
-            var rule = CSSRulePlugin.getRule("." + idPage + "-menu li." + ruleId + ":after");
-            TweenMax.to(rule, 0.3, {
-                cssRule: {
-                    opacity: 0
-                }
-            });
-        });
-
-        /*$("."+idPage+"-menu li").onclick(function(){
-            var ruleId = $(this).attr("class");
-            var rule = CSSRulePlugin.getRule("."+idPage+"-menu li."+ruleId+":after");
-            TweenMax.to(rule, 0.3, {cssRule:{opacity:0}});
-        });*/
     }
 
     getRatioPxPerfect = function (z) {

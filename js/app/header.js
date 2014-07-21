@@ -217,7 +217,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         var wA = (vW*0.41) - (hirePadddingLeft+hirePadddingRight);
         var wB = (vW*0.295)- contentPaddingLeft;
         
-        $(".contactPanel").width(vW+100);
+        $(".contactPanel").width(vW+150);
         $(".contactPanel").css("left",LAYOUT.viewportW);
         /*$(".menuContent").css("left", -LAYOUT.viewportW)*/
 
