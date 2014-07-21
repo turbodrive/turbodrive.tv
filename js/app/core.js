@@ -68,6 +68,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
         // overlay
         overlay.on.clickMainOverlay.add(onClickMainOverlay);
+        overlay.loadGmd();
     }
     
     var onClickMainOverlay = function() {
@@ -136,7 +137,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 loadFolio(page, section);
             } else {
                 hideFolioContent();
-                loadReel();
+                loadReel(page);
             }
         }else {
             // transition between both of Env
@@ -154,10 +155,12 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }  
     
     var onReadyForTransitionToReel = function() {
+        console.log("onReadyForTransitionToReel")
         MODULES.reel.on.readyToPlayAfterSeek.remove(onReadyForTransitionToReel)
         MODULES.reel.startTransition(false);
         MODULES.reel.resume();
         showHeader(true);
+        
     }
     
     var onReadyForTransitionToFolio = function() {
@@ -184,16 +187,16 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
     /******* FOLIO MODULE *******/
     
-    var gatherTimeline = function() {
+    /*var gatherTimeline = function() {
         if(!timelineDiv){
             timelineDiv = $(".timeline");
             timelineDiv.remove();
         }
         return timelineDiv
-    }
+    }*/
     
     var loadFolio = function(pageId, sectionId, initloadFunc2){
-        gatherTimeline();
+        //gatherTimeline();
         bindTouchEvents();
         
         if(!MODULES.folio){
@@ -255,7 +258,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         unBindTouchEvents();
         if(!MODULES.reel){
             // show Loader ??
-            overlay.loadGmd();
             require(["app/reelPlayer"], function(reelPlayer){
                 console.log("reelplayer loaded");
                 MODULES.reel = reelPlayer;
@@ -266,9 +268,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.enableOverlayClicks.add(overlay.enableClicks);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
                 if(seekFunction){
-                    MODULES.reel.on.readyToPlayAfterSeek.add(onReadyForTransitionToReel);  
+                    MODULES.reel.on.readyToPlayAfterSeek.add(seekFunction);  
                 }
-                MODULES.reel.init(gatherTimeline(),chapter);
+                MODULES.reel.init(chapter);
                 if(CONFIG.isMobile){
                     MODULES.reel.on.mobileCTAReady.add(onReelMobileReady);
                 }
@@ -277,7 +279,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if(!chapter || !seekFunction){
                 throw new Error("no chapter or handlerFunction defined");
             }else {
-                MODULES.reel.on.readyToPlayAfterSeek.add(onReadyForTransitionToReel);
+                MODULES.reel.on.readyToPlayAfterSeek.add(seekFunction);
                 MODULES.reel.seekToChapterAndPause();
             }
         }

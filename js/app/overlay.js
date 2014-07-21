@@ -40,23 +40,26 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     
     GLOBAL_ACCESS.gmdReady = function(sym){
         gmdAnimation = sym;
+        console.log("3. @@@@@@@ gmdReady ! " + gmdAnimation)
     }
     
     overlay.loadGmd = function(){
+        if(gmdAnimation !== undefined) return
+        console.log("1. @@@@@@@ Start Load GMD")
         require(["GmdEdge"], function(GmdEdge){
-            //console.log("firstScript getMoreDetails loaded");
+            console.log("2. @@@@@@@ firstScript getMoreDetails loaded");
         });
     }
     
     overlay.gmdLoaded = function(){
-        console.log("gmdLoaded !")
-       return Boolean(gmdAnimation)
+        console.log("@@@@@@@ gmdLoaded ! - " + gmdAnimation);
+        return Boolean(gmdAnimation);
     }
     
-    overlay.removeGmd = function(){
+    /*overlay.removeGmd = function(){
         $(gmdAnimation).remove();
-        //console.log("removed GMD");
-    }
+        console.log("999 @@@@@@@ removed GMD");
+    }*/
     
     overlay.show = function(element){
         showMain();
@@ -104,14 +107,14 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     var pausedAnimation = false;
     
     overlay.pauseGmd = function(){
-        if(gmdAnimation.isPlaying()){
+        if(gmdAnimation && gmdAnimation.isPlaying()){
             gmdAnimation.stop();
             pausedAnimation = true;
         }
     }
     
     overlay.resumeGmd = function(){
-        if(pausedAnimation){
+        if(gmdAnimation && pausedAnimation){
             gmdAnimation.play();
             pausedAnimation = false;
         }
