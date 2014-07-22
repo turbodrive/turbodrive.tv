@@ -101,6 +101,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             if(chapterInfo.id == chapterId){
                 //video.currentTime = chapterInfo.startAt;
                 seekTo(chapterInfo.startAt);
+                closeTimeline();
             }
         }
     }
@@ -205,12 +206,24 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timeOverlayClickable = CONFIG.debug ? timelineChapters[0].startAt : timelineChapters[1].startAt;
     var firedOverlayClickable = false;
     var firedShowHeader = false;
+    var tmpChapter;
     
     /******************************/ 
     /************ VIDEO ***********/
     /******************************/
     
     var initVideoPlayer = function(chapter){
+        if(videoInitialized){
+            console.trace("Error - video allready Initialized");
+        }
+        
+        if(chapter){
+            tmpChapter = chapter;
+        }else {
+            tmpChapter = null;   
+        }
+        
+        
         reelContainer = $("#reel");
         video = $("#video")[0];
         video.muted = CONFIG.debug;
@@ -228,18 +241,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         console.log("init and seek to chapter" + chapter);
         
-        video.addEventListener("playing", function() {
-            reelPlayer.on.playStarted.dispatch();
-            active = true;
-            fadeButton();
-            if(chapter){
-                console.log("playing >> seek to chapter " + chapter) 
-                //video.addEventListener("seeked", onSeekedChapter)
-                reelPlayer.seekToChapter(chapter)
-                reelPlayer.on.readyToPlayAfterSeek.dispatch();
-                //video.pause();
-            }
-        });
+        video.addEventListener("playing", onPlayingVideo);
         
         if(CONFIG.isMobile){
             video.addEventListener("progress", mobileReady);
@@ -257,6 +259,20 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         video.play();
         
         globalVideoOverlay = $(".video-overlay");
+    }
+    
+    var onPlayingVideo = function(event) {
+        video.removeEventListener("playing", onPlayingVideo);
+        reelPlayer.on.playStarted.dispatch();
+        active = true;
+        fadeButton();
+        if(tmpChapter){
+            console.log("playing >> seek to chapter " + tmpChapter) 
+            //video.addEventListener("seeked", onSeekedChapter)
+            reelPlayer.seekToChapter(tmpChapter)
+            reelPlayer.on.readyToPlayAfterSeek.dispatch();
+            //video.pause();
+        }
     }
     
     var onSeekedChapter = function(event){
@@ -438,7 +454,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         var ratioSeek = (e.pageX - p3X)/(LAYOUT.viewportW-p3X)
         if(ratioSeek < 0) ratioSeek = 0;
         // seek the video : duration*ratioSeek;
-        console.log("ratio > " + ratioSeek);
+        //console.log("ratio > " + ratioSeek);
+        closeTimeline();
     }
     
     reelPlayer.toggleTimeline = function() {

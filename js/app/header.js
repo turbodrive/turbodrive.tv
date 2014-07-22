@@ -53,7 +53,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         header.resize();
         header.on.initialized.dispatch();
         
-        $(function () { $("[data-toggle='tooltip']").tooltip(); });
+        $("[data-toggle='tooltip']").tooltip();
         
         //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
     }
