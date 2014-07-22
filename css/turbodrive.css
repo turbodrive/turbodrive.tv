@@ -92,7 +92,7 @@ body {
     pointer-events: none;
     font-family:"texgyreadventorregular", "helvetica neue", Arial, sans-serif;
     padding-top: 10px;  
-    /*overflow: hidden;*/
+    overflow: hidden;
     background: url('../images/bgProjects.jpg');
 	background-size:cover;
 	background-position: center center;
@@ -714,13 +714,15 @@ a.github:hover {
     margin: 0px;
     letter-spacing: -0.2px;
     opacity: 0.4;
-    text-shadow: 0px 0px 10px rgba(254,247,180,0.5);
+    text-shadow: 0px 0px 10px rgba(254,247,180,0.7);
 }
 
 .timeline-menu a.no-project {
     color: #D5EFC8;
     border-bottom-color: #D5EFC8;
-    text-shadow: 0px 0px 10px rgba(213,239,200,0.5);
+    text-shadow: 0px 0px 10px rgba(213,239,200,0.7);
+    position: relative;
+    top: 12px;
 }
 
 .timeline-menu a:hover,

@@ -37,13 +37,14 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         hideGmd : new signals.Signal(),
         enableOverlayClicks : new signals.Signal(),
         readyToPlayAfterSeek : new signals.Signal(),
+        changeChapter : new signals.Signal(),
         videoComplete : new signals.Signal()
     }        
 
     reelPlayer.init = function (chapter) {
         timelineMenu = $(".timeline-menu");
         
-        p3XConstant = Number(p2X) + (Math.cos(degToRad(-52)) * _wP2); 
+        
         //reelPlayer.on.initialized.dispatch();
         initVideoPlayer(chapter);
     }
@@ -93,6 +94,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     reelPlayer.seekToChapter = function(chapterId) {
+        if(currentChapter && chapterId == currentChapter.id) return
+        
         for(var i = 0; i<timelineChapters.length ; i++){
             var chapterInfo = timelineChapters[i];
             if(chapterInfo.id == chapterId){
@@ -297,8 +300,23 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         })
     }
     
+    var fireChangeChapter = function() {
+        if(currentChapter == timelineChapters[0]) return;
+        reelPlayer.on.changeChapter.dispatch(currentChapter);
+    }
+    
+    var updateTimelineChapters = function() {
+        var buttons = $(".timeline-menu a");
+        for(var i=0; i<buttons.length ;i++){
+            if(buttons[i].id == currentChapter.id){
+                $(buttons[i]).addClass("active");    
+            }else {
+                $(buttons[i]).removeClass("active");   
+            }
+        }
+    }
+    
     var onTimeUpdate = function(event) {
-        
         cTime = video.currentTime;
         
         for (var i = nbrChapters-2; i >= 0; i--) {
@@ -307,6 +325,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             if (cTime >= chapter.startAt && cTime < nextChapter.startAt) {
                 if (currentChapter == null || currentChapter.id != chapter.id) {
                     currentChapter = chapter;
+                    updateTimelineChapters()
+                    fireChangeChapter();
                     if (i > 0) {
                         cTimeGmd = timeGmd[i];
                     }
@@ -346,7 +366,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         var widthProgress
         if(timelineIsCreated){
             var ratioProgress = (video.currentTime/video.duration)
-            widthProgress = Number(p3XConstant) + (LAYOUT.viewportW -  Number(p3X))*ratioProgress;
+            widthProgress = Number(p3XConstant) + ((LAYOUT.viewportW -  Number(p3XConstant))*ratioProgress);
         }else{
             widthProgress = 0
         }
@@ -454,6 +474,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         p2 = $("#timelineP2");
         p2X = p2.attr("x");
+        p3XConstant = Number(p2X) + (Math.cos(degToRad(-52)) * _wP2);
         p2Y = p2.attr("y");
         p3 = $("#timelineP3");
         bgTimeline = $("#bgTimeline");

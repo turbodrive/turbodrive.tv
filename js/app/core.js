@@ -116,7 +116,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
         //if(env == ABOUT_ENV && page == undefined) page = "about"
         console.log("env > " + env + " page > " + page + " section > " + section);
-        
+        console.log("currentEnv > " + currentEnv);
         var newEnvIsFolio = (env == FOLIO_ENV);
         
         if(MODULES.header) MODULES.header.close();
@@ -128,6 +128,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if (newEnvIsFolio) {
                 loadFolio(page, section);
             }else {
+                console.log("CORE - seekToChapter " + page )
                 MODULES.reel.seekToChapter(page)
             }
         }else if(currentEnv == ""){
@@ -267,6 +268,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.hideGmd.add(onHideGmd);
                 MODULES.reel.on.enableOverlayClicks.add(overlay.enableClicks);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
+                MODULES.reel.on.changeChapter.add(onChangeChapter);
                 if(seekFunction){
                     MODULES.reel.on.readyToPlayAfterSeek.add(seekFunction);  
                 }
@@ -283,7 +285,11 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.seekToChapterAndPause();
             }
         }
-    }   
+    } 
+    
+    var onChangeChapter = function(newChapter){
+        hasher.setHash("reel",newChapter.id+"/");
+    }
     
     var onReelMobileReady = function(){        
         MODULES.reel.on.mobileCTAReady.remove(onReelMobileReady);
