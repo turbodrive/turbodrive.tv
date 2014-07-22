@@ -53,7 +53,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         header.resize();
         header.on.initialized.dispatch();
         
-        $("[data-toggle='tooltip']").tooltip();
+        /*$("[data-toggle='tooltip']").tooltip();*/
         
         //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
     }
@@ -75,6 +75,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         } else {
             $(".navbar-default").removeClass("navbar-stealth");
         }
+        removeHighlightButtons();
     }
     
     /* closing menu header from external module*/
@@ -100,6 +101,35 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             header.close();
             return
         }
+    }
+    
+    var to1,to2, to3, to4;
+    
+    header.highlightButtons = function(){
+        to1 = setTimeout(function(){
+            $(".navbar-stealth .container").addClass("highlightContainer");
+            $("#moreProjects").addClass("highlight");
+        },1500);
+        
+        /*to2 = setTimeout(function(){
+            $("#moreProjects").removeClass("highlight");
+        },7000);*/
+        
+         to3 = setTimeout(function(){
+            $(".about-button").addClass("highlight");
+        },3000);
+        
+         to4 = setTimeout(removeHighlightButtons,8000);
+    }
+    
+    var removeHighlightButtons = function() {
+        $("#moreProjects").removeClass("highlight");
+        $(".about-button").removeClass("highlight");
+        $(".navbar-stealth .container").removeClass("highlightContainer");
+        clearTimeout(to1);
+        clearTimeout(to2);
+        clearTimeout(to3);
+        clearTimeout(to4);
     }
     
     controlMenuState = function (idButton, duration) {

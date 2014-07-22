@@ -37,6 +37,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         hideGmd : new signals.Signal(),
         enableOverlayClicks : new signals.Signal(),
         readyToPlayAfterSeek : new signals.Signal(),
+        highlightButtonsHeader : new signals.Signal(),
         changeChapter : new signals.Signal(),
         videoComplete : new signals.Signal()
     }        
@@ -370,14 +371,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             firedShowHeader = true;
             reelPlayer.on.showHeader.dispatch();
         }
-        
-        /*if (cTime > timeTimeline && cTime < timeTimeline + timeDetectRange) {
-            //showAndHideTimeline();
-        }
 
         if (cTime > timeTimeline2 && cTime < timeTimeline2 + timeDetectRange) {
-            //showAndHideTimeline();
-        }*/
+            showAndHideTimeline();
+            reelPlayer.on.highlightButtonsHeader.dispatch();
+        }
         
         var widthProgress
         if(timelineIsCreated){
@@ -431,10 +429,12 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     /******************************/
     
     var mouseOverTimelineHandler = function(e){
+        clearTimeout(timeOutCloseTimeline);
         openTimeline(false)
     }
     
     var mouseOutTimelineHandler = function(e){
+        clearTimeout(timeOutCloseTimeline);
         closeTimeline()
     }
     
@@ -518,7 +518,15 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         timelineIsInitialized = true;
     }
     
-    var openTimeline = function(first) {        
+    var timeOutCloseTimeline;
+    var showAndHideTimeline = function() {
+        if(timeOutCloseTimeline !== null) return
+        openTimeline()
+        timeOutCloseTimeline = setTimeout(closeTimeline, 2500)
+    }
+    
+    var openTimeline = function(first) {
+        timeOutCloseTimeline = null;
         if(first){
             twObjects.p2Rotation = -52;
             $(".timeline").css("bottom",0);
@@ -539,6 +547,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var closeTimeline = function(){
+        timeOutCloseTimeline = null;
         if(twTmlePanel) twTmlePanel.pause();
         if(twTmleAngle) twTmleAngle.pause();
         if(twAlphaTmleBg) twAlphaTmleBg.pause();
@@ -550,14 +559,15 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {delay:0.2, autoAlpha:0});
         twTmleMenu = TweenMax.to(timelineMenu,0.3, {autoAlpha:0})
         
-        TweenMax.to(twObjects,1.5, {delay:0.2,bgTimelineOpacity:0.25,
+        TweenMax.to(twObjects,2, {delay:3,bgTimelineOpacity:0.25,
             onUpdate:function(){
                 $("#bgTimeline").css("fill-opacity",twObjects.bgTimelineOpacity)
             }
-            });
+        });
     }
     
     var removeTimeline = function(){
+        clearTimeout(timeOutCloseTimeline)
         console.log(">> tmle " + $(".timeline"));
         $(".timeline").remove();
         console.log(">> tmle remove" + $(".timeline"));

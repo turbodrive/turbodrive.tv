@@ -267,6 +267,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.playGmd.add(onPlayGmd);
                 MODULES.reel.on.hideGmd.add(onHideGmd);
                 MODULES.reel.on.enableOverlayClicks.add(overlay.enableClicks);
+                MODULES.reel.on.highlightButtonsHeader.add(onHighLightButtonsHeader);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
                 MODULES.reel.on.changeChapter.add(onChangeChapter);
                 if(seekFunction){
@@ -286,6 +287,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             }
         }
     } 
+    
+    var onHighLightButtonsHeader = function(event){
+        if(MODULES.header) MODULES.header.highlightButtons();
+    }
     
     var onChangeChapter = function(newChapter){
         hasher.setHash("reel",newChapter.id+"/");
