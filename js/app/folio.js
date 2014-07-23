@@ -315,12 +315,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             var vx2 = dfX * 0.09;
             //console.log("dfX = " + dfX + " | vX = " + vx2);
             objTmx.twPos = Number(Number(objTmx.twPos) + Number(vx2));
-            //fadeOut(currentPage3D.getId())
+            //fadeOut(previousPage3D.getId())
 
             if (Math.abs(dfX) < 0.1) {
                 console.log("fadeInAndActivate > ")
                 if (currentPage3D.getId() != targetPage) {
                     console.log("prepPgeForTransition > ")
+                    fadeOut(currentPage3D.getId());
                     prepPgeForTransition(targetPage);
                     fadeInAndActivate(targetPage, 0.2, false);
                 }
@@ -902,16 +903,20 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     fadeOut = function (pageId, delay) {
-        if ($("#" + pageId).css("opacity") < 1) return
-        TweenMax.to($("#" + pageId), 0.3, {
+        console.log("FADEOUT >> " + pageId);
+        var page = $("[page-id='"+pageId+"']" );
+        
+        if (page.css("opacity") < 1) return
+        TweenMax.to(page, 0.3, {
             delay: delay,
             autoAlpha: 0
         });
     }
 
     fadeInAndActivate = function (pageId, delay, setTweenPos) {
-        console.log("current Opacity > " + $("#" + pageId).css("opacity"))
-        if ($("#" + pageId).css("opacity") > 0) {
+        var page = $("[page-id='"+pageId+"']" );
+        console.log("current Opacity > " + page.css("opacity"))
+        if (page.css("opacity") > 0) {
             return
         } else {
             console.log("show " + pageId);
@@ -919,7 +924,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
         var dispatchComplete = setTweenPos ? transitionComplete : null;
 
-        TweenMax.to($("#" + pageId), 0.5, {
+        TweenMax.to(page, 0.5, {
             delay: delay,
             autoAlpha: 1,
             onComplete: dispatchComplete,
