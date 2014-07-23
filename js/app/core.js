@@ -55,20 +55,33 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         /*if(!hasher.getHash()){
             //hasher.setHash(DEFAULT_HASH);
         } */       
-        hasher.initialized.add(parseHash);
-        hasher.changed.add(parseHash);
-        hasher.init();        
+              
         
         document.ontouchmove = function(event){
             event.preventDefault();
         }
         
-        $(window).resize(resizeWindowHandler);
-        resizeWindowHandler(null);
         
+
         // overlay
         overlay.on.clickMainOverlay.add(onClickMainOverlay);
         overlay.loadGmd();
+        
+        $(window).resize(resizeWindowHandler);
+        resizeWindowHandler(null);
+        
+        if(orientationIsLandscape){
+            initializedHasher();
+        }else{
+            orientationCallBack = initializedHasher;
+        }
+    }
+    
+    var initializedHasher = function() {
+        orientationCallBack = null;
+        hasher.initialized.add(parseHash);
+        hasher.changed.add(parseHash);
+        hasher.init(); 
     }
     
     var onClickMainOverlay = function() {
@@ -433,6 +446,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     /******* RESIZE EVENT *******/
     
     var resizeWindowHandler = function(event) {
+        readDeviceOrientation();
+        
         LAYOUT.viewportH = window.innerHeight;
         LAYOUT.viewportW = window.innerWidth;
         LAYOUT.vH2 = LAYOUT.viewportH*0.5;
@@ -470,6 +485,23 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
 
         //updateScene3D(); // if needed
         $(REEL_ENV).css('height', viewportH);
+    }
+    
+    var orientationIsLandscape = true;
+    var orientationCallBack;
+    
+    var readDeviceOrientation = function() {
+        console.log('readDeviceOrientation')
+        
+        var isLandscape = ($(window).width() > $(window).height());
+        if(orientationIsLandscape && !isLandscape){
+            overlay.show(overlay.LANDSCAPE_ALERT);
+        }else if(!orientationIsLandscape && isLandscape){
+            overlay.hide(overlay.LANDSCAPE_ALERT);
+            if(orientationCallBack) orientationCallBack();
+        }
+        orientationIsLandscape = isLandscape;
+        console.log("orientationIsLandscape >> " + orientationIsLandscape)
     }
     
     initCore();

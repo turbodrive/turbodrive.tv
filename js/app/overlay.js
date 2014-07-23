@@ -3,11 +3,13 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     var loader = $(".loader-overlay");
     var main = $(".video-overlay");
     var gmd = $(".getmore-overlay");
+    var lanscapeAlert = $(".landscape-alert-overlay");
     
-    var listElements = ["loader","getMoreDetails"];
+    var listElements = ["loader","getMoreDetails","landscapeAlert"];
     var overlay = {
         LOADER : listElements[0],
-        GETMOREDETAILS : listElements[1]
+        GETMOREDETAILS : listElements[1],
+        LANDSCAPE_ALERT : listElements[2]
     };
     
     var currentElName = overlay.LOADER;
@@ -34,25 +36,26 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
             case overlay.GETMOREDETAILS :
                 return gmd;
                 break;
+            case overlay.LANDSCAPE_ALERT :
+                return lanscapeAlert;
+                break;
         }
         return null;
     }
     
     GLOBAL_ACCESS.gmdReady = function(sym){
         gmdAnimation = sym;
-        console.log("3. @@@@@@@ gmdReady ! " + gmdAnimation)
     }
     
     overlay.loadGmd = function(){
         if(gmdAnimation !== undefined) return
-        console.log("1. @@@@@@@ Start Load GMD")
+
         require(["GmdEdge"], function(GmdEdge){
-            console.log("2. @@@@@@@ firstScript getMoreDetails loaded");
+            
         });
     }
     
     overlay.gmdLoaded = function(){
-        console.log("@@@@@@@ gmdLoaded ! - " + gmdAnimation);
         return Boolean(gmdAnimation);
     }
     
@@ -72,6 +75,13 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         }else {
             TweenMax.to(newEl, 0.5, {autoAlpha:1});
         }
+        
+        if(element == overlay.LANDSCAPE_ALERT){
+            $(main).addClass("overlay-total");   
+        }else {
+            $(main).removeClass("overlay-total");   
+        }
+        
         currentElName = element;
     }
     
@@ -86,6 +96,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         }
         
         if(element == currentElName) currentElName = "";
+        $(main).removeClass("overlay-total");
     }
     
     overlay.enableClicks = function(){
