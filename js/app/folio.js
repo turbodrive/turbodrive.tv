@@ -38,6 +38,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     folio.kill = function () {
         stopRendering();
+        previousPage3D = null;
+        currentPage3D = null;
+        $(stage).css("visibility", "hidden");
+        console.log("KILL FOLIO");
         // delete all pages
     }
 
@@ -166,7 +170,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     setTweenPosition = function (pageId, sectionId) {
         interactTx = startx = 0
         touchEnd = touchEnd2 = false;
-        console.log("setTweenPosition >> " + pageId);
+        console.log("setTweenPosition >> " + pageId + " - " + sectionId);
         folio.load(pageInfo.getNextPageId(pageId));
         folio.load(pageInfo.getPrevPageId(pageId));
 
@@ -420,7 +424,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //buildGridTile(1,1);
 
         
-        if(CONFIG.hyperDriveTransition) buildHyperDriveScene();
+        //if(CONFIG.hyperDriveTransition) buildHyperDriveScene();
         scene3DBuilt = true;
     }
 
@@ -454,7 +458,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         bunchQuantity = 5
     }
 
-    enterFrameHyperDrive = function () {
+    var enterFrameHyperDrive = function () {
         var interactZ = interactContainer.z
         var newZ = -interactZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
         var speedIntZ = interactZ - prevIntZ;
@@ -469,7 +473,19 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         prevIntZ = interactZ;
     }
     
-    buildHyperDriveScene = function () {        
+    var tmpPageIdHd, tmpSectionIdHd;
+    
+    folio.startIntroTransition = function(pageId, sectionId) {
+        tmpPageIdHd = pageId;
+        tmpSectionIdHd = sectionId; 
+        if(CONFIG.hyperDriveTransition){
+            buildHyperDriveScene();
+        }else{
+            fireReadyForIntroTransition();
+        }
+    }
+    
+    var buildHyperDriveScene = function () {        
         hyperdriveContainer = new Sprite3D()
             .setId("hyperdriveContainer")
             .setRegistrationPoint(0, 0, 0);
@@ -573,7 +589,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     var fireReadyForIntroTransition = function(){
-        folio.on.readyForIntroTransition.dispatch();
+        folio.on.readyForIntroTransition.dispatch(tmpPageIdHd, tmpSectionIdHd);
     }
     
     buildGridTile = function (indexX, indexY) {
@@ -819,6 +835,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 section.setOpacity(0);
             }
         }
+        currentSectionId = sectionId;
     }
 
     getRelatedToFovValue = function (minL, maxL) {
@@ -843,18 +860,24 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if (sectionId) updateSection(currentPage3D, sectionId)
         return page;
     }
-
+    
+    folio.hasCurrentPage3D = function(){
+        console.log("APGES " + currentPage3D + " - " + previousPage3D);
+        
+        return (currentPage3D !== undefined)
+    }
+    
     folio.startTransition = function (pageId, sectionId) {
         console.log("startTransition >> + " + sectionId);
         startRendering();
-        tmpSectionId = sectionId
+        tmpSectionId = sectionId;
         if (currentPageId == pageId) {
             if (sectionId && currentSectionId != sectionId) {
-                console.log("update section")
-                updateSection(currentPage3D, sectionId)
+                console.log("update section");
+                updateSection(currentPage3D, sectionId);
                 return
             } else {
-                console.log("allready uptoDate >> " + pageId)
+                console.log("allready uptoDate >> " + pageId);
                 return
             }
         }
@@ -863,7 +886,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
         if (!previousPage3D) {
             // transition depuis HyperSPACE
-            setTweenPosition(pageId)
+            setTweenPosition(pageId, sectionId);
             fadeInAndActivate(pageId, 0, false);
             // TODO : SET CONTAINER POSITION (temp)
         } else {
@@ -871,12 +894,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             fadeOut(currentPageId, 0.4)
             fadeInAndActivate(pageId, 1.1, false);
             if (Math.abs(siblingsLevel) == 1) {
-                level1Transition(page)
+                level1Transition(page);
             } else {
-                freeTransition(page)
+                freeTransition(page);
             }
         }
-
     }
 
     fadeOut = function (pageId, delay) {
@@ -892,10 +914,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if ($("#" + pageId).css("opacity") > 0) {
             return
         } else {
-            console.log("show " + pageId)
+            console.log("show " + pageId);
         }
 
-        var dispatchComplete = setTweenPos ? transitionComplete : null
+        var dispatchComplete = setTweenPos ? transitionComplete : null;
 
         TweenMax.to($("#" + pageId), 0.5, {
             delay: delay,
@@ -928,7 +950,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     freeTransition = function (page) {
         transitionStarted = true;
         //stopRendering();
-        console.log("target > " + page.rotationY)
+        //console.log("target > " + page.rotationY)
 
 
         TweenMax.to(container, 2, {

@@ -156,7 +156,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }else {
             // transition between both of Env
             if (newEnvIsFolio) {
-                if(CONFIG.isMobile) MODULES.reel.pause();
+                MODULES.reel.pause();
                 loadFolio(page, section, onReadyForTransitionToFolio);
                 overlay.disable();
             }else {
@@ -170,7 +170,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var onReadyForTransitionToReel = function() {
         console.log("onReadyForTransitionToReel")
-        MODULES.reel.on.readyToPlayAfterSeek.remove(onReadyForTransitionToReel)
+        MODULES.reel.on.readyToPlayAfterSeek.remove(onReadyForTransitionToReel);
+        MODULES.reel.on.transitionComplete.add(onTransitionToReelComplete);
         MODULES.reel.startTransition(false);
         MODULES.reel.resume();
         showHeader(true);
@@ -179,14 +180,21 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var onReadyForTransitionToFolio = function() {
         MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
-        MODULES.reel.pauseEnv();
-        MODULES.reel.startTransition(true)
+        if(MODULES.reel){
+            MODULES.reel.pauseEnv();
+            MODULES.reel.startTransition(true);
+        }
         if(MODULES.header){
             //MODULES.reel.pauseEnv();
             showHeader(false);
         }else {
             showHeader(false, onHeaderInitialized);
         }
+    }
+    
+    var onTransitionToReelComplete = function(){
+        MODULES.reel.on.transitionComplete.remove(onTransitionToReelComplete);
+        MODULES.folio.kill();
     }
     
     var onHeaderInitialized = function() {
@@ -262,8 +270,27 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var onPageLoaded = function(pageId, sectionId){
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
         console.log("FOLIO onPageLoaded >> " + pageId);
-        MODULES.folio.startTransition(pageId, sectionId)
-        if(!CONFIG.hyperDriveTransition) overlay.hide();
+        console.log("MODULES.folio.hasCurrentPage3D() >>" + MODULES.folio.hasCurrentPage3D())
+        if(MODULES.folio.hasCurrentPage3D()){
+            MODULES.folio.startTransition(pageId, sectionId);
+        }else{
+            MODULES.folio.on.readyForIntroTransition.add(readyForIntroTransitionToFolio);
+            MODULES.folio.startIntroTransition(pageId, sectionId);
+        }
+        
+        
+        
+        //if(!CONFIG.hyperDriveTransition) overlay.hide();
+    }
+    
+    var readyForIntroTransitionToFolio = function(pageId, sectionId) {
+        overlay.hide();
+        console.log("readyForIntroTransitionToFolio - " + pageId + " - " + sectionId);
+        MODULES.folio.startTransition(pageId, sectionId);
+        
+        if(MODULES.reel){
+            //   
+        }
     }
     
     /******* REEL MODULE *******/

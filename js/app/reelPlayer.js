@@ -41,7 +41,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         readyToPlayAfterSeek : new signals.Signal(),
         highlightButtonsHeader : new signals.Signal(),
         changeChapter : new signals.Signal(),
-        videoComplete : new signals.Signal()
+        videoComplete : new signals.Signal(),
+        transitionComplete : new signals.Signal()
     }        
 
     reelPlayer.init = function (chapter) {
@@ -122,7 +123,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             reelContainer.css("visibility", "visible");
             TweenMax.fromTo(reelContainer,1,
                 {y:-LAYOUT.viewportH},
-                {delay:0.1, y:0, ease:Power2.easeInOut}
+                {delay:0.1, y:0, ease:Power2.easeInOut,
+                    onComplete:function(){
+                        reelPlayer.on.transitionComplete.dispatch();
+                    }
+                }
             );
         }
     }
@@ -552,7 +557,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         var duration = first ? 0.7 : 0.5;
         var easeFunc = first ? Power2.easeInOut : Power3.easeOut;
         
-        twTmlePanel = TweenMax.to($(".timeline"),duration,{delay:0.2, css:{bottom:-30}, ease:easeFunc});
+        twTmlePanel = TweenMax.to($(".timeline"),duration,{delay:0.2, css:{bottom:-28}, ease:easeFunc});
         twTmleAngle = TweenMax.to(twObjects,duration,{delay:0.2, p2Rotation:0, p1Width:92.5, pHeight:8, ease:easeFunc, onUpdate:updateP3Pos});
         
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),duration, {delay:0.2, autoAlpha:0});
