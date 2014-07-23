@@ -5,19 +5,21 @@
 define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var reelPlayer = {};
     var _wP2 = 39;
-    var p2, p3;
+    var p1, p2, p3;
     var p2X =0, p2Y = 0;
     var p3X = 0;
     var bgTimeline, progTimeline;
     var twObjects = {};
     twObjects.wBg = 0;
     twObjects.p2Rotation = 0;
-    twObjects.bgTimelineOpacity = 1
+    twObjects.bgTimelineOpacity = 1;
+    twObjects.p1Width = 92.5;
+    twObjects.pHeight = 8;
     
     var timelineIsInitialized = false;
     var timelineIsCreated = false;
     var twTmlePanel, twTmleAngle, twAlphaTmleBg, twTmleMenu;
-    var timelineEl = $('<div class="timeline"><div id="timelineSvg"><svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><g><clipPath id="timelineMask"><rect x="0" y="60" width="91" height="5"/><rect id="timelineP2" x="88" y="60" width="40" height="5" transform="rotate(-30,235,52)"/><rect id="timelineP3" x="271" y="60" width="500" height="5"/></clipPath></g><g><rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64" style="fill-opacity:1"/><rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/></g></svg></div><div id="timelineBg"><img id="footerGradient" src="images/gradient_timelineFooter.png"><img id="hexagrid" src="images/hexagrid_lcd.png"></div></div>');
+    var timelineEl = $('<div class="timeline"><div id="timelineSvg"><svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><g><clipPath id="timelineMask"><rect id="timelineP1" rect x="0" y="60" width="'+twObjects.p1Width+'" height="'+twObjects.pHeight+'"/><rect id="timelineP2" x="88" y="60" width="40" height="'+twObjects.pHeight+'" transform="rotate(-30,235,52)"/><rect id="timelineP3" x="271" y="60" width="500" height="'+twObjects.pHeight+'"/></clipPath></g><g><rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64" style="fill-opacity:1"/><rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/></g></svg></div><div id="timelineBg"><img id="footerGradient" src="images/gradient_timelineFooter.png"><img id="hexagrid" src="images/hexagrid_lcd.png"></div></div>');
     
     var timelineMenu;
     var reelContainer;
@@ -60,14 +62,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             updateP3Pos();
             bgTimeline.attr("width",LAYOUT.viewportW)
             $("#footerGradient").attr("width",LAYOUT.viewportW);
-            $("#hexagrid").attr("width",LAYOUT.viewportW);
-            /*var min-witdh = 10+LAYOUT.getRatioW(25);
-            $(".timeline-menu a").css("min-width", )*/
-            //console.log("paddingRightButtons >> " + LAYOUT.ratioW);
-            
-            /*min-width: 65px;
-            padding-right: 10px;*/
-            
+            $("#hexagrid").attr("width",LAYOUT.viewportW);            
         }
         
         var paddingRightButtons = 10+(LAYOUT.ratioW*25);
@@ -94,7 +89,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         pausedVideo = true;
     }
     
-    reelPlayer.seekToChapter = function(chapterId) {
+    reelPlayer.seekToChapter = function(chapterId, autoCloseTimeline) {
         if(currentChapter && chapterId == currentChapter.id) return
         
         for(var i = 0; i<timelineChapters.length ; i++){
@@ -102,7 +97,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             if(chapterInfo.id == chapterId){
                 //video.currentTime = chapterInfo.startAt;
                 seekTo(chapterInfo.startAt);
-                closeTimeline();
+                if(autoCloseTimeline === null) autoCloseTimeline = true;
+                if(autoCloseTimeline) closeTimeline();
             }
         }
     }
@@ -270,7 +266,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         if(tmpChapter){
             console.log("playing >> seek to chapter " + tmpChapter) 
             //video.addEventListener("seeked", onSeekedChapter)
-            reelPlayer.seekToChapter(tmpChapter)
+            reelPlayer.seekToChapter(tmpChapter, false)
             reelPlayer.on.readyToPlayAfterSeek.dispatch();
             //video.pause();
         }
@@ -489,6 +485,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         appendTimelineDiv();
         $(".timeline").prepend(timelineMenu);
         
+        p1 = $("#timelineP1");
         p2 = $("#timelineP2");
         p2X = p2.attr("x");
         p3XConstant = Number(p2X) + (Math.cos(degToRad(-52)) * _wP2);
@@ -505,7 +502,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         progTimeline.attr("width",0);        
         openTimeline(true);
         
-        TweenMax.to(twObjects,1,{delay:1, wBg:LAYOUT.viewportW, ease:Linear.easeNone,
+        TweenMax.to(twObjects,1,{delay:1, wBg:LAYOUT.viewportW, ease:Linear.easeNone,                               
             onUpdate:function(){
                 bgTimeline.attr("width",twObjects.wBg);
             },
@@ -513,8 +510,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
                 timelineIsCreated = true;
             }
         });        
-        
-        setTimeout(closeTimeline, 2500)
+    
+        setTimeout(closeTimeline, 2500, true)
         timelineIsInitialized = true;
     }
     
@@ -529,7 +526,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         timeOutCloseTimeline = null;
         if(first){
             twObjects.p2Rotation = -52;
-            $(".timeline").css("bottom",0);
+            $(".timeline").css("bottom",60);
             updateP3Pos();
         }else{
             if(twTmlePanel) twTmlePanel.pause();
@@ -537,27 +534,29 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             if(twAlphaTmleBg) twAlphaTmleBg.pause();
             if(twTmleMenu) twTmleMenu.pause();
             
-            twTmlePanel = TweenMax.to($(".timeline"),0.3,{css:{bottom:0}, ease:Power3.EaseOut});
-            twTmleAngle = TweenMax.to(twObjects,0.3,{p2Rotation:-52, ease:Power3.EaseOut, onUpdate:updateP3Pos});
-            twTmleMenu = TweenMax.to(timelineMenu,0.3, {autoAlpha:1, delay:0.2})
+            twTmlePanel = TweenMax.to($(".timeline"),0.4,{css:{bottom:0}, ease:Power3.easeInOut});
+            twTmleAngle = TweenMax.to(twObjects,0.4,{p2Rotation:-52, p1Width:91, pHeight:5, ease:Power3.easeInOut, onUpdate:updateP3Pos});
+            twTmleMenu = TweenMax.to(timelineMenu,0.4, {autoAlpha:1, delay:0.2})
         }        
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {autoAlpha:1});
         
         reelPlayer.resize();
     }
     
-    var closeTimeline = function(){
+    var closeTimeline = function(first){
         timeOutCloseTimeline = null;
         if(twTmlePanel) twTmlePanel.pause();
         if(twTmleAngle) twTmleAngle.pause();
         if(twAlphaTmleBg) twAlphaTmleBg.pause();
         if(twTmleMenu) twTmleMenu.pause();
+        var duration = first ? 0.7 : 0.5;
+        var easeFunc = first ? Power2.easeInOut : Power3.easeOut;
         
-        twTmlePanel = TweenMax.to($(".timeline"),0.5,{delay:0.2, css:{bottom:-35}, ease:Quart.EaseOut});
-        twTmleAngle = TweenMax.to(twObjects,0.5,{delay:0.2, p2Rotation:0, ease:Quart.EaseOut, onUpdate:updateP3Pos});
+        twTmlePanel = TweenMax.to($(".timeline"),duration,{delay:0.2, css:{bottom:-30}, ease:easeFunc});
+        twTmleAngle = TweenMax.to(twObjects,duration,{delay:0.2, p2Rotation:0, p1Width:92.5, pHeight:8, ease:easeFunc, onUpdate:updateP3Pos});
         
-        twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {delay:0.2, autoAlpha:0});
-        twTmleMenu = TweenMax.to(timelineMenu,0.3, {autoAlpha:0})
+        twAlphaTmleBg = TweenMax.to($("#timelineBg"),duration, {delay:0.2, autoAlpha:0});
+        twTmleMenu = TweenMax.to(timelineMenu,duration, {autoAlpha:0})
         
         TweenMax.to(twObjects,2, {delay:3,bgTimelineOpacity:0.25,
             onUpdate:function(){
@@ -568,21 +567,25 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var removeTimeline = function(){
         clearTimeout(timeOutCloseTimeline)
-        console.log(">> tmle " + $(".timeline"));
         $(".timeline").remove();
-        console.log(">> tmle remove" + $(".timeline"));
-        console.log(">> tmle parent" + $(".timeline").parent());
     }
         
     var updateP3Pos = function () {
         // adaptation depuis la version actionscript;
+        //if(!timelineIsInitialized) return
         var rX = parseInt(p2X)+1;
         var rY = parseInt(p2Y)+2;
-        p2.attr("transform","rotate("+twObjects.p2Rotation+","+rX+","+rY+")");
+        if(p2){ p2.attr("transform","rotate("+twObjects.p2Rotation+","+rX+","+rY+")");
+              }
         p3X = Number(p2X) + (Math.cos(degToRad(twObjects.p2Rotation)) * _wP2);
         p3.attr("x",p3X);
         p3.attr("y",parseInt(Number(p2Y) + (Math.sin(degToRad(twObjects.p2Rotation)) * _wP2)));
         p3.attr("width", Number(LAYOUT.viewportW) - Number(p3X));
+        
+        p1.attr("height", twObjects.pHeight);
+        p1.attr("width", twObjects.p1Width);
+        p2.attr("height", twObjects.pHeight);
+        p3.attr("height", twObjects.pHeight);
     }
 
     var degToRad = function(angle) {

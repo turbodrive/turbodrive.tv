@@ -71,7 +71,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if (!scene3DBuilt) return
         
         
-        console.log("resize >> (translate2D)");
+        //console.log("resize >> (translate2D)");
         $("#folio").css("left", LAYOUT.vW2)
         $("#folio").css("top", LAYOUT.vH2)
         stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);

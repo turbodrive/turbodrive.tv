@@ -142,7 +142,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 loadFolio(page, section);
             }else {
                 console.log("CORE - seekToChapter " + page )
-                MODULES.reel.seekToChapter(page)
+                MODULES.reel.seekToChapter(page, true)
             }
         }else if(currentEnv == ""){
             if (newEnvIsFolio) {
@@ -491,17 +491,21 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var orientationCallBack;
     
     var readDeviceOrientation = function() {
-        console.log('readDeviceOrientation')
         
         var isLandscape = ($(window).width() > $(window).height());
         if(orientationIsLandscape && !isLandscape){
             overlay.show(overlay.LANDSCAPE_ALERT);
+            if(MODULES.reel && MODULES.reel.isActive()){
+                MODULES.reel.pause()   
+            }
         }else if(!orientationIsLandscape && isLandscape){
             overlay.hide(overlay.LANDSCAPE_ALERT);
             if(orientationCallBack) orientationCallBack();
+             if(MODULES.reel && MODULES.reel.isActive()){
+                MODULES.reel.resume()   
+            }
         }
         orientationIsLandscape = isLandscape;
-        console.log("orientationIsLandscape >> " + orientationIsLandscape)
     }
     
     initCore();
