@@ -14,6 +14,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     
     var currentElName = overlay.LOADER;
     var gmdAnimation;
+    var startLoadGmd = false;
     
     overlay.on = {
         clickMainOverlay: new signals.Signal()
@@ -48,6 +49,8 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }
     
     overlay.loadGmd = function(){
+        if(startLoadGmd) return;
+        startLoadGmd = true
         if(gmdAnimation !== undefined) return
 
         require(["GmdEdge"], function(GmdEdge){
@@ -76,7 +79,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
             TweenMax.to(newEl, 0.5, {autoAlpha:1});
         }
         
-        if(element == overlay.LANDSCAPE_ALERT){
+        if(element == overlay.LANDSCAPE_ALERT || element == overlay.LOADER){
             $(main).addClass("overlay-total");   
         }else {
             $(main).removeClass("overlay-total");   

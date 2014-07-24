@@ -65,7 +65,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
 
         // overlay
         overlay.on.clickMainOverlay.add(onClickMainOverlay);
-        overlay.loadGmd();
         
         $(window).resize(resizeWindowHandler);
         resizeWindowHandler(null);
@@ -246,16 +245,16 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         console.log("FOLIO onFolioInitialized >> " + pageId);
         MODULES.folio.on.initialized.remove(onFolioInitialized);
         MODULES.folio.on.pageLoaded.add(onPageLoaded);
-        if(CONFIG.hyperDriveTransition){
+        /*if(CONFIG.hyperDriveTransition){
             MODULES.folio.on.readyForIntroTransition.add(onHideOverlay);
-        }
+        }*/
         MODULES.folio.load(pageId, sectionId);
     }
     
-    var onHideOverlay = function(){
+    /*var onHideOverlay = function(){
         MODULES.folio.on.readyForIntroTransition.remove(onHideOverlay)
-        overlay.hide();
-    }
+        //overlay.hide();
+    }*/
     
     var onTwPositionDefined = function(pageId,sectionId){
         // passer la section ?
@@ -280,7 +279,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
         
         
-        //if(!CONFIG.hyperDriveTransition) overlay.hide();
+        if(!CONFIG.hyperDriveTransition) overlay.hide();
     }
     
     var readyForIntroTransitionToFolio = function(pageId, sectionId) {
@@ -299,11 +298,14 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }else {
             showHeader(false, onHeaderInitialized);
         }
+        
+        overlay.loadGmd();
     }
     
     /******* REEL MODULE *******/
     
     var loadReel = function(chapter, seekFunction){
+        overlay.loadGmd();
         unBindTouchEvents();
         if(!MODULES.reel){
             // show Loader ??

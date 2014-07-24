@@ -466,9 +466,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var rangeHeight = 2000;
     var splitWidth = 100;
     var splitHeight = 100;
-    var timeParticleCreation = 125;
+    var timeParticleCreation = 250;
     var intervalParticlesCreation;
-    var bunchQuantity = 40;
+    var bunchQuantity = 20;
     
     if(CONFIG.isMobile) {
         // mobile-tablets only

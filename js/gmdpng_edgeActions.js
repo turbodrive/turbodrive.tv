@@ -1,7 +1,6 @@
 (function($,Edge,compId){var Composition=Edge.Composition,Symbol=Edge.Symbol;
 //Edge symbol: 'stage'
 (function(symbolName){Symbol.bindElementAction(compId,symbolName,"document","compositionReady",function(sym,e){
-    console.log("##########")
     gmdReady(sym);
 });
 //Edge binding end
