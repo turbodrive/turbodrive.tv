@@ -90,6 +90,24 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         pausedVideo = true;
     }
     
+    // pause the reel and everything related
+    reelPlayer.sleep = function() {
+        console.log("SLEEP REELPLAYER");
+        removeTimeline();
+        active = false;
+        reelPlayer.pause();
+        firedOverlayClickable = false;
+    }
+    
+    reelPlayer.wakeup = function(chapter) {
+        console.log("WAKEUP REELPLAYER");
+        tmpChapter = chapter;
+        active = true;
+        video.addEventListener("playing", onPlayingVideo);
+        reelPlayer.resume();
+        //reelPlayer.seekToChapter(chapter);
+    }
+    
     reelPlayer.seekToChapter = function(chapterId, autoCloseTimeline) {
         if(currentChapter && chapterId == currentChapter.id) return
         
@@ -102,14 +120,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
                 if(autoCloseTimeline) closeTimeline();
             }
         }
-    }
-    
-    // pause the reel and everything related
-    reelPlayer.pauseEnv = function() {
-        removeTimeline();
-        active = false;
-        reelPlayer.pause();
-        firedOverlayClickable = false;
     }
     
     reelPlayer.startTransition = function(hide) {
@@ -419,7 +429,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var seekTo = function(time){
         var isSeekable = seekable(time);
-        console.log("isSeekable ?"+isSeekable);
+        console.trace("isSeekable ?"+isSeekable);
         if(isSeekable){
             video.currentTime = time;
         }

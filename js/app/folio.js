@@ -27,6 +27,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var hyperdriveContainer;
     var pages3D = [];
     var transitionStarted;
+    var nextPrev;
 
     // Signal Events
     folio.on = {
@@ -38,11 +39,18 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     folio.kill = function () {
         stopRendering();
+        fadeOut(currentPageId);
         previousPage3D = null;
         currentPage3D = null;
         $(stage).css("visibility", "hidden");
+        if(nextPrev) nextPrev.hide();
         console.log("KILL FOLIO");
         // delete all pages
+    }
+    
+    folio.wakeup = function() {
+        $(stage).css("visibility", "visible");
+        console.log("WAKEUP FOLIO");
     }
 
     folio.init = function (pageId, sectionId) {
@@ -405,9 +413,19 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             pageInfo.content[i].elementJQ = elementJQ;
         }
         $("#folioContent").remove();
-
+        
+        require(["app/nextPrev"], function(nextPrevModule){
+            console.log("nextPrev loaded");
+            nextPrev = nextPrevModule;
+            nextPrev.on.backToTheReelPress.add(onBackToTheReelPressed);
+            nextPrev.init();
+        });
     }
-
+    
+    var onBackToTheReelPressed = function(){
+        window.location.hash = "#/reel/"+currentPageId+"/";
+    }
+                
     buildScene = function () {
         stage = Sprite3D.createCenteredContainer();
         stage.setId("folio");
@@ -573,7 +591,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 interactContainer.updateZLast();
                 enterFrameHyperDrive();
             },
-            ease:Power2.easeOut
+            ease:Power2.easeOut,
+            onComplete: function () {
+                if(nextPrev) nextPrev.show(currentPageId);   
+            }
+            
         })
         
         TweenMax.to(interactContainer, 2, {delay: delay+0.2,rotationY: 0,ease:Power1.easeInOut});
@@ -854,20 +876,26 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     prepPgeForTransition = function (pageId, sectionId) {
         var page = pageInfo.getPageInfo(pageId);
         if (currentPage3D) previousPage3D = currentPage3D;
-
+        if(currentPage3D){   
+            console.log("prepPgeForTransition  0 >> " + currentPage3D.getId())
+        }else {
+            console.log("prepPgeForTransition  0 >> noCurrentPage ")
+        }
         if (!page.built) {
             currentPage3D = buildPage3D(page);
         } else {
             currentPage3D = getPage3D(pageId);
         }
-
+        console.log("prepPgeForTransition 1 >> " +currentPage3D.getId())
         updatePage3D(currentPage3D, page);
         if (sectionId) updateSection(currentPage3D, sectionId)
         return page;
     }
     
     folio.hasCurrentPage3D = function(){
-        return (currentPage3D !== undefined)
+        console.log("hasCurrentPage3D >> " + currentPage3D)
+        
+        return (currentPage3D !== undefined && currentPage3D !== null)
     }
     
     folio.startTransition = function (pageId, sectionId) {
@@ -946,6 +974,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     transitionComplete = function (pageId) {
         transitionStarted = false;
         setTweenPosition(pageId, tmpSectionId);
+        nextPrev.show(currentPageId);
         tmpSectionId = null;
         previousPage3D = null;
     }
