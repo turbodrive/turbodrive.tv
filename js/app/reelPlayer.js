@@ -336,7 +336,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var updateTimelineChapters = function() {
         var buttons = $(".timeline-menu a");
         for(var i=0; i<buttons.length ;i++){
-            if(buttons[i].id == currentChapter.id){
+            if($(buttons[i]).attr("id-chapter") == currentChapter.id){
                 $(buttons[i]).addClass("active");    
             }else {
                 $(buttons[i]).removeClass("active");   

@@ -88,9 +88,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         if(MODULES.header && MODULES.header.isOpen()){
             MODULES.header.close();   
         }else if(MODULES.reel){
-            var currentChapter = MODULES.reel.getCurrentChapter();
-            console.log("chapter >> " + currentChapter.link);
-            
+            var currentChapter = MODULES.reel.getCurrentChapter();            
             if(currentChapter){
                 if(currentChapter.link){
                     window.location.hash = currentChapter.link;
@@ -232,7 +230,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 }
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.init(pageId, sectionId);
-                bindTouchEvents();
+
             })
         }else{
             if(initloadFunc2){
@@ -240,7 +238,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             }
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
             MODULES.folio.load(pageId, sectionId);
-            bindTouchEvents();
         }
     }
     
@@ -270,6 +267,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onPageLoaded = function(pageId, sectionId){
+        bindTouchEvents();
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
         console.log("FOLIO onPageLoaded >> " + pageId);
         console.log("MODULES.folio.hasCurrentPage3D() >>" + MODULES.folio.hasCurrentPage3D());

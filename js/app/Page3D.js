@@ -37,6 +37,11 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
         return this;
     }
     
+    Page3D.prototype.getPageInfo = function()
+    {
+        return this.pageInfo;
+    }
+    
     Page3D.prototype.build = function()
     {   
         if(this.pageInfo.project){

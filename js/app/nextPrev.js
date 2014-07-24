@@ -26,8 +26,10 @@ define(["jquery", "TweenMax","signals"], function ($, TweenMax, signals) {
         })
     }
     
-    nextPrev.show = function() {
-        TweenMax.to(main,0.5, {autoAlpha:1});
+    nextPrev.show = function(pageInfo) {
+        if(pageInfo.project){
+            TweenMax.to(main,0.5, {autoAlpha:1});
+        }
     }
     
     
