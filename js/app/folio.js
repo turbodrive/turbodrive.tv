@@ -74,8 +74,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     folio.resize = function () {
         if (!scene3DBuilt) return
         
-        
-        //console.log("resize >> (translate2D)");
         $("#folio").css("left", LAYOUT.vW2)
         $("#folio").css("top", LAYOUT.vH2)
         stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);
@@ -170,14 +168,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     setTweenPosition = function (pageId, sectionId) {
         interactTx = startx = 0
         touchEnd = touchEnd2 = false;
-        console.log("setTweenPosition >> " + pageId + " - " + sectionId);
+        //console.log("setTweenPosition >> " + pageId + " - " + sectionId);
         folio.load(pageInfo.getNextPageId(pageId));
         folio.load(pageInfo.getPrevPageId(pageId));
 
         positionTmx.currentLabel(pageId);
         objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
-        console.log("2 setTweenPosition >> " + objTmx.twMem);
-        console.log("3 setTweenPosition >> " + objTmx.twPos);
+        //console.log("2 setTweenPosition >> " + objTmx.twMem);
+        //console.log("3 setTweenPosition >> " + objTmx.twPos);
         //onUpdateTmx();
         currentPageId = pageId;
         if (sectionId) {
@@ -327,9 +325,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             //fadeOut(previousPage3D.getId())
 
             if (Math.abs(dfX) < 0.1) {
-                console.log("fadeInAndActivate > ")
                 if (currentPage3D.getId() != targetPage) {
-                    console.log("prepPgeForTransition > ")
                     fadeOut(currentPage3D.getId());
                     prepPgeForTransition(targetPage);
                     fadeInAndActivate(targetPage, 0.2, false);
@@ -835,7 +831,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     updateSection = function (page3d, sectionId) {
-        console.log("updateSection >> " + sectionId)
         var sectionsList = page3d.getSections();
         for (var i = 0; i < sectionsList.length; i++) {
             var section = sectionsList[i];
@@ -872,24 +867,19 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     folio.hasCurrentPage3D = function(){
-        console.log("APGES " + currentPage3D + " - " + previousPage3D);
-        
         return (currentPage3D !== undefined)
     }
     
     folio.startTransition = function (pageId, sectionId) {
-        console.log("startTransition >> + " + sectionId);
+        console.log("startTransition >> + " + pageId);
         startRendering();
         tmpSectionId = sectionId;
         if (currentPageId == pageId) {
             if (sectionId && currentSectionId != sectionId) {
-                console.log("update section");
                 updateSection(currentPage3D, sectionId);
                 return
-            } else {
-                console.log("allready uptoDate >> " + pageId);
-                return
             }
+            return
         }
 
         var page = prepPgeForTransition(pageId, sectionId);
@@ -912,9 +902,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     fadeOut = function (pageId, delay) {
-        console.log("FADEOUT >> " + pageId);
-        var page = $("[page-id='"+pageId+"']");
         
+        var page = $("[page-id='"+pageId+"']");
         if (page.css("opacity") < 1) return
         
         TweenMax.to(page, 0.3, {
@@ -933,13 +922,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     fadeInAndActivate = function (pageId, delay, setTweenPos) {
         var page = $("[page-id='"+pageId+"']" );
-        console.log("current Opacity > " + page.css("opacity"))
         if (page.css("opacity") > 0) {
             return
-        } else {
-            console.log("show " + pageId);
         }
-
         var dispatchComplete = setTweenPos ? transitionComplete : null;
 
         TweenMax.to(page, 0.5, {
@@ -950,7 +935,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         });
         
         var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
-        console.log("has pgFreeContainer3D ? " + pgFreeContainer3D)
         if(pgFreeContainer3D){
              TweenMax.to(pgFreeContainer3D.domElement, 0.5, {
                 delay: delay,
@@ -960,7 +944,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     transitionComplete = function (pageId) {
-        console.log("transitionComplete >> " + pageId);
         transitionStarted = false;
         setTweenPosition(pageId, tmpSectionId);
         tmpSectionId = null;
@@ -969,7 +952,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     level1Transition = function (page) {
         transitionStarted = true;
-        console.log("level1Transition >> " + page.id)
         positionTmx.tweenTo(page.id, {
             ease: Quad.easeInOut,
             onUpdate: onUpdateTmx,
@@ -982,8 +964,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     freeTransition = function (page) {
         transitionStarted = true;
         //stopRendering();
-        //console.log("target > " + page.rotationY)
-
 
         TweenMax.to(container, 2, {
             x: -page.x,

@@ -143,7 +143,6 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
                     }
                     
                     element3d.update();
-                    //console.log("elementName >> " + elementName + " + domEl >> " + domEl);
                     this.elementList.push({element3d:element3d, info:elementInfo, id:elementName});
                 }
             }
@@ -165,7 +164,6 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
     Page3D.prototype.addFree3dElement = function()
     {
         if(this.elementList){
-            console.log("addchild >> " + this.elementList.length)
             for(var i = 0; i< this.elementList.length ; i++){
                 if(this.elementList[i].info.position == pageInfo.FREE3D_P){
                     if(this.free3DContainer === null) {
