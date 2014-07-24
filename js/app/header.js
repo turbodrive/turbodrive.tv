@@ -74,7 +74,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             $(".navbar-default").addClass("navbar-stealth");
         } else {
             $(".navbar-default").removeClass("navbar-stealth");
-        }
+        }   
         removeHighlightButtons();
     }
     
@@ -84,27 +84,26 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     }
     
     /* event handler for tablets*/
-    header.onTouchClick = function(element) {
+    /*header.onTouchClick = function(element) {
         var className = element.className
-        console.log("onTouchClick >> " + className)
-        if(className.indexOf("button-menu")>-1 || className.indexOf("menu-icon")>-1){
+        console.log("className >> " + className)
+        
+        if(className.indexOf("button-menu")>-1 || className.indexOf("menu-icon")>-1 || className.indexOf("button-contact")){
             if(className.indexOf("about-button") == -1){
                 controlMenuState(element.id)
             }
         } else if (className.indexOf("closeMenuPicto")>-1){
-            header.close();
+            //header.close();
             return
         } else if(className.indexOf("hireMeAbout")>-1){
             controlMenuState("contact");
             return
         }else if (className.indexOf("button-menu")== -1 && className.indexOf("button-contact")== -1){
             header.close();
-            return
         }
-    }
+    }*/
     
     var to1,to2, to3, to4;
-    
     header.highlightButtons = function(){
         to1 = setTimeout(function(){
             $(".navbar-stealth .container").addClass("highlightContainer");

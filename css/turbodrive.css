@@ -54,6 +54,7 @@
 
 .menu-icon:before {
     font-size: 30px;
+    pointer-events: none;
 }
 
 .icon-alone:hover {

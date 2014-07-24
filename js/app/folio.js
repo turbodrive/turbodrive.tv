@@ -242,6 +242,15 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if (element.className.indexOf("pictoPlayContainer") > -1) {
             // play video   
         }
+
+        if($(element).parent().is("a")){
+            var href = $(element).parent().attr("href");            
+            window.location.hash = href;
+        }else if($($(element).children()[0]).is("a")){
+
+            var href =  $($(element).children()[0]).attr("href");
+            window.location.hash = href;
+        }
     }
 
 

@@ -419,7 +419,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var seekTo = function(time){
         var isSeekable = seekable(time);
-        console.log("isSeekable ?"+isSeekable)
+        console.log("isSeekable ?"+isSeekable);
         if(isSeekable){
             video.currentTime = time;
         }
@@ -503,7 +503,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         $("#bgTimeline").on("click", clickTimelineHandler);
         
         progTimeline = $("#bgProgress");
-        bgTimeline.attr("width",twObjects.wBg)
+        bgTimeline.attr("width",twObjects.wBg);
         progTimeline.attr("width",0);        
         openTimeline(true);
         
@@ -516,15 +516,15 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             }
         });        
     
-        setTimeout(closeTimeline, 2500, true)
+        setTimeout(closeTimeline, 2500, true);
         timelineIsInitialized = true;
     }
     
     var timeOutCloseTimeline;
     var showAndHideTimeline = function() {
-        if(timeOutCloseTimeline !== null) return
-        openTimeline()
-        timeOutCloseTimeline = setTimeout(closeTimeline, 2500)
+        if(timeOutCloseTimeline !== null) return;
+        openTimeline();
+        timeOutCloseTimeline = setTimeout(closeTimeline, 2500);
     }
     
     var openTimeline = function(first) {
@@ -541,10 +541,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             
             twTmlePanel = TweenMax.to($(".timeline"),0.4,{css:{bottom:0}, ease:Power3.easeInOut});
             twTmleAngle = TweenMax.to(twObjects,0.4,{p2Rotation:-52, p1Width:91, pHeight:5, ease:Power3.easeInOut, onUpdate:updateP3Pos});
-            twTmleMenu = TweenMax.to(timelineMenu,0.4, {autoAlpha:1, delay:0.2})
-        }        
-        twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {autoAlpha:1});
+            twTmleMenu = TweenMax.to(timelineMenu,0.4, {autoAlpha:1, delay:0.2});
+        }
         
+        twAlphaTmleBg = TweenMax.to($("#timelineBg"),0.5, {autoAlpha:1});
         reelPlayer.resize();
     }
     
@@ -557,7 +557,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         var duration = first ? 0.7 : 0.5;
         var easeFunc = first ? Power2.easeInOut : Power3.easeOut;
         
-        twTmlePanel = TweenMax.to($(".timeline"),duration,{delay:0.2, css:{bottom:-28}, ease:easeFunc});
+        twTmlePanel = TweenMax.to($(".timeline"),duration,{delay:0.2, css:{bottom:-32}, ease:easeFunc});
         twTmleAngle = TweenMax.to(twObjects,duration,{delay:0.2, p2Rotation:0, p1Width:92.5, pHeight:8, ease:easeFunc, onUpdate:updateP3Pos});
         
         twAlphaTmleBg = TweenMax.to($("#timelineBg"),duration, {delay:0.2, autoAlpha:0});
@@ -580,8 +580,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         //if(!timelineIsInitialized) return
         var rX = parseInt(p2X)+1;
         var rY = parseInt(p2Y)+2;
-        if(p2){ p2.attr("transform","rotate("+twObjects.p2Rotation+","+rX+","+rY+")");
-              }
+        if(!p2) return;
+        
+        p2.attr("transform","rotate("+twObjects.p2Rotation+","+rX+","+rY+")");
         p3X = Number(p2X) + (Math.cos(degToRad(twObjects.p2Rotation)) * _wP2);
         p3.attr("x",p3X);
         p3.attr("y",parseInt(Number(p2Y) + (Math.sin(degToRad(twObjects.p2Rotation)) * _wP2)));

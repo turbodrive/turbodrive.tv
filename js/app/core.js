@@ -219,7 +219,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var loadFolio = function(pageId, sectionId, initloadFunc2){
         //gatherTimeline();
-        bindTouchEvents();
+       
         
         if(!MODULES.folio){
             // show Loader ??
@@ -232,6 +232,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 }
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.init(pageId, sectionId);
+                bindTouchEvents();
             })
         }else{
             if(initloadFunc2){
@@ -239,6 +240,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             }
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
             MODULES.folio.load(pageId, sectionId);
+            bindTouchEvents();
         }
     }
     
@@ -399,20 +401,21 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     /******* EVENT HANDLERS ******/
     /******* TOUCH EVENTS *******/
     
-    var targetTouch;  
-    
+    var targetTouch;
     var unBindTouchEvents = function(){
-        document.removeEventListener("touchstart", onTouchStart, true );
-        document.removeEventListener("touchmove", onTouchMove, true );
-        document.removeEventListener("touchend", onTouchEnd, true );
+        var folioDiv = $("#folio")[0];
+        folioDiv.removeEventListener("touchstart", onTouchStart, true );
+        folioDiv.removeEventListener("touchmove", onTouchMove, true );
+        folioDiv.removeEventListener("touchend", onTouchEnd, true );
         touchEventsBinded = false
     }   
 
     var bindTouchEvents = function(){
         if(!touchEventsBinded){
-            document.addEventListener("touchstart", onTouchStart, true );
-            document.addEventListener("touchmove", onTouchMove, true );
-            document.addEventListener("touchend", onTouchEnd, true );
+            var folioDiv = $("#folio")[0];
+            folioDiv.addEventListener("touchstart", onTouchStart, true );
+            folioDiv.addEventListener("touchmove", onTouchMove, true );
+            folioDiv.addEventListener("touchend", onTouchEnd, true );
             touchEventsBinded = true
         }
     }
@@ -462,8 +465,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         var target = event.target;               
         if(MODULES.folio) MODULES.folio.onTouchEnd(event);
         
+        console.log("ON TOUCH END")
+        
         if(target == targetTouch){
-            if(MODULES.header) MODULES.header.onTouchClick(event.target);
+            //if(MODULES.header) MODULES.header.onTouchClick(event.target);
             if(MODULES.folio) MODULES.folio.onTouchClick(event.target);
             processRegularLink(target);
         }        
