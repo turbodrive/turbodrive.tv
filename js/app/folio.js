@@ -913,13 +913,22 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     fadeOut = function (pageId, delay) {
         console.log("FADEOUT >> " + pageId);
-        var page = $("[page-id='"+pageId+"']" );
+        var page = $("[page-id='"+pageId+"']");
         
         if (page.css("opacity") < 1) return
+        
         TweenMax.to(page, 0.3, {
             delay: delay,
             autoAlpha: 0
         });
+        
+        var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
+        if(pgFreeContainer3D){
+             TweenMax.to(pgFreeContainer3D.domElement, 0.3, {
+                delay: delay,
+                autoAlpha: 0
+            });   
+        }
     }
 
     fadeInAndActivate = function (pageId, delay, setTweenPos) {
@@ -939,6 +948,15 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             onComplete: dispatchComplete,
             onCompleteParams: [pageId]
         });
+        
+        var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
+        console.log("has pgFreeContainer3D ? " + pgFreeContainer3D)
+        if(pgFreeContainer3D){
+             TweenMax.to(pgFreeContainer3D.domElement, 0.5, {
+                delay: delay,
+                autoAlpha: 1
+            });   
+        }
     }
 
     transitionComplete = function (pageId) {

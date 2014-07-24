@@ -28,6 +28,7 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
     Page3D.prototype.textPlane = null;
     Page3D.prototype.content = null;
     Page3D.prototype.textPlane = null;
+    Page3D.prototype.free3DContainer = null;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -148,6 +149,9 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
             }
             //this.addFree3dElement();
         }
+        
+        this.setCSS("opacity","0");
+        this.setCSS("visibility","hidden");
             //page3D.contentSprite3D.push(title, client, redLine,bg, textPlane, projectContent, pictoPlay)
                 
         return this;
@@ -164,11 +168,21 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
             console.log("addchild >> " + this.elementList.length)
             for(var i = 0; i< this.elementList.length ; i++){
                 if(this.elementList[i].info.position == pageInfo.FREE3D_P){
-                    this.parentSprite3D.addChild(this.elementList[i].element3d);
+                    if(this.free3DContainer === null) {
+                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer");
+                        this.free3DContainer.setCSS("opacity","0");
+                        this.free3DContainer.setCSS("visibility","hidden");
+                        this.parentSprite3D.addChild(this.free3DContainer);
+                    }
+                    this.free3DContainer.addChild(this.elementList[i].element3d);
                 }
             }
         }
     }
+    
+    Page3D.prototype.getFree3DContainer = function() {
+        return this.free3DContainer;
+    };
     
     Page3D.prototype.setParentSprite = function(e) {
         this.parentSprite3D = e;
