@@ -11,7 +11,7 @@ Although the project is currently in production, the beta version is available o
 * [Turbodrive mobile beta](http://m.turbodrive.tv)
 
 
-Soon, I'd like to introduce the workflow I've created for managing CSS3D transition from Adobe After Effect.
+Soon, I'd like to introduce the workflow I've created for managing CSS3D transition from Adobe After Effects.
 
 
 License
