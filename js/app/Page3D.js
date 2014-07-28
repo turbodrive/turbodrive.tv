@@ -1,4 +1,4 @@
-define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
+define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, TweenMax) {
     
     const USE_AEX_COORD = true;    
     
@@ -29,6 +29,9 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
     Page3D.prototype.content = null;
     Page3D.prototype.textPlane = null;
     Page3D.prototype.free3DContainer = null;
+    
+    Page3D.prototype.twFadeIn = null;
+    Page3D.prototype.twFadeOut = null;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -160,6 +163,24 @@ define(["Sprite3D","app/pageInfo"], function(Sprite3D, pageInfo) {
                 
         return this;
     }
+    
+    Page3D.prototype.show = function()
+    {    
+        if(!this.twFadeIn || !this.twFadeIn.isActive()){
+            if(this.twFadeOut) this.twFadeOut.pause();
+            this.twFadeIn = TweenMax.to(this.domElement, 0.5, {autoAlpha:1});
+        }
+        
+    }
+    
+    Page3D.prototype.hide = function()
+    {
+        if(!this.twFadeOut || !this.twFadeOut.isActive()){
+            if(this.twFadeIn) this.twFadeIn.pause();
+            this.twFadeOut = TweenMax.to(this.domElement, 0.5, {autoAlpha:0});
+        }
+    }
+    
     
     Page3D.prototype.getSections = function()
     {

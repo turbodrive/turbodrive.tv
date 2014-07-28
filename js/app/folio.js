@@ -270,6 +270,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var touchEnd = false;
     var speedX = 0;
     var limitSwitch = 200;
+    var limitSwitchMini = 40;
     var vx = 0,
         vy = 0;
     var elasticCoef = 0.5;
@@ -279,6 +280,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var touchTransitionPlaying = false;
     var sourceTwPosition = 0;
     var targetTransition = -1;
+    var interruptWhenPlaying = false;
+    var memLastPage3D;
     
     folio.onTouchStart = function (event) {
         touchEnd2 = false;
@@ -292,10 +295,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         if (!touchTransitionPlaying) {
             //pXm = startx;
+            interruptWhenPlaying = false;
             sourceTwPosition = objTmx.twMem;
         }else {
             // interrupt transition 
-            sourceTwPosition = objTmx.twPos;
+            interruptWhenPlaying = true;
+            sourceTwPosition = Number(objTmx.twPos);
         }
         //console.log("onTouchStart >> " + event.target + " - " + event.target.className);
     }
@@ -307,11 +312,27 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         touchEnd = false
         //pXm = parseInt(t.pageX);
     }
-
+    
+    var hideExceptPage = function(pageId) {
+        for(var i = 0; i<pages3D.length ; i++){
+            if(pageId != pages3D[i].getId()){
+                pages3D[i].hide();
+            }
+        }
+    }
+    
     folio.onTouchEnd = function (event) {
         // trigger autotransition behavior
         if(touchTransitionPlaying){
             touchEnd2 = true;
+            if(interruptWhenPlaying){
+                interruptWhenPlaying = false;
+                var memId = memLastPage3D.getId();
+                console.log("Update >> " + targetPage + " lastPage >>" + memId);
+                hideExceptPage(targetPage);
+                fadeInAndActivate(targetPage, 0, false);
+                updateWindowStatus(targetPage);
+            }  
         }else {
             touchEnd = true;
             touchEnd2 = false;            
@@ -319,7 +340,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     updateContainerInteraction = function () {
-        //console.log("touchEnd >> " + touchEnd);        
+        //console.log("touchEnd >> " + touchEnd);
+        if(interruptWhenPlaying){
+            if (Math.abs(interactTx) > limitSwitchMini){
+                var forceStep = (Math.abs(interactTx) - limitSwitchMini)/512;
+                //console.log("forceStep >> " + forceStep);                
+                targetTransition = interactTx > 0 ? Math.round(Number(objTmx.twPos) + forceStep) : Math.round(Number(objTmx.twPos) - forceStep);
+                console.log("redefine target 1 - targetTransition = " + targetTransition);
+                targetPage = pageInfo.content[targetTransition].id;
+                // prepare page in case of...
+                console.log("prepAge >> " + targetPage + " lastPage >>" + memLastPage3D.getId());
+                prepPgeForTransition(targetPage);
+                
+            }
+        }
+        
         if (touchEnd) {
             // check what we do when we stop touching the screen
             touchEnd2 = false
@@ -328,14 +363,20 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 interactTx += Number(vx *= friction);
             } else if (Math.abs(interactTx) > limitSwitch) {
                 if(targetTransition < 0){
-                    targetTransition = interactTx > 0 ? sourceTwPosition + 1 : sourceTwPosition - 1;
+                    targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;
                     targetPage = pageInfo.content[targetTransition].id
-                }
+                }                
+                /*if(interruptWhenPlaying){
+                    console.log("redefine target 0")
+                    targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;
+                    targetPage = pageInfo.content[targetTransition].id
+                }*/
                 
                 //prepPgeForTransition(targetPage);
                 //touchEnd = false;
                 touchEnd2 = true;
                 if(!touchTransitionPlaying){
+                    memLastPage3D = currentPage3D;
                     touchTransitionPlaying = true;
                 }
             } else {
@@ -344,21 +385,26 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         }
         if (touchEnd2) {
             var dfX = (targetTransition - Number(objTmx.twPos));
-            var vx2 = dfX * 0.02; //0.09
+            var vx2 = dfX * 0.09; //0.09
             //console.log("dfX = " + dfX + " | vX = " + vx2);
             objTmx.twPos = Number(Number(objTmx.twPos) + Number(vx2));
             //fadeOut(previousPage3D.getId())
 
-            if (Math.abs(dfX) < 0.1) {
+            if (Math.abs(dfX) < 0.1) {    
                 if (currentPage3D.getId() != targetPage) {
+                    console.log("update display from " + currentPage3D.getId() + " to " + targetPage);          
                     fadeOut(currentPage3D.getId());
-                    prepPgeForTransition(targetPage,null, false);
+                    hideExceptPage(targetPage);
                     fadeInAndActivate(targetPage, 0.2, false);
-                    updateWindowStatus(targetPage)
+                    prepPgeForTransition(targetPage,null, false);
+                    updateWindowStatus(targetPage);
                 }
+                
+                
             }
-            if (Math.abs(dfX) < 0.001) { //0.0001
-                touchTransitionPlaying = false;
+            if (Math.abs(dfX) < 0.0001) { //0.0001
+                
+                interruptWhenPlaying = touchTransitionPlaying = false;
                 targetTransition = -1;
                 transitionComplete(targetPage)
             }
@@ -993,13 +1039,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     fadeOut = function (pageId, delay) {
-        
-        var page = $("[page-id='"+pageId+"']");
-        if (page.css("opacity") < 1) return
+        console.log("@@@@@@@@ HIDE " + pageId);
+        //var page = $("[page-id='"+pageId+"']");
+        /*if (page.css("opacity") < 1) return
         TweenMax.to(page, 0.3, {
             delay: delay,
             autoAlpha: 0
-        });
+        });*/
+        getPage3D(pageId).hide();
         
         var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
         if(pgFreeContainer3D){
@@ -1011,18 +1058,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     fadeInAndActivate = function (pageId, delay, setTweenPos) {
-        var page = $("[page-id='"+pageId+"']" );
+        console.log("@@@@@@@@ SHOW " + pageId);
+        /*var page = $("[page-id='"+pageId+"']" );
         if (page.css("opacity") > 0) {
             return
-        }
-        var dispatchComplete = setTweenPos ? transitionComplete : null;
+        }*/
+        //var dispatchComplete = setTweenPos ? transitionComplete : null;
 
-        TweenMax.to(page, 0.5, {
+        getPage3D(pageId).show();
+        
+        /*TweenMax.to(page, 0.5, {
             delay: delay,
             autoAlpha: 1,
             onComplete: dispatchComplete,
             onCompleteParams: [pageId]
-        });
+        });*/
         
         var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
         if(pgFreeContainer3D){
@@ -1035,6 +1085,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     transitionComplete = function (pageId) {
         transitionStarted = false;
+        console.log("transitionComplete >> " + pageId)
         setTweenPosition(pageId, tmpSectionId);
         if(currentPage3D.getPageInfo().project){
             nextPrev.show(currentPage3D.getPageInfo());

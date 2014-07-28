@@ -20,10 +20,10 @@ define(["jquery", "TweenMax","signals"], function ($, TweenMax, signals) {
     nextPrev.init = function() {
         main = $(".next-prev");
         backToTheReel = $(".back-to-the-reel");
-        backToTheReel.click(function(event){
+        /*backToTheReel.click(function(event){
             event.preventDefault();
             nextPrev.on.backToTheReelPress.dispatch();
-        })
+        })*/
     }
     
     nextPrev.show = function(pageInfo) {
