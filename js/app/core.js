@@ -61,8 +61,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             event.preventDefault();
         }
         
-        
-
         // overlay
         overlay.on.clickMainOverlay.add(onClickMainOverlay);
         
@@ -268,8 +266,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var onPageLoaded = function(pageId, sectionId){
         bindTouchEvents();
         MODULES.folio.on.pageLoaded.remove(onPageLoaded);
-        console.log("FOLIO onPageLoaded >> " + pageId);
-        console.log("MODULES.folio.hasCurrentPage3D() >>" + MODULES.folio.hasCurrentPage3D());
+        /*console.log("FOLIO onPageLoaded >> " + pageId);
+        console.log("MODULES.folio.hasCurrentPage3D() >>" + MODULES.folio.hasCurrentPage3D());*/
         if(MODULES.folio.hasCurrentPage3D()){
             MODULES.folio.startTransition(pageId, sectionId);
         }else{
@@ -531,6 +529,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var orientationCallBack;
     
     var readDeviceOrientation = function() {
+        
+        if(!CONFIG.isMobile) return
         
         var isLandscape = ($(window).width() > $(window).height());
         if(orientationIsLandscape && !isLandscape){

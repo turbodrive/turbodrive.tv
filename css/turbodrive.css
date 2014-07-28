@@ -1706,19 +1706,48 @@ div.skill-section {
 
 #debug {
     pointer-events: none;
-    visibility: hidden;
+    /*visibility: hidden;*/
 	color: #FFF;
 	position: absolute;
 	bottom: 20px;
-	left: 10px;
-	width: 390px;
+	left: 5px;
+	width: 410px;
     padding: 5px;
 	text-align: left;
 	font-family: courier;
     line-height: 10px;
     font-size: 11px;
-    z-index: 30000;
+    z-index: 30000000;
     background-color: rgba(0, 0, 0, 0.6);
+}
+
+.barInfo {
+    height: 10px;
+    width: 100%; 
+    display: block;
+    background-color: white;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    color: rgba(240,240,240,1);
+    text-shadow: 1px 1px black;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+#interactTxRate {
+   background-color: green;
+}
+
+#interactTxRate2 {
+   background-color: darkslateblue;
+}
+
+#interactTxRate2Influence {
+   background-color: #963131;
+}
+
+#tweenTxRate {
+    background-color: darkgoldenrod;
 }
 
 .slider {

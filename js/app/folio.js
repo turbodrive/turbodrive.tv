@@ -26,7 +26,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var stage, interactContainer, container;
     var hyperdriveContainer;
     var pages3D = [];
-    var transitionStarted;
+    var transitionStarted = false;
     var nextPrev;
 
     // Signal Events
@@ -77,6 +77,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //pageInfo.on.imagesLoaded.remove(onImageLoaded);
         console.log("FOLIO >> " + pageId + " loaded !");
         folio.on.pageLoaded.dispatch(pageId, sectionId);
+        prebuildPages(pageId);
     }
 
     folio.resize = function () {
@@ -181,10 +182,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         folio.load(pageInfo.getPrevPageId(pageId));
 
         positionTmx.currentLabel(pageId);
-        objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
-        //console.log("2 setTweenPosition >> " + objTmx.twMem);
-        //console.log("3 setTweenPosition >> " + objTmx.twPos);
-        //onUpdateTmx();
+        sourceTwPosition = objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
+
+        updateWindowStatus(pageId, sectionId);
+    }
+    
+    updateWindowStatus = function(pageId, sectionId) {
         currentPageId = pageId;
         if (sectionId) {
             currentSectionId = sectionId;
@@ -260,7 +263,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
 
-    var targetTouch, lastTouch;
+   var targetTouch, lastTouch;
     var interactTx = 0,
         interactTy = 0,
         startx, starty, pX, pXm;
@@ -272,18 +275,27 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var elasticCoef = 0.5;
     var friction = 0.1;
     var touchEnd2 = false;
-    var targetPage, tX;
-
+    var targetPage;
+    var touchTransitionPlaying = false;
+    var sourceTwPosition = 0;
+    var targetTransition = -1;
+    
     folio.onTouchStart = function (event) {
         touchEnd2 = false;
         targetTouch = event.target;
         lastTouch = event.target.className;
         var t = event.changedTouches[0];
-        if (!transitionStarted) {
-            interactTx = interactTy = 0
-            startx = parseInt(t.pageX)
-            starty = parseInt(t.pageY)
-            pXm = startx;
+        
+        interactTx = interactTy = 0
+        startx = parseInt(t.pageX)
+        //starty = parseInt(t.pageY)
+        
+        if (!touchTransitionPlaying) {
+            //pXm = startx;
+            sourceTwPosition = objTmx.twMem;
+        }else {
+            // interrupt transition 
+            sourceTwPosition = objTmx.twPos;
         }
         //console.log("onTouchStart >> " + event.target + " - " + event.target.className);
     }
@@ -293,13 +305,17 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactTx = -(parseInt(t.pageX) - startx)
         interactTy = (parseInt(t.pageY) - starty)
         touchEnd = false
-        pXm = parseInt(t.pageX);
+        //pXm = parseInt(t.pageX);
     }
 
     folio.onTouchEnd = function (event) {
         // trigger autotransition behavior
-        touchEnd = true;
-        touchEnd2 = false;
+        if(touchTransitionPlaying){
+            touchEnd2 = true;
+        }else {
+            touchEnd = true;
+            touchEnd2 = false;            
+        }
     }
 
     updateContainerInteraction = function () {
@@ -311,23 +327,24 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 vx += (0 - interactTx) * elasticCoef;
                 interactTx += Number(vx *= friction);
             } else if (Math.abs(interactTx) > limitSwitch) {
-                tX = interactTx > 0 ? Number(objTmx.twMem) + 1 : Number(objTmx.twMem) - 1;
-                targetPage = pageInfo.content[tX].id
+                if(targetTransition < 0){
+                    targetTransition = interactTx > 0 ? sourceTwPosition + 1 : sourceTwPosition - 1;
+                    targetPage = pageInfo.content[targetTransition].id
+                }
+                
                 //prepPgeForTransition(targetPage);
                 //touchEnd = false;
                 touchEnd2 = true;
+                if(!touchTransitionPlaying){
+                    touchTransitionPlaying = true;
+                }
             } else {
                 touchEnd = false
             }
-
-            /* if(interactTy > 0.01) {
-                vy += (0 - interactTy) * elasticCoef;            
-                interactTy += (vy *= friction);     
-            }*/
         }
         if (touchEnd2) {
-            var dfX = (tX - Number(objTmx.twPos));
-            var vx2 = dfX * 0.09;
+            var dfX = (targetTransition - Number(objTmx.twPos));
+            var vx2 = dfX * 0.02; //0.09
             //console.log("dfX = " + dfX + " | vX = " + vx2);
             objTmx.twPos = Number(Number(objTmx.twPos) + Number(vx2));
             //fadeOut(previousPage3D.getId())
@@ -335,17 +352,20 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             if (Math.abs(dfX) < 0.1) {
                 if (currentPage3D.getId() != targetPage) {
                     fadeOut(currentPage3D.getId());
-                    prepPgeForTransition(targetPage);
+                    prepPgeForTransition(targetPage,null, false);
                     fadeInAndActivate(targetPage, 0.2, false);
+                    updateWindowStatus(targetPage)
                 }
             }
-            if (Math.abs(dfX) < 0.0001) {
+            if (Math.abs(dfX) < 0.001) { //0.0001
+                touchTransitionPlaying = false;
+                targetTransition = -1;
                 transitionComplete(targetPage)
             }
         } else {
             //console.log("interactTx > " + interactTx)
             var prct = interactTx / (LAYOUT.viewportW);
-            objTmx.twPos = Number(objTmx.twMem) + (0.5 * prct)
+            objTmx.twPos = Number(sourceTwPosition) + (0.5 * prct)
         }
         onUpdateTmx();
     }
@@ -357,15 +377,30 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     var startRendering = function () {
         if (isRendering) return
-        isRendering = true
+        isRendering = true;
         enterFrame();
     }
 
     var stopRendering = function () {
-        isRendering = true
+        isRendering = true;
     }
 
     var enterFrame = function () {
+        /*influenceMouseX = Math.abs(objTmx.twMem - objTmx.twPos)*/
+        
+        /*interactTx2Mod += (interactTx2 - interactTx2Mod)*0.2;
+        var interactTx2ModInfluence = interactTx2Mod*influenceMouseX;
+        
+        var speedTwPos = Math.abs(prevtwPos-objTmx.twPos);
+        $("#interactTxRate").css("width" , ((Math.abs(interactTx)/LAYOUT.viewportW)*100)+ "%");
+        $("#interactTxRate2").css("width" , ((Math.abs(interactTx2Mod)/LAYOUT.viewportW)*100)+ "%");
+        
+        $("#interactTxRate2Influence").css("width" , ((Math.abs(interactTx2ModInfluence)/LAYOUT.viewportW)*100)+ "%");
+        $("#tweenTxRate").css("width" , (influenceMouseX*100)+ "%");
+        
+        prevtwPos = objTmx.twPos;*/
+        
+        
         if (isRendering) {
             requestAnimationFrame(enterFrame);
         }
@@ -542,8 +577,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         intervalParticlesCreation = setInterval(createBunchOfParticles,timeParticleCreation)
     }
-    
-    
         
     var createBunchOfParticles = function() {
         if(particles.length >= nbrParticles){
@@ -686,6 +719,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     updatePage3D = function (page3D, currentPageInfo) {
         if (currentPageInfo == null) {
+            console.log("updatePage3D >> " + page3D + " ID = " + pageInfo);
             currentPageInfo = pageInfo.getPageInfo(page3D.getId());
         }
 
@@ -884,21 +918,38 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         return offset;
     }
 
-    prepPgeForTransition = function (pageId, sectionId) {
+    prebuildPages = function(pageId) {
+        var page = pageInfo.getPageInfo(pageId);
+        if(!page.built){
+            console.log("### prebuild Page - " + pageId);
+            var page3D = buildPage3D(pageInfo.getPageInfo(pageId));
+            updatePage3D(page3D, page)
+        }
+    }
+    
+    prepPgeForTransition = function (pageId, sectionId, updatePage) {
         var page = pageInfo.getPageInfo(pageId);
         if (currentPage3D) previousPage3D = currentPage3D;
-        if(currentPage3D){   
-            console.log("prepPgeForTransition  0 >> " + currentPage3D.getId())
+        /*if(currentPage3D){   
+            console.trace("prepPgeForTransition >> " + currentPage3D.getId());
         }else {
-            console.log("prepPgeForTransition  0 >> noCurrentPage ")
-        }
+            console.trace("prepPgeForTransition >> noCurrentPage ");
+        }*/
         if (!page.built) {
+            //console.log("getPage3D - buildPage3D")
             currentPage3D = buildPage3D(page);
+            updatePage3D(currentPage3D, page);
+            
         } else {
+            //console.log("getPage3D - allready built")
             currentPage3D = getPage3D(pageId);
+             if(updatePage === null || updatePage == true){
+                console.log("prepPgeForTransition / update >> " +currentPage3D.getId())
+                updatePage3D(currentPage3D, page);
+            }
         }
-        console.log("prepPgeForTransition 1 >> " +currentPage3D.getId())
-        updatePage3D(currentPage3D, page);
+
+       
         if (sectionId) updateSection(currentPage3D, sectionId)
         return page;
     }
@@ -940,12 +991,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             }
         }
     }
-
+    
     fadeOut = function (pageId, delay) {
         
         var page = $("[page-id='"+pageId+"']");
         if (page.css("opacity") < 1) return
-        
         TweenMax.to(page, 0.3, {
             delay: delay,
             autoAlpha: 0
