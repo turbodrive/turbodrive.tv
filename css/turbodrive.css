@@ -583,47 +583,61 @@ a.about-button {
 }
 
 a.buttonShare {
-    transition: 0.15s;
+    transition: background-color 0.15s ease-out;
     background-color: #3D2F3A;
     color: #C4C0C3;
     display: inline-block;
     width: 32px;
     height:32px;
     text-decoration: none;
-    padding: 8px 0px 0px 1px;
-    margin: 0px 2px;
+    padding: 6px 0px 0px 1px;
+    margin: 0px 1px;
+    border: 2px solid transparent;
 }
 
-a.facebook:hover {
+a.buttonShare:active {
+    opacity: 0.95;
+    border: 2px solid #C4C0C3;
+}
+
+a.facebook:hover,
+a.facebook:active {
     background-color: #1E4389;
 }
 
-a.twitter:hover {
+a.twitter:hover,
+a.twitter:active {
     background-color: #28A9E0;
 }
 
-a.linkedin:hover {
+a.linkedin:hover,
+a.linkedin:active {
     background-color: #156695;
 }
 
-a.googleplus:hover {
+a.googleplus:hover,
+a.googleplus:active {
     background-color: #D5492C;
 }
 
-a.pinterest:hover {
+a.pinterest:hover,
+a.pinterest:active {
     background-color: #CD152B;
 }
 
-a.vimeo:hover {
+a.vimeo:hover,
+a.vimeo:active {
     background-color: #1EB8EB;
 }
 
-a.buttonShare:hover {
+a.buttonShare:hover,
+a.buttonShare:active {
     color: #FFF;
     text-decoration: none;
 }
 
-a.github:hover {
+a.github:hover,
+a.github:active {
     background-color: #FFFFFF;
     color: #000000;
     text-decoration: none;

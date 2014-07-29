@@ -61,7 +61,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         folio.on.initialized.dispatch(pageId, sectionId);
         folio.resize();
     }
-
+    
+    folio.contains = function(domElement) {
+        return ($("#folio")[0].contains(domElement));
+    }
+    
     folio.load = function (pageId, sectionId) {
         var page = pageInfo.getPageInfo(pageId);
         if (!page) return
@@ -205,6 +209,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if (isNaN(objTmx.twPos)) return
             //console.log("updateTimeline >> "+ container.x + " - twPos >> " + objTmx.twPos)
 
+        if(objTmx.twPos > pageInfo.content.length-1) return
+        
+        //console.log("-- > " + objTmx.twPos + " length > " + pageInfo.content.length)
+        
         container.x = getValForProp("x", objTmx.twPos, false);
         container.y = getValForProp("y", objTmx.twPos);
         container.z = getValForProp("z", objTmx.twPos);
@@ -249,12 +257,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     /*********************************/
 
     folio.onTouchClick = function (element) {
+        console.log("FOLIO onTouchClick - " + element)
+        
+        if(!folio.contains(element)) return;
+        
         if (element.className.indexOf("pictoPlayContainer") > -1) {
             // play video   
         }
 
         if($(element).parent().is("a")){
-            var href = $(element).parent().attr("href");            
+            var href = $(element).parent().attr("href");   
             window.location.hash = href;
         }else if($($(element).children()[0]).is("a")){
 
@@ -289,7 +301,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         targetTouch = event.target;
         lastTouch = event.target.className;
         var t = event.changedTouches[0];
-        console.log("onTouchStart  >> " + lastTouch);
         
         interactTx = interactTy = 0
         startx = parseInt(t.pageX)
@@ -325,6 +336,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     folio.onTouchEnd = function (event) {
         // trigger autotransition behavior
+        if(interactTx > 0 && objTmx.twPos == pageInfo.content.length-1) return;
+        if(interactTx < 0 && objTmx.twPos == 0) return;
+        
         if(touchTransitionPlaying){
             touchEnd2 = true;
             if(interruptWhenPlaying){
@@ -342,11 +356,20 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     updateContainerInteraction = function () {
         //console.log("touchEnd >> " + touchEnd);
+        if(interactTx > 0 && objTmx.twPos == pageInfo.content.length-1) return;
+        if(interactTx < 0 && objTmx.twPos == 0) return;
+        
+        
         if(interruptWhenPlaying){
             if (Math.abs(interactTx) > limitSwitchMini){
                 var forceStep = (Math.abs(interactTx) - limitSwitchMini)/512;
-                //console.log("forceStep >> " + forceStep);                
+                //console.log("forceStep >> " + forceStep);
+                
                 targetTransition = interactTx > 0 ? Math.round(Number(objTmx.twPos) + forceStep) : Math.round(Number(objTmx.twPos) - forceStep);
+                
+                
+                if(targetTransition < 0 || targetTransition > pageInfo.content.length-1) return
+                
                 targetPage = pageInfo.content[targetTransition].id;
                 // prepare page in case of...
                 prepPgeForTransition(targetPage);
@@ -363,6 +386,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             } else if (Math.abs(interactTx) > limitSwitch) {
                 if(targetTransition < 0){
                     targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;
+                    if(targetTransition < 0 || targetTransition > pageInfo.content.length-1) return
                     targetPage = pageInfo.content[targetTransition].id
                 }                
                 /*if(interruptWhenPlaying){
@@ -1035,48 +1059,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     fadeOut = function (pageId, delay) {
+        if(pageId == undefined) return;
         console.log("@@@@@@@@ HIDE " + pageId);
-        //var page = $("[page-id='"+pageId+"']");
-        /*if (page.css("opacity") < 1) return
-        TweenMax.to(page, 0.3, {
-            delay: delay,
-            autoAlpha: 0
-        });*/
         getPage3D(pageId).hide();
-        
-        var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
-        if(pgFreeContainer3D){
-             TweenMax.to(pgFreeContainer3D.domElement, 0.3, {
-                delay: delay,
-                autoAlpha: 0
-            });   
-        }
     }
 
     fadeInAndActivate = function (pageId, delay, setTweenPos) {
         console.log("@@@@@@@@ SHOW " + pageId);
-        /*var page = $("[page-id='"+pageId+"']" );
-        if (page.css("opacity") > 0) {
-            return
-        }*/
-        //var dispatchComplete = setTweenPos ? transitionComplete : null;
-
+        if(pageId == undefined) return;
         getPage3D(pageId).show();
         
-        /*TweenMax.to(page, 0.5, {
-            delay: delay,
-            autoAlpha: 1,
-            onComplete: dispatchComplete,
-            onCompleteParams: [pageId]
-        });*/
-        
-        var pgFreeContainer3D = getPage3D(pageId).getFree3DContainer();
-        if(pgFreeContainer3D){
-             TweenMax.to(pgFreeContainer3D.domElement, 0.5, {
-                delay: delay,
-                autoAlpha: 1
-            });   
-        }
     }
 
     transitionComplete = function (pageId) {

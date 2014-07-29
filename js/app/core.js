@@ -410,8 +410,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var targetTouch;
     var unBindTouchEvents = function(){
-        var folioDiv = $("#folio")[0];
-        if(!folioDiv) return
+        /*var folioDiv = $("#folio")[0];
+        if(!folioDiv) return*/
         document.removeEventListener("touchstart", onTouchStart, false );
         document.removeEventListener("touchmove", onTouchMove, false );
         document.removeEventListener("touchend", onTouchEnd, false );
@@ -420,7 +420,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
 
     var bindTouchEvents = function(){
         if(!touchEventsBinded){
-            var folioDiv = $("#folio")[0];
+            //var folioDiv = $("#folio")[0];
             document.addEventListener("touchstart", onTouchStart, false );
             document.addEventListener("touchmove", onTouchMove, false );
             document.addEventListener("touchend", onTouchEnd, false );
@@ -437,16 +437,19 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if(targetUrl != "#"){
                 if(targetWindow && targetWindow != "_self"){
                     window.open(targetUrl, targetWindow);
+                    return true
                 }else {
-                    console.log("Set HASH >> " + targetUrl)
                     if(targetUrl.indexOf("#/") == 0){
                         targetUrl = targetUrl.slice(2)
-                        console.log("Set HASH2 >> " + targetUrl)
                     }
                     hasher.setHash(targetUrl);
+                    return true
                 }               
             }
         }
+        
+        
+        return false;
         
         // image in anchor
         /*if($(element).is("img")){
@@ -474,9 +477,15 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         if(MODULES.folio) MODULES.folio.onTouchEnd(event);
         
         if(target == targetTouch){
-            //if(MODULES.header) MODULES.header.onTouchClick(event.target);
-            if(MODULES.folio) MODULES.folio.onTouchClick(event.target);
-            processRegularLink(target);
+            if(!processRegularLink(target)){
+                // regular link didn't work so, we try modules.
+                if(MODULES.header){
+                    MODULES.header.onTouchClick(target);
+                }
+                if(MODULES.folio){
+                    MODULES.folio.onTouchClick(target);
+                }
+            }
         }        
         targetTouch = null
     }   

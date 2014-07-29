@@ -78,13 +78,19 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         removeHighlightButtons();
     }
     
+    header.contains = function(domElement) {
+        return ($.contains($(".menu3D")[0], domElement) || $.contains($(".navbar")[0],domElement));
+    }
+    
     /* closing menu header from external module*/
     header.close = function() {
         controlMenuState("");
     }
     
     /* event handler for tablets*/
-    /*header.onTouchClick = function(element) {
+    header.onTouchClick = function(element) {
+        if(!header.contains(element)) return;
+        
         var className = element.className
         console.log("className >> " + className)
         
@@ -101,7 +107,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         }else if (className.indexOf("button-menu")== -1 && className.indexOf("button-contact")== -1){
             header.close();
         }
-    }*/
+    }
     
     var to1,to2, to3, to4;
     header.highlightButtons = function(){
@@ -281,6 +287,6 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             TweenMax.set($(".menuContent"),{x: -LAYOUT.viewportW}) 
         }
     }
-    
+
     return header;
 });

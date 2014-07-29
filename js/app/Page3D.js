@@ -172,13 +172,23 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         return hidden
     }
     
-    Page3D.prototype.show = function()
+    Page3D.prototype.show = function(delay)
     {   
         if(!this.isBuilt || !this.isHidden()) return;
         
         if(!this.twFadeIn || !this.twFadeIn.isActive()){
             if(this.twFadeOut) this.twFadeOut.pause();
-            this.twFadeIn = TweenMax.to(this.domElement, 0.5, {autoAlpha:1});
+            this.twFadeIn = TweenMax.to(this.domElement, 0.5, {
+                delay: delay,
+                autoAlpha:1
+            });
+        }
+        
+        if(this.free3DContainer){
+             TweenMax.to(this.free3DContainer.domElement, 0.5, {
+                delay: delay,
+                autoAlpha: 1
+            });   
         }
         
     }
@@ -190,6 +200,12 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();
             this.twFadeOut = TweenMax.to(this.domElement, 0.5, {autoAlpha:0});
+        }
+        
+        if(this.free3DContainer){
+             TweenMax.to(this.free3DContainer.domElement, 0.5, {
+                autoAlpha: 0
+            });   
         }
     }
     
