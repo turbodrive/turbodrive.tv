@@ -464,6 +464,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         targetTouch = event.target        
         event.preventDefault();
         if(MODULES.folio) MODULES.folio.onTouchStart(event);
+        if(MODULES.header) MODULES.header.close();
+        
     }
     
     var onTouchMove = function(event){

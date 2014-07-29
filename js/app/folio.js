@@ -843,33 +843,33 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 .update();
 
             // PICTOPLAY
-            page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), 0).update();
+            page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), -50).update();
 
             // REDLINE
             var xRedLine = tW * (0.5 + (layout.redLine.x));
             var yRedLine = tH * (0.5 + (layout.redLine.y));
-            page3D.redLine.setPosition(xRedLine, yRedLine, 0) //75
+            page3D.redLine.setPosition(xRedLine, yRedLine, -50) //75
             .setRegistrationPoint(2500, 2, 0) //2500,2,0
             .update();
 
             // TITLE
             var oY = -70 - ((invRetinaScale - 1) * 10);
             var oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.title.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, 0) //100
+            page3D.title.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //100
             .setRegistrationPoint(0, 0, 0)
                 .update();
 
             // CLIENT
             oY = -95 - ((invRetinaScale - 1) * 10);
             oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.client.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, 0) //50
+            page3D.client.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //50
             .setRegistrationPoint(0, 0, 0)
                 .update();
 
             // CONTENT
             oY = 25 * retinaScale;
             oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.content.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, 0) //5
+            page3D.content.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //5
             .setRegistrationPoint(0, 0, 0)
                 .update();
 
