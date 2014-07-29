@@ -433,6 +433,50 @@ a.about-button {
     opacity: 1;
 }
 
+.navbar-right {
+    position: absolute;
+    right: 14%;
+}
+
+li.blog {
+    background-color: rgba(0,0,0,0.20);
+    height: 50px;
+    position: fixed;
+    right: 0;
+    width: 10%;
+    text-align: center;
+    border-left: 1px solid rgba(125,125,125,0.15);
+    border-bottom: 1px solid rgba(125,125,125,0.1);
+}
+
+li.blog > a {
+    padding: 0px;
+    width: auto;   
+}
+
+.navbar-default .navbar-nav > li.blog > a {
+    color: #6f636b;
+}
+
+.navbar-default .navbar-nav > li.blog > a:hover {
+    color: #ecece1;
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: auto;
+        padding-left: 30px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: auto;
+        padding-left: 100px;
+    }
+}
+
+
 
 /***** MENU3D *******/
 .menu3D {

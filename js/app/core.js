@@ -441,8 +441,11 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 }else {
                     if(targetUrl.indexOf("#/") == 0){
                         targetUrl = targetUrl.slice(2)
+                        hasher.setHash(targetUrl);
+                    }else {
+                        window.open(targetUrl, targetWindow);
                     }
-                    hasher.setHash(targetUrl);
+                    
                     return true
                 }               
             }
@@ -482,6 +485,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if(!processRegularLink(target)){
                 // regular link didn't work so, we try modules.
                 if(MODULES.header){
+                    console.log("header >> " + target)
                     MODULES.header.onTouchClick(target);
                 }
                 if(MODULES.folio){
