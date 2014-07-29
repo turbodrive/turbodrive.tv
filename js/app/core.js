@@ -412,18 +412,18 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var unBindTouchEvents = function(){
         var folioDiv = $("#folio")[0];
         if(!folioDiv) return
-        folioDiv.removeEventListener("touchstart", onTouchStart, true );
-        folioDiv.removeEventListener("touchmove", onTouchMove, true );
-        folioDiv.removeEventListener("touchend", onTouchEnd, true );
+        document.removeEventListener("touchstart", onTouchStart, false );
+        document.removeEventListener("touchmove", onTouchMove, false );
+        document.removeEventListener("touchend", onTouchEnd, false );
         touchEventsBinded = false
     }   
 
     var bindTouchEvents = function(){
         if(!touchEventsBinded){
             var folioDiv = $("#folio")[0];
-            folioDiv.addEventListener("touchstart", onTouchStart, true );
-            folioDiv.addEventListener("touchmove", onTouchMove, true );
-            folioDiv.addEventListener("touchend", onTouchEnd, true );
+            document.addEventListener("touchstart", onTouchStart, false );
+            document.addEventListener("touchmove", onTouchMove, false );
+            document.addEventListener("touchend", onTouchEnd, false );
             touchEventsBinded = true
         }
     }

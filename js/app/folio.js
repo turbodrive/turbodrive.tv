@@ -78,6 +78,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("FOLIO >> " + pageId + " loaded !");
         folio.on.pageLoaded.dispatch(pageId, sectionId);
         prebuildPages(pageId);
+        
+        folio.load(pageInfo.getNextPageId(pageId));
+        folio.load(pageInfo.getPrevPageId(pageId));
     }
 
     folio.resize = function () {
@@ -178,8 +181,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactTx = startx = 0
         touchEnd = touchEnd2 = false;
         //console.log("setTweenPosition >> " + pageId + " - " + sectionId);
-        folio.load(pageInfo.getNextPageId(pageId));
-        folio.load(pageInfo.getPrevPageId(pageId));
 
         positionTmx.currentLabel(pageId);
         sourceTwPosition = objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
@@ -288,6 +289,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         targetTouch = event.target;
         lastTouch = event.target.className;
         var t = event.changedTouches[0];
+        console.log("onTouchStart  >> " + lastTouch);
         
         interactTx = interactTy = 0
         startx = parseInt(t.pageX)
@@ -327,8 +329,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             touchEnd2 = true;
             if(interruptWhenPlaying){
                 interruptWhenPlaying = false;
-                var memId = memLastPage3D.getId();
-                console.log("Update >> " + targetPage + " lastPage >>" + memId);
+                //var memId = memLastPage3D.getId();
                 hideExceptPage(targetPage);
                 fadeInAndActivate(targetPage, 0, false);
                 updateWindowStatus(targetPage);
@@ -346,10 +347,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 var forceStep = (Math.abs(interactTx) - limitSwitchMini)/512;
                 //console.log("forceStep >> " + forceStep);                
                 targetTransition = interactTx > 0 ? Math.round(Number(objTmx.twPos) + forceStep) : Math.round(Number(objTmx.twPos) - forceStep);
-                console.log("redefine target 1 - targetTransition = " + targetTransition);
                 targetPage = pageInfo.content[targetTransition].id;
                 // prepare page in case of...
-                console.log("prepAge >> " + targetPage + " lastPage >>" + memLastPage3D.getId());
                 prepPgeForTransition(targetPage);
                 
             }
@@ -392,15 +391,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
             if (Math.abs(dfX) < 0.1) {    
                 if (currentPage3D.getId() != targetPage) {
-                    console.log("update display from " + currentPage3D.getId() + " to " + targetPage);          
-                    fadeOut(currentPage3D.getId());
+                    //fadeOut(currentPage3D.getId());
                     hideExceptPage(targetPage);
                     fadeInAndActivate(targetPage, 0.2, false);
                     prepPgeForTransition(targetPage,null, false);
                     updateWindowStatus(targetPage);
                 }
-                
-                
             }
             if (Math.abs(dfX) < 0.0001) { //0.0001
                 
@@ -990,7 +986,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             //console.log("getPage3D - allready built")
             currentPage3D = getPage3D(pageId);
              if(updatePage === null || updatePage == true){
-                console.log("prepPgeForTransition / update >> " +currentPage3D.getId())
+                //console.log("prepPgeForTransition / update >> " +currentPage3D.getId())
                 updatePage3D(currentPage3D, page);
             }
         }

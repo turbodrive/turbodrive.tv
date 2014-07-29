@@ -32,6 +32,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     
     Page3D.prototype.twFadeIn = null;
     Page3D.prototype.twFadeOut = null;
+    Page3D.prototype.isBuilt = false;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -160,12 +161,21 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         this.setCSS("opacity","0");
         this.setCSS("visibility","hidden");
             //page3D.contentSprite3D.push(title, client, redLine,bg, textPlane, projectContent, pictoPlay)
-                
+        this.isBuilt = true;
+        
         return this;
     }
     
+    Page3D.prototype.isHidden = function()
+    {
+        var hidden = (!this.isBuilt || this.getCSS("visibility") == "hidden");
+        return hidden
+    }
+    
     Page3D.prototype.show = function()
-    {    
+    {   
+        if(!this.isBuilt || !this.isHidden()) return;
+        
         if(!this.twFadeIn || !this.twFadeIn.isActive()){
             if(this.twFadeOut) this.twFadeOut.pause();
             this.twFadeIn = TweenMax.to(this.domElement, 0.5, {autoAlpha:1});
@@ -175,6 +185,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     
     Page3D.prototype.hide = function()
     {
+        if(!this.isBuilt || this.isHidden()) return;        
+        
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();
             this.twFadeOut = TweenMax.to(this.domElement, 0.5, {autoAlpha:0});
