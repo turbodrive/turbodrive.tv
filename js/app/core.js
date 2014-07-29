@@ -283,7 +283,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var readyForIntroTransitionToFolio = function(pageId, sectionId) {
         overlay.hide();
         console.log("readyForIntroTransitionToFolio - " + pageId + " - " + sectionId);
-        MODULES.folio.wakeup();
+        MODULES.folio.wakeup(pageId);
         MODULES.folio.startTransition(pageId, sectionId);
         
         if(MODULES.reel){
@@ -297,7 +297,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             showHeader(false, onHeaderInitialized);
         }
         
-        overlay.loadGmd();
+        //overlay.loadGmd();
     }
     
     /******* REEL MODULE *******/

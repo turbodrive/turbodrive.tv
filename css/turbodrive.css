@@ -365,7 +365,7 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 	}
 }
 
-.button-menu, .about-button {
+.button-menu, .about-button, .blog-button {
     -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
     transition: .15s;
     
@@ -390,7 +390,8 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 }
 
 .about-button:hover,
-.button-menu:hover{
+.button-menu:hover,
+.blog-button:hover{
     color: #CECEC4;
 }
 
@@ -398,6 +399,7 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     color: #CECEC4!important;
 }
 
+a.blog-button,
 a.about-button {
     padding-top: 18px!important;
     padding-bottom: 20px!important;
@@ -461,6 +463,15 @@ li.blog > a {
 .navbar-default .navbar-nav > li.blog > a:hover {
     color: #ecece1;
 }
+
+.navbar-stealth .navbar-nav > li.blog > a {
+    opacity: 0.6;
+}
+
+.navbar-stealth .navbar-nav > li.blog > a:hover {
+    opacity: 1;
+}
+
 
 @media (min-width: 768px) {
     .container {
@@ -930,6 +941,23 @@ p{
     margin: 0px;
     /*opacity: 0.8;*/
     width: 340px;
+}
+
+p.skills-icon {
+    width: 380px;
+}
+
+p.skills-icon a {
+    border-bottom: 2px solid transparent;
+}
+
+p.skills-icon a:hover {
+    border-bottom: 2px solid #d15f5f;
+}
+
+.icon-skill {
+    margin: 12px 25px 22px 0px;
+    
 }
 
 /*.title {

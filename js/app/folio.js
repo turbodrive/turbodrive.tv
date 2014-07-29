@@ -48,8 +48,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         // delete all pages
     }
     
-    folio.wakeup = function() {
+    folio.wakeup = function(pageId) {
         $(stage).css("visibility", "visible");
+        //fadeInAndActivate(pageId);
         console.log("WAKEUP FOLIO");
     }
 
