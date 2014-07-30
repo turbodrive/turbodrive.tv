@@ -35,6 +35,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.isBuilt = false;
     Page3D.prototype.video = null;
     Page3D.prototype.pictoPlay = null;
+    Page3D.prototype.pictosInitialized = false;
+    Page3D.prototype.projectPlayer = null;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -50,13 +52,11 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     
     Page3D.prototype.playVideo = function(event)
     {   
-        //console.log("play >> " + this.getPageInfo())
-        //console.log("play 5 >> " + event.currentTarget.self.pageInfo.id);
         var page = event.currentTarget.self;
 
         TweenMax.to(page.videoContainer,0.5, {delay:0.2, autoAlpha:1});
+        page.projectPlayer.setCSS("visibility", "visible");
         TweenMax.to(page.pictoPlay.domElement,0.5, {autoAlpha:0});
-        
         page.video.play();
     }
     
@@ -69,18 +69,26 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         }
     }
     
-    var targetTouch
+    var targetTouch;
+    
+    Page3D.prototype.onTouchStartPicto = function(event){
+        console.log("href >> " + event.target.attributes("href"))   
+    }
+    
     Page3D.prototype.onTouchStartVideo = function(event){
         targetTouch = event.target
     }
     
     Page3D.prototype.onTouchEndVideo = function(event){
         if(event.target == targetTouch){
-            event.currentTarget.self.onClickVideo(event)
+            console.log("className >> " + event.target.className);
+            event.currentTarget.self.onClickVideo(event);
         }
     }
     
     Page3D.prototype.preloadVideo = function() {
+        TweenMax.to(this.pictoPlay.domElement, 0.25, {delay: 0.5, autoAlpha:1});
+        
         if(this.videoContainer){
             this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"></video>';
             this.video = this.videoContainer.firstElementChild;
@@ -90,7 +98,23 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             this.video.addEventListener("click", this.onClickVideo);
             this.video.addEventListener("touchstart", this.onTouchStartVideo);
             this.video.addEventListener("touchend", this.onTouchEndVideo);
-        }        
+        }
+        
+        /*if(!this.pictosInitialized){
+            this.pictosInitialized = true;        
+            var pictos = $(this.pictoSkills).children(".icon-skill")
+            for(var i = 0; i<pictos.length; i++){
+                pictos[i].addEventListener("touchstart", this.onTouchStartPicto);
+                pictos[i].addEventListener("touchend", this.onTouchEndVideo);
+                //console.log("addEventlistener to "  + pictos[i] + "pictoLength"  + pictos.length)
+            }
+        }*/
+    }
+    
+    Page3D.prototype.pauseVideo = function() {
+        if(this.video){
+            this.video.pause();
+        }
     }
     
     Page3D.prototype.removeVideo = function() {
@@ -100,7 +124,11 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             this.video.removeEventListener("touchstart", this.onTouchStartVideo);
             this.video.removeEventListener("touchend", this.onTouchEndVideo);
             this.videoContainer.innerHTML = "";
-            TweenMax.to(this.videoContainer,0.3, {autoAlpha:0});
+            TweenMax.to(this.videoContainer,0.3, {autoAlpha:0,
+                                                  onComplete:function(page){
+                page.projectPlayer.setCSS("visibility", "hidden")},
+                                                  onCompleteParams:[this]
+            });
             TweenMax.to(this.pictoPlay.domElement,0.3, {autoAlpha:1});
         }
     }
@@ -157,7 +185,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             var isRightLayout = (this.pageInfo.layout == pageInfo.RIGHT_LAYOUT)
             
             // 6. content
-            var pictoP = this.divElement.children("p")[0];
+            this.pictoSkills = this.divElement.children("p")[0];
             var divText = document.createElement("div");
             var leftOffset =  isRightLayout ? "20" : "0";
             var widthContent =  isRightLayout ? "580" : "340";
@@ -166,10 +194,10 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             divText.appendChild(this.divElement.children("p")[1]);
             // wrap text to get shapped paragraph
 if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
-                 }
+            }
             
             var projectContent = new Sprite3D()
-                .addDomElement(pictoP) // Picto Skills
+                .addDomElement(this.pictoSkills) // Picto Skills
                 .addDomElement(divText) // Text
                 .setRotationZ(-3)
                 .update();
@@ -186,6 +214,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .update();
             this.addChild(projectPlayer);
             this.projectPlayer = projectPlayer;
+            this.projectPlayer.setCSS("visibility", "hidden");
             
             // 7. pictoPlay
             var pictoPlay = new Sprite3D()
@@ -201,8 +230,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
             pictoPlay.domElement.addEventListener("click", this.playVideo)
             pictoPlay.domElement.addEventListener("touchstart", this.playVideo)
             pictoPlay.domElement.self = this;
-            /*pictoPlay.domElement.video = projectPlayer.domElement.firstChild.firstElementChild;
-            this.video = projectPlayer.domElement.firstChild.firstElementChild;*/
+            TweenMax.set(pictoPlay.domElement, {autoAlpha:0});
             
             
         }else {
@@ -287,7 +315,8 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
     
     Page3D.prototype.hide = function()
     {
-        if(!this.isBuilt || this.isHidden()) return;        
+        if(!this.isBuilt || this.isHidden()) return;
+        this.pauseVideo();
         this.removeVideo();
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){

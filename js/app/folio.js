@@ -113,8 +113,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         // update camera position depending on the sprite's position and size
         //if(currentTarget) startTransition(currentTarget,0)
         //}
-
-
     }
 
     getPage3D = function (pageId) {
@@ -259,6 +257,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     folio.onTouchClick = function (element) {
         console.log("FOLIO onTouchClick - " + element)
+        console.dir("FOLIO onTouchClick - " + element)
         
         if(!folio.contains(element)) return;
         
@@ -270,7 +269,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             var href = $(element).parent().attr("href");   
             window.location.hash = href;
         }else if($($(element).children()[0]).is("a")){
-
             var href =  $($(element).children()[0]).attr("href");
             window.location.hash = href;
         }
