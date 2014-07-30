@@ -93,15 +93,32 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             this.addChild(textPlane);
             this.textPlane = textPlane
             //msg("textPlane >> " + textPlane)
-
+            
+            
+            var isRightLayout = (this.pageInfo.layout == pageInfo.RIGHT_LAYOUT)
+            
             // 6. content
+            var pictoP = this.divElement.children("p")[0];
+            var divText = document.createElement("div");
+            var leftOffset =  isRightLayout ? "20" : "0";
+            var widthContent =  isRightLayout ? "580" : "340";
+            
+            divText.setAttribute("style", "-webkit-transform-style : preserve-3d; transform-style: preserve-3d; position:fixed; left:"+leftOffset+"px; width:"+widthContent+"px ;");
+            divText.appendChild(this.divElement.children("p")[1]);
+           
+if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
+                 }
+            
             var projectContent = new Sprite3D()
-                .addDomElement(this.divElement.children("p")[0]) // Picto Skills
-                .addDomElement(this.divElement.children("p")[0]) // Text
+                .addDomElement(pictoP) // Picto Skills
+                .addDomElement(divText) // Text
                 .setRotationZ(-3)
                 .update();
             this.addChild(projectContent);
             this.content = projectContent;
+            
+           
+
 
             // 7. pictoPlay
             var pictoPlay = new Sprite3D()

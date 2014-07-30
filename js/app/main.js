@@ -26,11 +26,10 @@ LAYOUT.getRatioH = function(h){
 
 LAYOUT.getSimpleRatio = function(value, min, max){
     var ratio = (Math.max(value, min) - min) / (max - min);
-    if (ratio > 1) ratio = 1
-    if (ratio < 0) ratio = 0
-    return ratio
+    if (ratio > 1) ratio = 1;
+    if (ratio < 0) ratio = 0;
+    return ratio;
 }
-
 
 var LAYOUT_3D = {
     PX_PERFECT_DISTANCE:0,
@@ -39,12 +38,24 @@ var LAYOUT_3D = {
     }
 }
 
-/*var tTemp = "";
-function msg(t) {
-    if(!CONFIG.debug) return
-    tTemp += t + "<br/>"
-    document.getElementById("debugText").innerHTML = tTemp
-}*/
+
+var UTILS = {};
+
+UTILS.shapeWrapper = function(lineHeight,Xs,container, nbrLines) {
+    //var container = document.getElementById(idElement);
+    var firstNode = container.firstChild;
+	var Xvalues = Xs.split('|');
+	for(i=0; i <= nbrLines; i++) {
+		parts = Xvalues[i].split(',');
+        var divA = document.createElement("div");
+        divA.setAttribute("style",'float:left;clear:left;height:'+lineHeight+'px;width:'+ parts[1]+'px');
+        var divB = document.createElement("div");
+        divB.setAttribute("style",'float:right;clear:right;height:'+lineHeight+'px;width:'+ parts[2]+'px');
+        container.insertBefore(divA, firstNode);
+        container.insertBefore(divB, firstNode);
+	}
+}
+
 
 var GLOBAL_ACCESS = this;
 
