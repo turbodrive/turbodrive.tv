@@ -1,7 +1,7 @@
 define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, TweenMax) {
     
     const USE_AEX_COORD = true;    
-    
+
     function Page3D(jQueryDivElement, pageInfoEl)
     {
         // 1st param of call is THIS
@@ -33,6 +33,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.twFadeIn = null;
     Page3D.prototype.twFadeOut = null;
     Page3D.prototype.isBuilt = false;
+    Page3D.prototype.video = null;
+    Page3D.prototype.pictoPlay = null;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -44,6 +46,63 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.getPageInfo = function()
     {
         return this.pageInfo;
+    }
+    
+    Page3D.prototype.playVideo = function(event)
+    {   
+        //console.log("play >> " + this.getPageInfo())
+        //console.log("play 5 >> " + event.currentTarget.self.pageInfo.id);
+        var page = event.currentTarget.self;
+
+        TweenMax.to(page.videoContainer,0.5, {delay:0.2, autoAlpha:1});
+        TweenMax.to(page.pictoPlay.domElement,0.5, {autoAlpha:0});
+        
+        page.video.play();
+    }
+    
+    Page3D.prototype.onClickVideo = function(event) {
+        var currentVideo = event.currentTarget;
+        if(currentVideo.paused){
+            currentVideo.play()
+        }else {
+            currentVideo.pause();
+        }
+    }
+    
+    var targetTouch
+    Page3D.prototype.onTouchStartVideo = function(event){
+        targetTouch = event.target
+    }
+    
+    Page3D.prototype.onTouchEndVideo = function(event){
+        if(event.target == targetTouch){
+            event.currentTarget.self.onClickVideo(event)
+        }
+    }
+    
+    Page3D.prototype.preloadVideo = function() {
+        if(this.videoContainer){
+            this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"></video>';
+            this.video = this.videoContainer.firstElementChild;
+            console.log("start Preloadvideo >> " + this.video);
+            this.videoContainer.self = this;
+            this.video.self = this;
+            this.video.addEventListener("click", this.onClickVideo);
+            this.video.addEventListener("touchstart", this.onTouchStartVideo);
+            this.video.addEventListener("touchend", this.onTouchEndVideo);
+        }        
+    }
+    
+    Page3D.prototype.removeVideo = function() {
+        if(this.videoContainer){
+            this.video.pause();
+            this.video.removeEventListener("click", this.onClickVideo);
+            this.video.removeEventListener("touchstart", this.onTouchStartVideo);
+            this.video.removeEventListener("touchend", this.onTouchEndVideo);
+            this.videoContainer.innerHTML = "";
+            TweenMax.to(this.videoContainer,0.3, {autoAlpha:0});
+            TweenMax.to(this.pictoPlay.domElement,0.3, {autoAlpha:1});
+        }
     }
     
     Page3D.prototype.build = function()
@@ -105,7 +164,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             
             divText.setAttribute("style", "-webkit-transform-style : preserve-3d; transform-style: preserve-3d; position:fixed; left:"+leftOffset+"px; width:"+widthContent+"px ;");
             divText.appendChild(this.divElement.children("p")[1]);
-           
+            // wrap text to get shapped paragraph
 if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
                  }
             
@@ -117,18 +176,34 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
             this.addChild(projectContent);
             this.content = projectContent;
             
-           
-
-
+             // 7. projectPlayer
+            this.videoContainer = this.divElement.children(".project-player")[0];
+            
+            var projectPlayer = new Sprite3D()
+                .addDomElement(this.videoContainer)
+                .setRegistrationPoint(50, 50, 0)
+                .setRotationZ(-3)
+                .update();
+            this.addChild(projectPlayer);
+            this.projectPlayer = projectPlayer;
+            
             // 7. pictoPlay
             var pictoPlay = new Sprite3D()
-                .addDomElement(this.divElement.children("a")[0])
+                .addDomElement(this.divElement.children("button")[0])
                 .setRegistrationPoint(50, 50, 0)
                 .setRotationZ(-3)
                 /*.setScale(0.85,0.85,0)*/
                 .update();
             this.addChild(pictoPlay);
             this.pictoPlay = pictoPlay;
+            
+            
+            pictoPlay.domElement.addEventListener("click", this.playVideo)
+            pictoPlay.domElement.addEventListener("touchstart", this.playVideo)
+            pictoPlay.domElement.self = this;
+            /*pictoPlay.domElement.video = projectPlayer.domElement.firstChild.firstElementChild;
+            this.video = projectPlayer.domElement.firstChild.firstElementChild;*/
+            
             
         }else {
             // infoLayout
@@ -213,6 +288,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
     Page3D.prototype.hide = function()
     {
         if(!this.isBuilt || this.isHidden()) return;        
+        this.removeVideo();
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();

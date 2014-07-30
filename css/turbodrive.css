@@ -987,7 +987,7 @@ p.skills-icon a:hover {
 /***************************** PROJECTS ********************************/
 
 .icon-play {
-    visibility: hidden;
+    visibility: visible;
 }
 
 .icon-play > [data-icon]:before {
@@ -997,13 +997,13 @@ p.skills-icon a:hover {
     padding: 0px;
 }
 
-a.icon-play {
+button.icon-play {
     transition: 0.15s;
     -webkit-transition:0.15s;
     -moz-transition:0.15s;
     
     margin: 0px;
-    padding: 0px;
+    padding: 3px 2px 1px 0px;
     display: inline-block;
     background-color: rgba(60,41,64,0.9);
     color: #8F7E7F;
@@ -1011,15 +1011,53 @@ a.icon-play {
     -webkit-box-shadow: 0px 0px 25px rgba(33, 14, 36, 1);
     -moz-box-shadow:    0px 0px 25px rgba(33, 14, 36, 1);
     box-shadow:         0px 0px 25px rgba(33, 14, 36, 1);
+    
+    border: none;
+    outline: none;
 }
 
-a.icon-play:hover {
+button.icon-play:hover {
+    background-color: rgb(65, 39, 62);
+    color: #CECEC4;
+    -webkit-box-shadow: 0px 0px 20px rgba(210, 92, 97, 0.7);
+    -moz-box-shadow:    0px 0px 20px rgba(210, 92, 97, 0.7);
+    box-shadow:         0px 0px 20px rgba(210, 92, 97, 0.7);
+    
+    border: none;
+    outline: none;
+}
+
+button.icon-play:active,
+button.icon-play:focus {
     background-color: rgba(77,46,67,1);
     color: #EFECE1;
     -webkit-box-shadow: 0px 0px 60px rgba(210, 92, 97, 1);
     -moz-box-shadow:    0px 0px 60px rgba(210, 92, 97, 1);
     box-shadow:         0px 0px 60px rgba(210, 92, 97, 1);
     
+    border: none;
+    outline: none;
+}
+
+.project-player {
+    display: block;
+    background-color: #251927;
+    width: 724px;
+    height: 432px;
+    visibility: hidden;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#project-video {
+    top: 2%;
+    left: 2%;
+    width: 96%;
+    height: 96%;
+    position: absolute;
+    background-color: #000000;
+    padding: 0px;
+    margin: 0px;
 }
 
 /*.pictoPlayContainer {

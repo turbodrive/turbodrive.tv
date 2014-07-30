@@ -275,8 +275,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             MODULES.folio.startIntroTransition(pageId, sectionId);
         }
         
-        
-        
         if(!CONFIG.hyperDriveTransition) overlay.hide();
     }
     
@@ -464,8 +462,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }    
     
     var onTouchStart = function(event){
-        targetTouch = event.target        
         event.preventDefault();
+        targetTouch = event.target
+        
         if(MODULES.folio) MODULES.folio.onTouchStart(event);
         if(MODULES.header) MODULES.header.close();
         

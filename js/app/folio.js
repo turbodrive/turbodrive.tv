@@ -513,7 +513,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             var page = pageInfo.content[i];
             var elementJQ = $("div[page-id*='" + page.id + "']");
             pageInfo.content[i].elementJQ = elementJQ;
-        }
+        }        
         $("#folioContent").remove();
         
         require(["app/nextPrev"], function(nextPrevModule){
@@ -611,6 +611,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             }            
         }else{
             fireReadyForIntroTransition();
+            transitionComplete(pageId);
         }
     }
     
@@ -759,9 +760,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
         if (page.id == "skillsfield" || page.id == "about") {
             initSkillsMenu(page.id);
-        }
+        }       
 
         return page3D
+    }
+    
+    folio.getProjectVideo = function(){
+        return currentPage3D.video;
     }
 
     initSkillsMenu = function (idPage) {
@@ -842,9 +847,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             //.setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)
             .setScale(scaleList._scaleVisuel, scaleList._scaleVisuel, 1)
                 .update();
-
+            
+            // PROJECT-PLAYER
+            page3D.projectPlayer.setPosition((tW*0.10), 270, -20).update();
+            
             // PICTOPLAY
-            page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), -50).update();
+            page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), 0).update();
 
             // REDLINE
             var xRedLine = tW * (0.5 + (layout.redLine.x));
@@ -1077,9 +1085,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("transitionComplete >> " + pageId)
         setTweenPosition(pageId, tmpSectionId);
         if(currentPage3D.getPageInfo().project){
-            nextPrev.show(currentPage3D.getPageInfo());
+            currentPage3D.preloadVideo();
+            if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
         }else{
-            nextPrev.hide();   
+            if(nextPrev) nextPrev.hide();   
         }
         tmpSectionId = null;
         previousPage3D = null;
