@@ -428,7 +428,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var processRegularLink = function(element)
     {
-        // simple link
         if($(element).is("a")){
             var targetUrl = $(element).attr("href");
             var targetWindow = $(element).attr("target");
@@ -484,7 +483,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if(!processRegularLink(target)){
                 // regular link didn't work so, we try modules.
                 if(MODULES.header){
-                    console.log("header >> " + target)
                     MODULES.header.onTouchClick(target);
                 }
                 if(MODULES.folio){

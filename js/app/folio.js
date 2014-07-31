@@ -50,7 +50,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     folio.wakeup = function(pageId) {
         $(stage).css("visibility", "visible");
-        //fadeInAndActivate(pageId);
         console.log("WAKEUP FOLIO");
     }
 
@@ -70,7 +69,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     folio.load = function (pageId, sectionId) {
         var page = pageInfo.getPageInfo(pageId);
         if (!page) return
-        console.log(page.id + " - loaded ? >> " + page.loaded)
         if (!page.loaded) {
             pageInfo.loadImage(pageId, sectionId);
         } else {
@@ -80,7 +78,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     this.onImageLoaded = function (pageId, sectionId) {
         //pageInfo.on.imagesLoaded.remove(onImageLoaded);
-        console.log("FOLIO >> " + pageId + " loaded !");
+        //console.log("FOLIO >> " + pageId + " loaded !");
         folio.on.pageLoaded.dispatch(pageId, sectionId);
         prebuildPages(pageId);
         
@@ -140,8 +138,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     //var rotationTmx = new TimelineMax({paused:true});
 
     buildTimelines = function () {
-        positionTmx.add("empty")
-        positionTmx.add(pageInfo.content[0].id)
+        positionTmx.add("empty");
+        positionTmx.add(pageInfo.content[0].id);
 
         for (var i = 0; i < pageInfo.content.length - 1; i++) {
             var label = pageInfo.content[i + 1].id;
@@ -180,15 +178,22 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         return res;
     };
 
-    setTweenPosition = function (pageId, sectionId) {
+    setTweenPosition = function (pageId, sectionId, isIntro) {
         interactTx = startx = 0
         touchEnd = touchEnd2 = false;
-        //console.log("setTweenPosition >> " + pageId + " - " + sectionId);
+        console.log("setTweenPosition >> " + pageId + " - " + sectionId);
 
         positionTmx.currentLabel(pageId);
         sourceTwPosition = objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
-
         updateWindowStatus(pageId, sectionId);
+        
+        if(isIntro === null) isIntro = false
+        if(!isIntro) {        
+            if(nextPrev) nextPrev.updateState(currentPage3D.getPageInfo());
+            if(currentPage3D.getPageInfo().project){
+                currentPage3D.preloadVideo();
+            } 
+        }
     }
     
     updateWindowStatus = function(pageId, sectionId) {
@@ -255,15 +260,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     /********* TOUCH CONTROL *********/
     /*********************************/
 
-    folio.onTouchClick = function (element) {
-        console.log("FOLIO onTouchClick - " + element)
-        console.dir("FOLIO onTouchClick - " + element)
-        
-        if(!folio.contains(element)) return;
-        
-        if (element.className.indexOf("pictoPlayContainer") > -1) {
-            // play video   
-        }
+    folio.onTouchClick = function (element) {        
+        if(!folio.contains(element)) return
 
         if($(element).parent().is("a")){
             var href = $(element).parent().attr("href");   
@@ -344,7 +342,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 interruptWhenPlaying = false;
                 //var memId = memLastPage3D.getId();
                 hideExceptPage(targetPage);
-                fadeInAndActivate(targetPage, 0, false);
+                fadeInAndActivate(targetPage, 0);
                 updateWindowStatus(targetPage);
             }  
         }else {
@@ -388,14 +386,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     if(targetTransition < 0 || targetTransition > pageInfo.content.length-1) return
                     targetPage = pageInfo.content[targetTransition].id
                 }                
-                /*if(interruptWhenPlaying){
-                    console.log("redefine target 0")
-                    targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;
-                    targetPage = pageInfo.content[targetTransition].id
-                }*/
-                
-                //prepPgeForTransition(targetPage);
-                //touchEnd = false;
                 touchEnd2 = true;
                 if(!touchTransitionPlaying){
                     memLastPage3D = currentPage3D;
@@ -416,7 +406,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 if (currentPage3D.getId() != targetPage) {
                     //fadeOut(currentPage3D.getId());
                     hideExceptPage(targetPage);
-                    fadeInAndActivate(targetPage, 0.2, false);
+                    fadeInAndActivate(targetPage, 0.2);
                     prepPgeForTransition(targetPage,null, false);
                     updateWindowStatus(targetPage);
                 }
@@ -450,22 +440,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         isRendering = true;
     }
 
-    var enterFrame = function () {
-        /*influenceMouseX = Math.abs(objTmx.twMem - objTmx.twPos)*/
-        
-        /*interactTx2Mod += (interactTx2 - interactTx2Mod)*0.2;
-        var interactTx2ModInfluence = interactTx2Mod*influenceMouseX;
-        
-        var speedTwPos = Math.abs(prevtwPos-objTmx.twPos);
-        $("#interactTxRate").css("width" , ((Math.abs(interactTx)/LAYOUT.viewportW)*100)+ "%");
-        $("#interactTxRate2").css("width" , ((Math.abs(interactTx2Mod)/LAYOUT.viewportW)*100)+ "%");
-        
-        $("#interactTxRate2Influence").css("width" , ((Math.abs(interactTx2ModInfluence)/LAYOUT.viewportW)*100)+ "%");
-        $("#tweenTxRate").css("width" , (influenceMouseX*100)+ "%");
-        
-        prevtwPos = objTmx.twPos;*/
-        
-        
+    var enterFrame = function () {        
         if (isRendering) {
             requestAnimationFrame(enterFrame);
         }
@@ -475,12 +450,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     if (!window.requestAnimationFrame) {
-        /*
-        if ( window.mozRequestAnimationFrame ) alert("has mozRequestAnimationFrame");
-        if ( window.webkitRequestAnimationFrame ) alert("has webkitRequestAnimationFrame");
-        if ( window.oRequestAnimationFrame ) alert("has oRequestAnimationFrame");
-        if ( window.msRequestAnimationFrame ) alert("has msRequestAnimationFrame");
-    */
         window.requestAnimationFrame = (function () {
 
             return window.webkitRequestAnimationFrame ||
@@ -490,7 +459,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
 
                     window.setTimeout(callback, 1000 / 30);
-
                 };
 
         })();
@@ -518,6 +486,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             nextPrev = nextPrevModule;
             nextPrev.on.backToTheReelPress.add(onBackToTheReelPressed);
             nextPrev.init();
+            if(currentPage3D) nextPrev.updateState(currentPage3D.getPageInfo());
         });
     }
     
@@ -546,7 +515,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //buildGridTile(-1,1);
         //buildGridTile(1,1);
 
-        
         //if(CONFIG.hyperDriveTransition) buildHyperDriveScene();
         scene3DBuilt = true;
     }
@@ -722,8 +690,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     var hyperDriveTransitionComplete = function() {
-        if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
+        //if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
         interactContainer.removeChild(hyperdriveContainer);
+        setTweenPosition(tmpPageIdHd, tmpSectionIdHd);
     }
     
     var fireReadyForIntroTransition = function(){
@@ -754,7 +723,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         page3D.setParentSprite(container);
         pages3D.push(page3D);
         page.built = true;
-        console.log(page.id + " is Built");
+        console.log("Page [" + page.id + "] is created");
 
         if (page.id == "skillsfield" || page.id == "about") {
             initSkillsMenu(page.id);
@@ -881,6 +850,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 .update();
 
             //page3D.textPlane.setPosition(xRedLine+layout.planeTextX, yRedLine, -250).update();
+            
             // TEXTPLANE
             page3D.textPlane.setPosition(xRedLine + layout.planeTextX, yRedLine, -150).update();
         } else {
@@ -994,7 +964,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     prebuildPages = function(pageId) {
         var page = pageInfo.getPageInfo(pageId);
         if(!page.built){
-            console.log("### prebuild Page - " + pageId);
             var page3D = buildPage3D(pageInfo.getPageInfo(pageId));
             updatePage3D(page3D, page)
         }
@@ -1003,32 +972,24 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     prepPgeForTransition = function (pageId, sectionId, updatePage) {
         var page = pageInfo.getPageInfo(pageId);
         if (currentPage3D) previousPage3D = currentPage3D;
-        /*if(currentPage3D){   
-            console.trace("prepPgeForTransition >> " + currentPage3D.getId());
-        }else {
-            console.trace("prepPgeForTransition >> noCurrentPage ");
-        }*/
+        
         if (!page.built) {
-            //console.log("getPage3D - buildPage3D")
             currentPage3D = buildPage3D(page);
             updatePage3D(currentPage3D, page);
             
         } else {
-            //console.log("getPage3D - allready built")
             currentPage3D = getPage3D(pageId);
              if(updatePage === null || updatePage == true){
-                //console.log("prepPgeForTransition / update >> " +currentPage3D.getId())
                 updatePage3D(currentPage3D, page);
             }
         }
 
-       
         if (sectionId) updateSection(currentPage3D, sectionId)
         return page;
     }
     
     folio.hasCurrentPage3D = function(){
-        console.log("hasCurrentPage3D >> " + currentPage3D)
+        //console.log("hasCurrentPage3D >> " + currentPage3D)
         
         return (currentPage3D !== undefined && currentPage3D !== null)
     }
@@ -1049,45 +1010,38 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
         if (!previousPage3D) {
             // transition depuis HyperSPACE
-            setTweenPosition(pageId, sectionId);
-            fadeInAndActivate(pageId, 0, false);
+            setTweenPosition(pageId, sectionId, true);
+            fadeInAndActivate(pageId, 0);
             // TODO : SET CONTAINER POSITION (temp)
         } else {
             var siblingsLevel = pageInfo.getLevelOfSibling(pageId, previousPage3D.getId());
             fadeOut(currentPageId, 0.4)
-            fadeInAndActivate(pageId, 1.1, false);
             if(nextPrev) nextPrev.hide();
             if (Math.abs(siblingsLevel) == 1) {
                 level1Transition(page);
             } else {
                 freeTransition(page);
             }
+            fadeInAndActivate(pageId, 1.1);
         }
     }
     
     fadeOut = function (pageId, delay) {
         if(pageId == undefined) return;
         console.log("@@@@@@@@ HIDE " + pageId);
-        getPage3D(pageId).hide();
+        getPage3D(pageId).hide(delay);
     }
 
-    fadeInAndActivate = function (pageId, delay, setTweenPos) {
-        console.log("@@@@@@@@ SHOW " + pageId);
+    fadeInAndActivate = function (pageId, delay) {
         if(pageId == undefined) return;
-        getPage3D(pageId).show();
-        
+        console.log("@@@@@@@@ SHOW " + pageId);
+        getPage3D(pageId).show(delay);
     }
 
     transitionComplete = function (pageId) {
         transitionStarted = false;
-        console.log("transitionComplete >> " + pageId)
+        console.log("transitionComplete >> " + pageId);
         setTweenPosition(pageId, tmpSectionId);
-        if(currentPage3D.getPageInfo().project){
-            currentPage3D.preloadVideo();
-            if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
-        }else{
-            if(nextPrev) nextPrev.hide();   
-        }
         tmpSectionId = null;
         previousPage3D = null;
     }
@@ -1108,6 +1062,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //stopRendering();
 
         TweenMax.to(container, 2, {
+            delay:0.3,
             x: -page.x,
             y: -page.y,
             z: -page.z,

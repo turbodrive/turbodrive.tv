@@ -50,8 +50,8 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     
     overlay.loadGmd = function(){
         if(startLoadGmd) return;
-        startLoadGmd = true
-        if(gmdAnimation !== undefined) return
+        startLoadGmd = true;
+        if(gmdAnimation !== undefined) return;
 
         require(["GmdEdge"], function(GmdEdge){
             

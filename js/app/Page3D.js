@@ -313,7 +313,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         
     }
     
-    Page3D.prototype.hide = function()
+    Page3D.prototype.hide = function(delay)
     {
         if(!this.isBuilt || this.isHidden()) return;
         this.pauseVideo();
@@ -321,11 +321,11 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();
-            this.twFadeOut = TweenMax.to(this.domElement, 0.5, {autoAlpha:0});
+            this.twFadeOut = TweenMax.to(this.domElement, 0.5, {delay:delay, autoAlpha:0});
         }
         
         if(this.free3DContainer){
-             TweenMax.to(this.free3DContainer.domElement, 0.5, {
+             TweenMax.to(this.free3DContainer.domElement, 0.5, {delay:delay,
                 autoAlpha: 0
             });   
         }

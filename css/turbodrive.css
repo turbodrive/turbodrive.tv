@@ -210,8 +210,8 @@ a:focus {
     position: absolute;
     top: 0px;
     left: 0px;
-    visibility: hidden;
-    opacity: 0;
+    /*visibility: hidden;
+    opacity: 0;*/
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -222,7 +222,95 @@ a:focus {
         position: absolute;
         bottom: 0px;
         left: 0px;
+        visibility: hidden;
+        opacity: 0;
     }
+
+    .transverse-nav {
+        display: block;
+        width:80px;
+        height: 100%;
+        position:absolute;
+        top: 0px;
+        color: #EFECE1;
+        background-color: transparent;
+        border: none;
+        pointer-events: auto;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .transverse-nav:focus,
+    .transverse-nav:active {
+        outline: none;
+        border: none;
+    }
+    
+
+        .transverse-nav .transverse-nav-bg {
+            pointer-events: auto;
+            background-color: rgba(209, 95, 95,0.9);
+            transform: rotate(34.5deg);
+            width: 500px;
+            height: 200%;
+            display: block;
+            position: absolute;
+            top:-50%;
+            opacity: 0;
+            visibility: hidden;
+        }
+    
+    .transverse-nav:hover  .transverse-nav-bg,
+    .transverse-nav:focus  .transverse-nav-bg {
+        background-color: rgba(209, 95, 95,0.9);
+    }
+
+    .transverse-nav:active  .transverse-nav-bg {
+        background-color: rgba(239, 236, 225,0.8);
+    }
+
+    
+    .transverse-nav .menu-icon {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .transverse-nav .menu-icon:before {
+        font-size: 90px;
+        transform: rotate(-3deg);
+        display: block;
+        position: absolute;
+        z-index: 10;
+    }
+    
+    .prev-button {
+        left: -5px;
+    }
+
+    .prev-button .menu-icon:before {
+        left: 50%;
+        top: 20%;
+    }
+
+    .prev-button .transverse-nav-bg {
+        left: -750%;
+    }
+
+    .next-button {
+        right: -5px;
+    }
+
+    .next-button .menu-icon:before {
+        right: 50%;
+        bottom: 25%;
+    }
+
+    .next-button .transverse-nav-bg {
+        right: -750%;
+    }
+
+    
 
 
 
@@ -944,20 +1032,51 @@ p{
 }
 
 p.skills-icon {
-    width: 380px;
+    width: 420px;
 }
 
 p.skills-icon a {
-    border-bottom: 2px solid transparent;
-    margin: 12px 25px 22px 0px;
+    width: 54px;
+    text-align: center;
+    border: 2px solid transparent;
+    margin: 0px 20px 20px 0px;
+    padding: 13px 0px 2px 0px;
 }
 
-p.skills-icon a:hover,
-p.skills-icon a:active {
-    border-bottom: 2px solid #d15f5f;
+p.skills-icon a:hover {
+    border-color: transparent;
+    border-bottom-color: #d15f5f;
     text-decoration: none;
     color: #EFECE1;
+    text-shadow: 0px 0px 0px #d15f5f;
+    box-shadow:
+        0px 0px 0px #d15f5f,
+        inset 0px 0px 0px #d15f5f;
 }
+
+p.skills-icon a:active {
+    border-color: #EFECE1;
+    text-decoration: none;
+    color: #EFECE1;
+    text-shadow: 0px 0px 15px #d15f5f;
+    box-shadow:
+        0px 0px 15px #d15f5f,
+        inset 0px 0px 15px #d15f5f;
+}
+
+p.skills-icon a:focus {
+    border-color: transparent;
+    border-bottom-color: #d15f5f;
+    text-decoration: none;
+    color: #EFECE1;
+    text-shadow: 0px 0px 0px #d15f5f;
+    box-shadow:
+        0px 0px 0px #d15f5f,
+        inset 0px 0px 0px #d15f5f;
+}
+
+
+
 
 
 /*.title {
@@ -1002,19 +1121,27 @@ button.icon-play {
     margin: 0px;
     padding: 2px 2px 2px 0px;
     display: inline-block;
-    background-color: rgba(60,41,64,0.9);
-    color: #8F7E7F;
     position: fixed;
-    -webkit-box-shadow: 0px 0px 25px rgba(33, 14, 36, 1);
-    -moz-box-shadow:    0px 0px 25px rgba(33, 14, 36, 1);
-    box-shadow:         0px 0px 25px rgba(33, 14, 36, 1);
-    
     border: none;
     outline: none;
     
+    background-color: rgba(60,41,64,0.9);
+    color: #8F7E7F;   
+    -webkit-box-shadow: 0px 0px 25px rgba(33, 14, 36, 1);
+    -moz-box-shadow:    0px 0px 25px rgba(33, 14, 36, 1);
+    box-shadow:         0px 0px 25px rgba(33, 14, 36, 1);
 }
 
-button.icon-play:hover {
+button.icon-play:focus {
+    background-color: rgba(60,41,64,0.9);
+    color: #8F7E7F;   
+    -webkit-box-shadow: 0px 0px 25px rgba(33, 14, 36, 1);
+    -moz-box-shadow:    0px 0px 25px rgba(33, 14, 36, 1);
+    box-shadow:      
+}
+
+button.icon-play:hover
+ {
     background-color: rgb(65, 39, 62);
     color: #CECEC4;
     -webkit-box-shadow: 0px 0px 20px rgba(210, 92, 97, 0.7);
@@ -1025,8 +1152,7 @@ button.icon-play:hover {
     outline: none;
 }
 
-button.icon-play:active,
-button.icon-play:focus {
+button.icon-play:active {
     background-color: rgba(77,46,67,1);
     color: #EFECE1;
     -webkit-box-shadow: 0px 0px 60px rgba(210, 92, 97, 1);
