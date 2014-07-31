@@ -321,6 +321,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactTy = (parseInt(t.pageY) - starty)
         touchEnd = false
         //pXm = parseInt(t.pageX);
+        if(Math.abs(interactTx) > limitSwitchMini){
+            if(nextPrev) nextPrev.hide(true);
+        }
     }
     
     var hideExceptPage = function(pageId) {
@@ -380,6 +383,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             if (Math.abs(interactTx) > 0.01 && Math.abs(interactTx) < limitSwitch) {
                 vx += (0 - interactTx) * elasticCoef;
                 interactTx += Number(vx *= friction);
+                if(nextPrev) nextPrev.show();
+                
             } else if (Math.abs(interactTx) > limitSwitch) {
                 if(targetTransition < 0){
                     targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;

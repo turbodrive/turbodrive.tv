@@ -130,41 +130,33 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
         if(hidden) return
         
         rolloutButton(event.currentTarget, 0.2)
-        
-        /*var btn = event.currentTarget;
-        var bg = $(btn).children(".transverse-nav-bg")[0];
-        
-        var objBtn = {autoAlpha:0.2,ease:Power3.easeInOut};
-        var objBgPos = {ease:Power3.easeInOut, onUpdate:updateBtnBgPosition};
-        if(isLeftButton(btn)){
-            objBtn.left = -80;
-            objBgPos.bgLeftPrct = -250;
-        }else {
-            objBtn.right = -80;
-            objBgPos.bgRightPrct = -250;
-        }
-        
-        TweenMax.to(btn,0.3, objBtn);
-        TweenMax.to(bg,0.3, {autoAlpha:0,ease:Power3.easeInOut});
-        TweenMax.to(tweenObj,0.3,objBgPos);*/
     }
     
-    nextPrev.hide = function() {
+    nextPrev.hide = function(boost) {
         hidden = true;
         
         /*TweenMax.to(nextButton,0.3, {autoAlpha:0});
         TweenMax.to(prevButton,0.3, {autoAlpha:0});*/
-        TweenMax.to(backToTheReel,0.3, {autoAlpha:0});
-        rolloutButton(nextButton,0);
-        rolloutButton(prevButton,0);
-    }
-
-    nextPrev.updateState = function(newPageInfo) {
-        currentPageInfo = newPageInfo;
-        nextPageId = pageInfo.getNextPageId(currentPageInfo.id);
-        prevPageId = pageInfo.getPrevPageId(currentPageInfo.id);
+        if(boost === null) boost = false
         
-        if(newPageInfo.project){
+        if(boost){
+            TweenMax.to(backToTheReel,0.3, {autoAlpha:0});
+            TweenMax.to(nextButton,0.3, {autoAlpha:0});
+            TweenMax.to(prevButton,0.3, {autoAlpha:0});
+        }else {
+            TweenMax.to(backToTheReel,0.3, {autoAlpha:0});
+            rolloutButton(nextButton,0);
+            rolloutButton(prevButton,0);
+        }
+    }
+    
+    nextPrev.show = function() {
+        if(!hidden) return
+        showIfNeeded();
+    }
+    
+    var showIfNeeded = function() {
+         if(currentPageInfo.project){
             hidden = false;
             
             TweenMax.to(backToTheReel,1.5, {autoAlpha:1});
@@ -175,8 +167,14 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
                 TweenMax.to(prevButton,1.5, {autoAlpha:0.2});
             }
         }
-                
-        
+    }
+    
+
+    nextPrev.updateState = function(newPageInfo) {
+        currentPageInfo = newPageInfo;
+        nextPageId = pageInfo.getNextPageId(currentPageInfo.id);
+        prevPageId = pageInfo.getPrevPageId(currentPageInfo.id);
+        showIfNeeded();        
     }
     
     return nextPrev;
