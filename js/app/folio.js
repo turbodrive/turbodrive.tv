@@ -28,12 +28,27 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var pages3D = [];
     var transitionStarted = false;
     var nextPrev;
+    var elementsBuild = 0;
+    var maxElements = 0;
+    var pagesBuild = 0;
+    
+    var updateCreation = function(){
+        elementsBuild++
+        folio.on.creationProgress.dispatch(Number(elementsBuild/maxElements));
+        
+        if(elementsBuild >= maxElements){
+            console.log("creationComplete")
+            folio.on.creationComplete.dispatch();
+        }
+    }
 
     // Signal Events
     folio.on = {
         initialized: new signals.Signal(),
         pageLoaded: new signals.Signal(),
         readyForIntroTransition: new signals.Signal(),
+        creationProgress: new signals.Signal(),
+        creationComplete: new signals.Signal(),
         twPositionDefined: new signals.Signal()
     }
 
@@ -54,6 +69,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     folio.init = function (pageId, sectionId) {
+        maxElements = pageInfo.content.length + nbrBunchParticles;
+        
         collectContent();
         buildTimelines();
         buildScene();
@@ -320,10 +337,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactTx = -(parseInt(t.pageX) - startx)
         interactTy = (parseInt(t.pageY) - starty)
         touchEnd = false
-        //pXm = parseInt(t.pageX);
-        if(Math.abs(interactTx) > limitSwitchMini){
-            if(nextPrev) nextPrev.hide(true);
-        }
+        //pXm = parseInt(t.pageX);        
     }
     
     var hideExceptPage = function(pageId) {
@@ -358,6 +372,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //console.log("touchEnd >> " + touchEnd);
         if(interactTx > 0 && objTmx.twPos == pageInfo.content.length-1) return;
         if(interactTx < 0 && objTmx.twPos == 0) return;
+        if(Math.abs(interactTx) > limitSwitchMini){
+            if(nextPrev) nextPrev.hide(true);
+        }
         
         
         if(interruptWhenPlaying){
@@ -454,23 +471,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         updateContainerInteraction();
     }
 
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = (function () {
-
-            return window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame || // comment out if FF4 is slow (it caps framerate at ~30fps: https://bugzilla.mozilla.org/show_bug.cgi?id=630127)
-                window.oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-
-                    window.setTimeout(callback, 1000 / 30);
-                };
-
-        })();
-
-    }
-
-
     /*********************************/
     /********** VIEWPORT 3D **********/
     /*********************************/
@@ -543,6 +543,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var intervalParticlesCreation;
     var bunchQuantity = 20;
     
+    
     if(CONFIG.isMobile) {
         // mobile-tablets only
         initZ = -40000;
@@ -553,7 +554,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         timeParticleCreation = 1000;
         bunchQuantity = 5
     }
-
+    
+    var nbrBunchParticles = nbrParticles/bunchQuantity;
+    
     var enterFrameHyperDrive = function () {
         var interactZ = interactContainer.z
         var newZ = -interactZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
@@ -661,8 +664,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 //console.log(particle.x + " - " + particle.y + " - " + particle.z);
                 hyperdriveContainer.addChild(particle); 
             }
+            updateCreation();
         }
     }
+    
+    
     
     var startHyperdriveAnimation = function() {
         prepareHyperDriveScene();
@@ -729,7 +735,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         pages3D.push(page3D);
         page.built = true;
         console.log("Page [" + page.id + "] is created");
-
+        
+        pagesBuild++
+        updateCreation();
+        
+        if(pagesBuild >= pageInfo.content.length){
+            console.log('page creationComplete')   
+        }
+        
         if (page.id == "skillsfield" || page.id == "about") {
             initSkillsMenu(page.id);
         }       
@@ -763,7 +776,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     updatePage3D = function (page3D, currentPageInfo) {
         if (currentPageInfo == null) {
-            console.log("updatePage3D >> " + page3D + " ID = " + pageInfo);
+            //console.log("updatePage3D >> " + page3D + " ID = " + pageInfo.id);
             currentPageInfo = pageInfo.getPageInfo(page3D.getId());
         }
 
@@ -789,12 +802,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             _scaleVisuel: 0,
             _scaleAboutVisuel: 0
         };
-        scaleList._scaleVisuel = _rX > _rY ? _rX * 4 : _rY * 4;
+        scaleList._scaleVisuel = _rX > _rY ? _rX : _rY;
         scaleList._scaleVisuel = scaleList._scaleVisuel.toFixed(3);
 
         scaleList._scaleAboutVisuel = _rX > _rY ? _rX : _rY;
         scaleList._scaleAboutVisuel = scaleList._scaleAboutVisuel.toFixed(3);
-        scaleList._scaleAboutVisuel = Math.min(scaleList._scaleAboutVisuel, 1.2)
+        scaleList._scaleAboutVisuel = Math.min(scaleList._scaleAboutVisuel, 1.2);
         //console.log("scaleBg >> " + scaleBg);
 
         /*var dfX = ((LAYOUT.viewportW-1280)/2)*_scaleVisuel
@@ -815,9 +828,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 .setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)*/
 
             // BACKGROUND
+            var scaleVisuel = getRatioPxPerfect(zVisuel)*scaleList._scaleVisuel;
             page3D.bg.setPosition(0, 0, zVisuel)
             //.setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)
-            .setScale(scaleList._scaleVisuel, scaleList._scaleVisuel, 1)
+            .setScale(scaleVisuel, scaleVisuel, 1)
                 .update();
             
             // PROJECT-PLAYER
@@ -1027,6 +1041,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             } else {
                 freeTransition(page);
             }
+            updatePage3D(getPage3D(pageId)) // only for non-touchtransition 
             fadeInAndActivate(pageId, 1.1);
         }
     }

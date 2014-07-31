@@ -179,7 +179,6 @@ a:focus {
         cursor:default;
     }
 
-
     .loader-overlay {
         position: absolute;
         display: block;    
@@ -188,6 +187,44 @@ a:focus {
         z-index: 30;
         background-color: #000000;
     }
+    
+    .loader-overlay div.loader-text {
+        opacity: 0;
+        visibility: hidden;
+        margin-top: 60px;
+        width: 260px;
+        height: 120px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        top: 41%;
+    }
+
+    .loader-overlay h1 {
+        text-align: center;
+        letter-spacing: -2px;
+        width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 45px;
+        height: 50px;
+        line-height: 40px;
+        position: relative;
+    }
+
+    .loader-overlay div.progress-load {
+        position: relative;
+        top: 29px;
+        width: 1px;
+        left: 19px;
+        background-color: #EFECE1;
+        display: inline-block;
+        height: 5px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    
     
     .getmore-overlay {
         pointer-events:auto;
@@ -245,7 +282,6 @@ a:focus {
         outline: none;
         border: none;
     }
-    
 
         .transverse-nav .transverse-nav-bg {
             pointer-events: auto;

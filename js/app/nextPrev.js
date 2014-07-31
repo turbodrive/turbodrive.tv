@@ -135,8 +135,7 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
     nextPrev.hide = function(boost) {
         hidden = true;
         
-        /*TweenMax.to(nextButton,0.3, {autoAlpha:0});
-        TweenMax.to(prevButton,0.3, {autoAlpha:0});*/
+
         if(boost === null) boost = false
         
         if(boost){

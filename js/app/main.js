@@ -11,7 +11,7 @@
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:false, volumeReel:0};
+hyperDriveTransition:true, volumeReel:0};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
 
@@ -59,11 +59,26 @@ UTILS.shapeWrapper = function(lineHeight,Xs,container, nbrLines) {
 
 var GLOBAL_ACCESS = this;
 
+if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = (function () {
+
+            return window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame || // comment out if FF4 is slow (it caps framerate at ~30fps: https://bugzilla.mozilla.org/show_bug.cgi?id=630127)
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function (callback,  element) {
+
+                    window.setTimeout(callback, 1000 / 30);
+                };
+
+        })();
+    }
+
 require.config({
     baseUrl: 'js/',
     paths: {
         jquery: 'jquery.min',
-        jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',
+        /*jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',*/
         /*bootstrap: 'bootstrap.min',*/
         tooltips: 'tooltips.min',
         TweenMax:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenMax.min',

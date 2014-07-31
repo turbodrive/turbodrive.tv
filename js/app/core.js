@@ -46,11 +46,11 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         crossroads.addRoute('/{env}/{page}/{section}/', switchPageSection);
         
         //loadCss("http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css");
-        if(CONFIG.debug){
+        /*if(CONFIG.debug){
             //console.dir(CONFIG)
             loadCss("http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css");
             require(["jquery_ui"]);
-        }
+        }*/
         
         /*if(!hasher.getHash()){
             //hasher.setHash(DEFAULT_HASH);
@@ -226,6 +226,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                     MODULES.folio.on.readyForIntroTransition.add(initloadFunc2)
                 }
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
+                MODULES.folio.on.creationProgress.add(overlay.updateProgress);
+                MODULES.folio.on.creationComplete.add(overlay.hide);
                 MODULES.folio.init(pageId, sectionId);
 
             })
@@ -274,12 +276,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             MODULES.folio.on.readyForIntroTransition.add(readyForIntroTransitionToFolio);
             MODULES.folio.startIntroTransition(pageId, sectionId);
         }
-        
-        if(!CONFIG.hyperDriveTransition) overlay.hide();
     }
     
     var readyForIntroTransitionToFolio = function(pageId, sectionId) {
-        overlay.hide();
+        /*overlay.hide();*/
         console.log("readyForIntroTransitionToFolio - " + pageId + " - " + sectionId);
         MODULES.folio.wakeup(pageId);
         MODULES.folio.startTransition(pageId, sectionId);

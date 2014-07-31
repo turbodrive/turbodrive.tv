@@ -600,6 +600,7 @@ define([], function() {
      * @return {Sprite3D} The reference to this Sprite3D object
      */
     Sprite3D.prototype.update = function() {
+        
         this.p = "translate3d(" + (this.x - this.regX) + "px," + (this.y - this.regY) + "px," + (this.z - this.regZ) + "px) ";
         this.rx = "rotateX(" + this.rotationX + "deg) ";
         this.ry = "rotateY(" + this.rotationY + "deg) ";
