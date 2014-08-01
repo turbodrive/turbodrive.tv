@@ -19,7 +19,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timelineIsInitialized = false;
     var timelineIsCreated = false;
     var twTmlePanel, twTmleAngle, twAlphaTmleBg, twTmleMenu;
-    var timelineEl = $('<div class="timeline"><div id="timelineSvg"><svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><g><clipPath id="timelineMask"><rect id="timelineP1" rect x="0" y="60" width="'+twObjects.p1Width+'" height="'+twObjects.pHeight+'"/><rect id="timelineP2" x="88" y="60" width="40" height="'+twObjects.pHeight+'" transform="rotate(-30,235,52)"/><rect id="timelineP3" x="271" y="60" width="500" height="'+twObjects.pHeight+'"/></clipPath></g><g><rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64" style="fill-opacity:1"/><rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/></g></svg></div><div id="timelineBg"><img id="footerGradient" src="images/gradient_timelineFooter.png"><img id="hexagrid" src="images/hexagrid_lcd.png"></div></div>');
+    var timelineEl = $('<div class="timeline"><div id="timelineSvg"><svg xmlns="http://www.w3.org/2000/svg" width="2000" height="100"><g><clipPath id="timelineMask"><rect id="timelineP1" rect x="0" y="60" width="'+twObjects.p1Width+'" height="'+twObjects.pHeight+'"/><rect id="timelineP2" x="88" y="60" width="40" height="'+twObjects.pHeight+'" transform="rotate(-30,235,52)"/><rect id="timelineP3" x="271" y="60" width="500" height="'+twObjects.pHeight+'"/></clipPath></g><g><rect x="0" y="20" id="bgTimeline" clip-path="url(#timelineMask)" fill="#D44848" width="0" height="64" style="fill-opacity:1"/><rect x="0" y="20" id="bgProgress" clip-path="url(#timelineMask)" fill="#DE4B4B" width="0" height="64"/></g></svg></div></div>');
+    
+    /*<div id="timelineBg"><img id="footerGradient" src="images/gradient_timelineFooter.png"><img id="hexagrid" src="images/hexagrid_lcd.png"></div>*/
     
     var timelineMenu;
     var reelContainer;
@@ -238,7 +240,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         reelContainer = $("#reel");
         video = $("#video")[0];
-        video.muted = CONFIG.debug;
+        //video.muted = CONFIG.debug;
         
         playButton = $("#play-pause");
         
@@ -256,21 +258,98 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         video.addEventListener("playing", onPlayingVideo);
         
         if(CONFIG.isMobile){
-            video.addEventListener("progress", mobileReady);
-            video.addEventListener("canplaythrough", mobileReady);
+            console.log(">> IS MOBILE - " + video)
+            video.addEventListener("progress", onProgress);
+            video.addEventListener("canplaythrough", onCanplaythrough);
+            video.addEventListener("loadstart", onLoadStart);
+            
+            video.addEventListener("canplay", onEvent1);
+            video.addEventListener("loadedmetadata", onEvent3);
+            video.addEventListener("waiting", onEvent4);
+            video.addEventListener("suspend", onEvent5);
+            
+            timeoutReInit = setTimeout(reInitVideoLoop, 1000)
         }else{
             video.addEventListener("canplaythrough", dektopReady);
         }
 
         video.addEventListener("timeupdate", onTimeUpdate);
+        video.addEventListener("wait", onWaitBuffering);
         video.addEventListener("ended", function() {
             reelPlayer.on.videoComplete.dispatch();
         });
         
-        videoInitialized = true;
         video.play();
-        
+        videoInitialized = true;
         globalVideoOverlay = $(".video-overlay");
+    }
+    
+    var timeoutReInit = 0;
+    var tries = 0;
+    var reInitVideoLoop = function() {
+        console.log("tryReinit")
+        tries++
+        
+        video.src = "https://vod.infomaniak.com/redirect/silvremarchal_1_vod/infomaniak_encoding-12980/mp4-226/mainediting_008_vhsscratch_prepinfomaniak.mp4?idTry="+tries;
+        
+        video.load();
+        timeoutReInit = setTimeout(reInitVideoLoop, 2500)
+    }
+    
+    var onProgress = function(event) {
+        console.log("mobile onProgress")
+        
+        mobileReady(event)
+    }
+    
+    var onCanplaythrough = function(event) {
+        console.log("mobile onCanplaythrough")
+        
+        mobileReady(event)
+    }
+    
+    var onLoadStart = function(event) {
+        console.log("mobile onLoadStart")
+        
+        mobileReady(event)
+    }
+    
+    var mobileReady = function(event) {
+        clearTimeout(timeoutReInit)
+        
+        console.log("mobileReady !")
+        video.removeEventListener("loadstart", onLoadStart);
+        video.removeEventListener("canplaythrough", onCanplaythrough);
+        video.removeEventListener("progress", onProgress);
+        
+        playButton.css("visibility", "visible");
+        reelPlayer.on.mobileCTAReady.dispatch();
+    }
+    
+    var onWaitBuffering = function(event) {
+        console.log("VIDEO - onWaitBuffering")
+        video.addEventListener("playing", onBufferFull);
+    }
+    
+    var onBufferFull = function(event) {
+        console.log("VIDEO - onBufferFull");
+        video.removeEventListener("playing", onBufferFull);
+    }
+    
+    var onEvent1 = function(event) {
+        console.log("mobile canplay");
+    }
+
+    var onEvent3 = function(event) {
+        console.log("mobile loadedmetadata");
+    }
+    
+    var onEvent4 = function(event) {
+        console.log("mobile waiting");
+    }
+    
+    var onEvent5 = function(event) {
+        console.log("mobile suspend");
     }
     
     var onPlayingVideo = function(event) {
@@ -292,12 +371,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         reelPlayer.on.readyToPlayAfterSeek.dispatch();
     }
     
-    var mobileReady = function(event) {
-        video.removeEventListener("progress", mobileReady);
-        video.removeEventListener("canplaythrough", mobileReady);
-        playButton.css("visibility", "visible");
-        reelPlayer.on.mobileCTAReady.dispatch();
-    }
+    
     
     var dektopReady = function(event) {
         video.removeEventListener("canplaythrough", dektopReady);
@@ -429,7 +503,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var seekTo = function(time){
         var isSeekable = seekable(time);
-        console.trace("isSeekable ?"+isSeekable);
         if(isSeekable){
             video.currentTime = time;
         }

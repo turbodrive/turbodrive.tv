@@ -397,7 +397,7 @@ button.videoNoise {
     position: absolute;
     top: 0px;
     background-color: #000000;
-    background-image: url(../images/videoNoise.gif);
+    /*background-image: url(../images/videoNoise.gif);*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -415,6 +415,10 @@ button#play-pause {
     line-height: 53px;
     text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
     visibility:hidden;
+}
+
+#folioContent {
+    overflow: hidden;
 }
 
 /*a.contact-img { background: url('../images/menu_contact.svg');}
@@ -1173,7 +1177,9 @@ button.icon-play:focus {
     color: #8F7E7F;   
     -webkit-box-shadow: 0px 0px 25px rgba(33, 14, 36, 1);
     -moz-box-shadow:    0px 0px 25px rgba(33, 14, 36, 1);
-    box-shadow:      
+    box-shadow:   0px 0px 25px rgba(33, 14, 36, 1);
+     border: none;
+    outline: none;
 }
 
 button.icon-play:hover

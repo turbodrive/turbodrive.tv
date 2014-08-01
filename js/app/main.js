@@ -67,8 +67,8 @@ if (!window.requestAnimationFrame) {
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
                 function (callback,  element) {
-
-                    window.setTimeout(callback, 1000 / 30);
+                    console.log("use Timeout as requestAnimationFrame");
+                    window.setTimeout(callback, 1000 / 20);
                 };
 
         })();

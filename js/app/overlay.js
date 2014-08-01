@@ -51,6 +51,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }
     
     overlay.loadGmd = function(){
+        
         if(startLoadGmd) return;
         startLoadGmd = true;
         if(gmdAnimation !== undefined) return;
@@ -98,7 +99,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     overlay.hide = function(element, force){
         //return;
         
-        console.trace("HIDE")
+        //console.trace("HIDE")
         
         var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;       
         if(element == null) {
