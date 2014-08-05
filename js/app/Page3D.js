@@ -118,7 +118,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     }
     
     Page3D.prototype.removeVideo = function() {
-        if(this.videoContainer){
+        if(this.videoContainer && this.video){
             this.video.pause();
             this.video.removeEventListener("click", this.onClickVideo);
             this.video.removeEventListener("touchstart", this.onTouchStartVideo);
@@ -134,7 +134,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     }
     
     var addClassName = function(element, className){
-        element.className += " " +className + " ";
+        element.className += " " +className+ " ";
         return element
     }
     
@@ -151,7 +151,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                 .addDomElement(addAndroidFix(this.divElement.children("h1")[0]))
                 .setRotationZ(-3)
                 .update();        
-            this.addChild(title);
+            //this.addChild(title);
             this.title = title;
 
             // 2. client
@@ -160,7 +160,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                 .addDomElement(addAndroidFix(this.divElement.children("h2")[0]))
                 .setRotationZ(-3)
                 .update();
-            this.addChild(client);
+            //this.addChild(client);
             this.client = client;
 
             // 3. redLine
@@ -211,7 +211,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .addDomElement(divText) // Text
                 .setRotationZ(-3)
                 .update();
-            this.addChild(projectContent);
+            //this.addChild(projectContent);
             this.content = projectContent;
             
              // 7. projectPlayer
@@ -222,7 +222,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .setRegistrationPoint(50, 50, 0)
                 .setRotationZ(-3)
                 .update();
-            this.addChild(projectPlayer);
+            //this.addChild(projectPlayer);
             this.projectPlayer = projectPlayer;
             this.projectPlayer.setCSS("visibility", "hidden");
             
@@ -233,7 +233,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .setRotationZ(-3)
                 /*.setScale(0.85,0.85,0)*/
                 .update();
-            this.addChild(pictoPlay);
+            //this.addChild(pictoPlay);
             this.pictoPlay = pictoPlay;
             
             
@@ -308,6 +308,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         
         if(!this.twFadeIn || !this.twFadeIn.isActive()){
             if(this.twFadeOut) this.twFadeOut.pause();
+            console.log("fadein >> " + this.getId());
             this.twFadeIn = TweenMax.to(this.domElement, 0.5, {
                 delay: delay,
                 autoAlpha:1
@@ -331,12 +332,15 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();
-            this.twFadeOut = TweenMax.to(this.domElement, 0.5, {delay:delay, autoAlpha:0});
+            console.log("fadeout >> " + this.getId())
+            this.twFadeOut = TweenMax.to(this.domElement, 0.3, {delay:delay,
+                autoAlpha:0, ease:Linear.easeNone
+            });
         }
         
         if(this.free3DContainer){
-             TweenMax.to(this.free3DContainer.domElement, 0.5, {delay:delay,
-                autoAlpha: 0
+             TweenMax.to(this.free3DContainer.domElement, 0.3, {delay:delay,
+                autoAlpha: 0, ease:Linear.easeNone
             });   
         }
     }

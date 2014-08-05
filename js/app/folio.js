@@ -38,7 +38,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         if(elementsBuild >= maxElements){
             console.log("creationComplete")
-            folio.on.creationComplete.dispatch();
+            //if(CONFIG)
+            //folio.on.creationComplete.dispatch();
         }
     }
 
@@ -69,7 +70,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     folio.init = function (pageId, sectionId) {
-        maxElements = pageInfo.content.length + nbrBunchParticles;
+        maxElements = nbrBunchParticles+1;
         
         collectContent();
         buildTimelines();
@@ -99,9 +100,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //pageInfo.on.imagesLoaded.remove(onImageLoaded);
         //console.log("FOLIO >> " + pageId + " loaded !");
         folio.on.pageLoaded.dispatch(pageId, sectionId);
-        folio.on.creationComplete.dispatch();
         
-        if(autoLoadSiblings) loadSiblings(pageId);;
+        if(autoLoadSiblings){
+            loadSiblings(pageId);
+        }else {
+            updateCreation();
+        }
     }
 
     var loadSiblings = function(pageId) {
@@ -357,10 +361,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         //pXm = parseInt(t.pageX);        
     }
     
-    var hideExceptPage = function(pageId) {
+    var hideExceptPage = function(pageId, delay) {
         for(var i = 0; i<pages3D.length ; i++){
             if(pageId != pages3D[i].getId()){
-                pages3D[i].hide();
+                pages3D[i].hide(delay);
             }
         }
     }
@@ -373,11 +377,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if(touchTransitionPlaying){
             touchEnd2 = true;
             if(interruptWhenPlaying){
+                console.log("!!! INTERRUPT !!!!! switch")
                 interruptWhenPlaying = false;
-                //var memId = memLastPage3D.getId();
-                hideExceptPage(targetPage);
-                fadeInAndActivate(targetPage, 0);
-                updateWindowStatus(targetPage);
+                hideExceptPage(targetPage,0);
+                fadeInAndActivate(targetPage, 0.3);
+                //updateWindowStatus(targetPage);
+                currentPageId = targetPage;
             }  
         }else {
             touchEnd = true;
@@ -419,16 +424,18 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 //if(nextPrev) nextPrev.show();
                 
             } else if (Math.abs(interactTx) > limitSwitch) {
+                
                 if(targetTransition < 0){
                     targetTransition = interactTx > 0 ? objTmx.twMem + 1 : objTmx.twMem - 1;
                     if(targetTransition < 0 || targetTransition > pageInfo.content.length-1) return
                     targetPage = pageInfo.content[targetTransition].id
-                }                
-                touchEnd2 = true;
-                if(!touchTransitionPlaying){
+                }
+                
+                if(!touchTransitionPlaying && !touchEnd2){
                     memLastPage3D = currentPage3D;
                     touchTransitionPlaying = true;
                 }
+                touchEnd2 = true;
             } else {
                 touchEnd = false
             }
@@ -442,12 +449,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             //fadeOut(previousPage3D.getId())
 
             if (Math.abs(dfX) < 0.1) {    
-                if (currentPage3D.getId() != targetPage) {
-                    //fadeOut(currentPage3D.getId());
-                    hideExceptPage(targetPage);
-                    fadeInAndActivate(targetPage, 0.2);
-                    prepPgeForTransition(targetPage,null, false);
-                    updateWindowStatus(targetPage);
+                if (currentPageId != targetPage) {
+                    console.log("!!!! NORMAL !!!! switch")
+                    //updateWindowStatus(targetPage);
+                    currentPageId = targetPage;
+                    hideExceptPage(targetPage,0);
+                    //prepPgeForTransition(targetPage,null, false);  
+                    fadeInAndActivate(targetPage, 0.3);
+                                      
                 }
             }
             if (Math.abs(dfX) < 0.0001) { //0.0001
@@ -455,6 +464,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 interruptWhenPlaying = touchTransitionPlaying = false;
                 targetTransition = -1;
                 transitionComplete(targetPage)
+                console.log("touchTransitionPlaying <> " + touchTransitionPlaying)
             }
         } else {
             //if(Math.abs(interactTx) > 0.01) console.log("interactTx > " + interactTx)
@@ -483,6 +493,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if (isRendering) {
             requestAnimationFrame(enterFrame);
         }
+        if(GLOBAL_ACCESS.stats) GLOBAL_ACCESS.stats.update();
         renderContainer();
         updateContainerInteraction();
     }
@@ -727,8 +738,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             onComplete: hyperDriveTransitionComplete            
         })
         
-        TweenMax.to(interactContainer, 2, {delay: delay+0.2,rotationY: 0,ease:Power1.easeInOut});
-        TweenMax.to(interactContainer, 3.6, {delay: delay+1.3,rotationZ: 0,ease:Power1.easeInOut});
+        TweenMax.to(interactContainer, 2, {delay: delay+1,rotationY: 0,ease:Power1.easeInOut});
+        TweenMax.to(interactContainer, 3.6, {delay: delay+1.8,rotationZ: 0,ease:Power1.easeInOut});
                 
         TweenMax.fromTo($("#contentContainer"), endDuration*2,
                         {opacity:0},{delay:endDelay-endDuration,opacity:1});
@@ -745,6 +756,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     var fireReadyForIntroTransition = function(){
         folio.on.readyForIntroTransition.dispatch(tmpPageIdHd, tmpSectionIdHd);
+        folio.on.creationComplete.dispatch();
     }
     
     buildGridTile = function (indexX, indexY) {
@@ -775,7 +787,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("--------- Page [" + page.id + "] is created");
         
         pagesBuild++
-        updateCreation();
+        
         
         if(pagesBuild >= pageInfo.content.length){
             console.log('page creationComplete')   

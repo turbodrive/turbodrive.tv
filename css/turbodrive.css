@@ -2046,7 +2046,9 @@ div.skill-section {
     line-height: 10px;
     font-size: 11px;
     z-index: 30000000;
-    background-color: rgba(0, 0, 0, 0.6);
+    /*background-color: rgba(0, 0, 0, 0.6);*/
+    background-color: transparent;
+    height: 100px;
 }
 
 .barInfo {

@@ -175,6 +175,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onReadyForTransitionToFolio = function() {
+        
         MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
         if(MODULES.reel){
             MODULES.reel.pause();
@@ -228,7 +229,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 }
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.on.creationProgress.add(overlay.updateProgress);
-                MODULES.folio.on.creationComplete.add(overlay.hide);
+                MODULES.folio.on.creationComplete.add(onCreationComplete);
                 MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
                 MODULES.folio.init(pageId, sectionId);
 
@@ -240,6 +241,13 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
             MODULES.folio.load(pageId, sectionId);
         }
+    }
+    
+    var onCreationComplete = function() {
+        MODULES.folio.on.creationComplete.remove(onCreationComplete);
+        MODULES.folio.on.creationProgress.remove(overlay.updateProgress);
+        console.log("ACCCCh")
+        overlay.hide();
     }
     
     var onFolioInitialized = function(pageId, sectionId){
