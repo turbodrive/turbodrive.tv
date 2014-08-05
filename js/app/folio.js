@@ -380,7 +380,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 console.log("!!! INTERRUPT !!!!! switch")
                 interruptWhenPlaying = false;
                 hideExceptPage(targetPage,0);
-                fadeInAndActivate(targetPage, 0.3);
+                fadeInAndActivate(targetPage, 0.2);
                 //updateWindowStatus(targetPage);
                 currentPageId = targetPage;
             }  
@@ -431,7 +431,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     targetPage = pageInfo.content[targetTransition].id
                 }
                 
-                if(!touchTransitionPlaying && !touchEnd2){
+                if(!touchTransitionPlaying){
                     memLastPage3D = currentPage3D;
                     touchTransitionPlaying = true;
                 }
@@ -455,10 +455,18 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     currentPageId = targetPage;
                     hideExceptPage(targetPage,0);
                     //prepPgeForTransition(targetPage,null, false);  
-                    fadeInAndActivate(targetPage, 0.3);
+                    fadeInAndActivate(targetPage, 0.2);
                                       
                 }
             }
+            
+            if(Math.abs(dfX) < 0.0010) {
+                if(currentPage3D.getId() != currentPageId){
+                    currentPage3D = getPage3D(currentPageId);
+                    currentPage3D.addSecondaryElements();
+                }
+            }
+            
             if (Math.abs(dfX) < 0.0001) { //0.0001
                 
                 interruptWhenPlaying = touchTransitionPlaying = false;
@@ -630,17 +638,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
         interactContainer.setRotation(0,-90,-70).update();
-        /*var baseZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
-        var multZ = rangeDepth/nbrParticles;
-            
-        // particles Z
-        for(var i = 0 ; i< nbrParticles ;i++) {
-            var prtcle = particles[i]
-            var randZ =  parseInt(baseZ + (multZ*i))
-            console.log("randZ >> " + randZ);
-            prtcle.setZ(randZ).update();
-            console.log("prtcleZ = " + prtcle.z);
-        }*/
     }
     
     var baseZ;
@@ -1102,8 +1099,17 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     transitionComplete = function (pageId) {
         transitionStarted = false;
         console.log("transitionComplete >> " + pageId);
-        loadSiblings(pageId);
+        
+        //if(!currentPage3D || currentPage3D.getId() != currentPageId){
+            currentPage3D = getPage3D(pageId);
+            currentPage3D.addSecondaryElements();
+        //}
+        
+        console.log("transitionComplete2 >> " + currentPage3D.getId());        
+            
         setTweenPosition(pageId, tmpSectionId);
+        
+        loadSiblings(pageId);
         tmpSectionId = null;
         previousPage3D = null;
     }

@@ -35,8 +35,9 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.isBuilt = false;
     Page3D.prototype.video = null;
     Page3D.prototype.pictoPlay = null;
-    Page3D.prototype.pictosInitialized = false;
+    //Page3D.prototype.pictosInitialized = false;
     Page3D.prototype.projectPlayer = null;
+    Page3D.prototype.secondaryElements = [];
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -87,7 +88,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     }
     
     Page3D.prototype.preloadVideo = function() {
-        TweenMax.to(this.pictoPlay.domElement, 0.25, {delay: 0.5, autoAlpha:1});
+        //TweenMax.to(this.pictoPlay.domElement, 1.25, {delay: 0.5, autoAlpha:1});
         
         if(this.videoContainer){
             this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"></video>';
@@ -145,13 +146,15 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.build = function()
     {   
         if(this.pageInfo.project){
+            this.secondaryElements = [];
+            
             // 1. title
             var title = new Sprite3D()
                 //.addClassName("title")
                 .addDomElement(addAndroidFix(this.divElement.children("h1")[0]))
                 .setRotationZ(-3)
                 .update();        
-            //this.addChild(title);
+            this.addChild(title);
             this.title = title;
 
             // 2. client
@@ -162,6 +165,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                 .update();
             //this.addChild(client);
             this.client = client;
+            this.secondaryElements.push(this.client);
 
             // 3. redLine
             var redLine = new Sprite3D()
@@ -213,6 +217,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .update();
             //this.addChild(projectContent);
             this.content = projectContent;
+            this.secondaryElements.push(this.content);
             
              // 7. projectPlayer
             this.videoContainer = this.divElement.children(".project-player")[0];
@@ -225,6 +230,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
             //this.addChild(projectPlayer);
             this.projectPlayer = projectPlayer;
             this.projectPlayer.setCSS("visibility", "hidden");
+            this.secondaryElements.push(this.projectPlayer);
             
             // 7. pictoPlay
             var pictoPlay = new Sprite3D()
@@ -235,12 +241,13 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                 .update();
             //this.addChild(pictoPlay);
             this.pictoPlay = pictoPlay;
+            this.secondaryElements.push(this.pictoPlay);
             
             
             pictoPlay.domElement.addEventListener("click", this.playVideo)
             pictoPlay.domElement.addEventListener("touchstart", this.playVideo)
             pictoPlay.domElement.self = this;
-            TweenMax.set(pictoPlay.domElement, {autoAlpha:0});
+            //TweenMax.set(pictoPlay.domElement, {autoAlpha:0});
             
             
         }else {
@@ -302,6 +309,33 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         return hidden
     }
     
+    Page3D.prototype.secElementsAdded = false;
+    
+    Page3D.prototype.addSecondaryElements = function()
+    {
+        if(this.secElementsAdded) return
+        
+        console.log("addSecondaryElements >> " + this.getId() + " - nbrElements = " + this.secondaryElements.length)
+       for(var i = 0; i< this.secondaryElements.length; i++ ){
+           var el = this.secondaryElements[i];
+           el.setCSS("opacity", "0");
+           TweenMax.to(el.domElement, 0.3, {alpha:1, delay:0.2*i})
+           this.addChild(el);
+       }
+        this.secElementsAdded = true;
+    }
+           
+    Page3D.prototype.removeSecondaryElements = function()
+    {
+        if(!this.secElementsAdded) return
+       for(var i = 0; i< this.secondaryElements.length; i++ ){
+           var el = this.secondaryElements[i];
+           this.removeChild(el);
+       }
+        
+        this.secElementsAdded = false;
+    }
+    
     Page3D.prototype.show = function(delay)
     {   
         if(!this.isBuilt || !this.isHidden()) return;
@@ -329,6 +363,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         if(!this.isBuilt || this.isHidden()) return;
         this.pauseVideo();
         this.removeVideo();
+        this.removeSecondaryElements();
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
             if(this.twFadeIn) this.twFadeIn.pause();
