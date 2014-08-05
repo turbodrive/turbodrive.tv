@@ -11,7 +11,7 @@
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:false, volumeReel:0};
+hyperDriveTransition:true, volumeReel:0};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
 
@@ -73,8 +73,9 @@ if (!window.requestAnimationFrame) {
     }
 
 require.config({
+    waitSeconds: 30,
     baseUrl: 'js/',
-    paths: {
+    paths: {        
         jquery: 'jquery.min',
         /*jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',*/
         /*bootstrap: 'bootstrap.min',*/

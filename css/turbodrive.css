@@ -255,6 +255,7 @@ button {
         -webkit-transform:rotate(-3deg);
         -ms-transform:rotate(-3deg);
         -moz-transform:rotate(-3deg);
+        transform:rotate(-3deg);
     }
         .edgeLoad-gmd-edge { visibility:hidden; }
 
@@ -306,6 +307,9 @@ button {
             pointer-events: auto;
             background-color: rgba(209, 95, 95,0.9);
             transform: rotate(34.5deg);
+            -webkit-transform:rotate(34.5deg);
+            -ms-transform:rotate(34.5deg);
+            -moz-transform:rotate(34.5deg);
             width: 500px;
             height: 200%;
             display: block;
@@ -334,6 +338,9 @@ button {
     .transverse-nav .menu-icon:before {
         font-size: 90px;
         transform: rotate(-3deg);
+        -webkit-transform:rotate(-3deg);
+        -ms-transform:rotate(-3deg);
+        -moz-transform:rotate(-3deg);
         display: block;
         position: absolute;
         z-index: 10;
@@ -1038,7 +1045,7 @@ a.github:active {
 .hd-prtcle {
     display: block;
     width: 130px;
-    height: 20px;
+    height: 10px;
 }
 
 .hd-prtcle-tex {
@@ -1046,7 +1053,7 @@ a.github:active {
     background-image: url(../images/hyperdrive_beam.png);
     background-size: 100% 100%;
     width: 130px;
-    height: 20px;    
+    height: 10px;    
 }
 /***** SPRITE 3D ****/
 

@@ -460,10 +460,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 }
             }
             
-            if(Math.abs(dfX) < 0.0010) {
+            if(Math.abs(dfX) < 0.0015) {
                 if(currentPage3D.getId() != currentPageId){
-                    currentPage3D = getPage3D(currentPageId);
-                    currentPage3D.addSecondaryElements();
+                    addSecondaryElementAndUpdatePage3DStatus(currentPageId)
                 }
             }
             
@@ -576,8 +575,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var particles = []
     var nbrParticles = 400; // 400 desktop, même si range Depth est faible /80 tablettes
     var rangeDepth = 8000;
-    var widthPrtcle = 130;
-    var heightPrtcle = 20;
+    var widthPrtcle = 130; // 130
+    var heightPrtcle = 10; //20
     var alphaPrtcle = 1;
     var prevIntZ = 0;
 
@@ -595,6 +594,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     if(CONFIG.isMobile) {
         // mobile-tablets only
+        widthPrtcle = 130;
+        heightPrtcle = 10;
         rangeDepth = 6000;
         nbrParticles = 200;
         rangeWidth = 1500;
@@ -739,9 +740,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         TweenMax.to(interactContainer, 3.6, {delay: delay+1.8,rotationZ: 0,ease:Power1.easeInOut});
                 
         TweenMax.fromTo($("#contentContainer"), endDuration*2,
-                        {opacity:0},{delay:endDelay-endDuration,opacity:1});
-        TweenMax.fromTo($("#hyperdriveContainer"), endDuration/2,
-                        {opacity:1},{delay:endDelay-(endDuration/2),opacity:0});
+                        {opacity:0},{delay:endDelay-endDuration-0.5,opacity:1, onComplete: function(){
+                            addSecondaryElementAndUpdatePage3DStatus(tmpPageIdHd);                  
+                        }});
+        TweenMax.fromTo($("#hyperdriveContainer"), endDuration/3,
+                        {opacity:1},{delay:endDelay-(endDuration/2)-0.8,opacity:0});
     }
     
     var hyperDriveTransitionComplete = function() {
@@ -1095,15 +1098,17 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("@@@@@@@@ SHOW " + pageId);
         getPage3D(pageId).show(delay);
     }
-
+    
+    var addSecondaryElementAndUpdatePage3DStatus = function(pageId){
+        currentPage3D = getPage3D(pageId);
+        currentPage3D.addSecondaryElements();
+    }
+    
     transitionComplete = function (pageId) {
         transitionStarted = false;
         console.log("transitionComplete >> " + pageId);
         
-        //if(!currentPage3D || currentPage3D.getId() != currentPageId){
-            currentPage3D = getPage3D(pageId);
-            currentPage3D.addSecondaryElements();
-        //}
+        addSecondaryElementAndUpdatePage3DStatus(pageId);
         
         console.log("transitionComplete2 >> " + currentPage3D.getId());        
             
