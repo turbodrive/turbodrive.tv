@@ -133,13 +133,22 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         }
     }
     
+    var addClassName = function(element, className){
+        element.className += " " +className + " ";
+        return element
+    }
+    
+    var addAndroidFix = function(element){
+        return addClassName(element, "android-fix")
+    }
+    
     Page3D.prototype.build = function()
     {   
         if(this.pageInfo.project){
             // 1. title
             var title = new Sprite3D()
                 //.addClassName("title")
-                .addDomElement(this.divElement.children("h1")[0])
+                .addDomElement(addAndroidFix(this.divElement.children("h1")[0]))
                 .setRotationZ(-3)
                 .update();        
             this.addChild(title);
@@ -148,7 +157,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             // 2. client
             var client = new Sprite3D()
                 //.addClassName("client")
-                .addDomElement(this.divElement.children("h2")[0])
+                .addDomElement(addAndroidFix(this.divElement.children("h2")[0]))
                 .setRotationZ(-3)
                 .update();
             this.addChild(client);
@@ -196,6 +205,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
 if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
             }
             
+            addAndroidFix(divText)
             var projectContent = new Sprite3D()
                 .addDomElement(this.pictoSkills) // Picto Skills
                 .addDomElement(divText) // Text
@@ -218,7 +228,7 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
             
             // 7. pictoPlay
             var pictoPlay = new Sprite3D()
-                .addDomElement(this.divElement.children("button")[0])
+                .addDomElement(addAndroidFix(this.divElement.children("button")[0]))
                 .setRegistrationPoint(50, 50, 0)
                 .setRotationZ(-3)
                 /*.setScale(0.85,0.85,0)*/

@@ -27,7 +27,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var reelContainer;
     var video;
     var videoInitialized = false;
-    var playButton;
+    var playButton, playButtonContent;
     var pausedVideo = false;
     var active = false;
     var p3XConstant;
@@ -44,6 +44,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         highlightButtonsHeader : new signals.Signal(),
         changeChapter : new signals.Signal(),
         videoComplete : new signals.Signal(),
+        bufferEmpty : new signals.Signal(),
+        bufferFull : new signals.Signal(),
         transitionComplete : new signals.Signal()
     }        
 
@@ -240,9 +242,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         reelContainer = $("#reel");
         video = $("#video")[0];
-        //video.muted = CONFIG.debug;
+        video.muted = CONFIG.debug;
         
         playButton = $("#play-pause");
+        playButtonContent = $(".cta-start-text");
         
         playButton.on("click", function() {
           if (video.paused) {
@@ -262,11 +265,10 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             video.addEventListener("progress", onProgress);
             video.addEventListener("canplaythrough", onCanplaythrough);
             video.addEventListener("loadstart", onLoadStart);
-            
-            video.addEventListener("canplay", onEvent1);
+            /*video.addEventListener("canplay", onEvent1);
             video.addEventListener("loadedmetadata", onEvent3);
             video.addEventListener("waiting", onEvent4);
-            video.addEventListener("suspend", onEvent5);
+            video.addEventListener("suspend", onEvent5);*/
             
             timeoutReInit = setTimeout(reInitVideoLoop, 1000)
         }else{
@@ -274,7 +276,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         }
 
         video.addEventListener("timeupdate", onTimeUpdate);
-        video.addEventListener("wait", onWaitBuffering);
+        /*video.addEventListener("seeking", onSeeking);*/
+        //video.addEventListener("seeked", onSeeked);
+        video.addEventListener("waiting", onWaitBuffering);
         video.addEventListener("ended", function() {
             reelPlayer.on.videoComplete.dispatch();
         });
@@ -298,19 +302,16 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var onProgress = function(event) {
         console.log("mobile onProgress")
-        
         mobileReady(event)
     }
     
     var onCanplaythrough = function(event) {
         console.log("mobile onCanplaythrough")
-        
         mobileReady(event)
     }
     
     var onLoadStart = function(event) {
         console.log("mobile onLoadStart")
-        
         mobileReady(event)
     }
     
@@ -318,6 +319,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         clearTimeout(timeoutReInit)
         
         console.log("mobileReady !")
+        video.pause();
         video.removeEventListener("loadstart", onLoadStart);
         video.removeEventListener("canplaythrough", onCanplaythrough);
         video.removeEventListener("progress", onProgress);
@@ -327,13 +329,40 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var onWaitBuffering = function(event) {
-        console.log("VIDEO - onWaitBuffering")
-        video.addEventListener("playing", onBufferFull);
+        console.log("VIDEO - onWaitBuffering");
+        /*video.addEventListener("playing", onBufferFull);
+        reelPlayer.on.bufferEmpty.dispatch();*/
     }
     
     var onBufferFull = function(event) {
         console.log("VIDEO - onBufferFull");
-        video.removeEventListener("playing", onBufferFull);
+        /*video.removeEventListener("playing", onBufferFull);
+        reelPlayer.on.bufferFull.dispatch();*/
+    }
+    
+    var timeMem = 0;
+    var onSeeking = function(event) {
+        timeMem = video.currentTime
+        console.log("VIDEO onSeeking - " + timeMem + " video.currentTime => " + video.currentTime)
+        
+        //video.addEventListener("playing", onSeeked);
+        video.addEventListener("timeupdate", onSeeked);
+        reelPlayer.on.bufferEmpty.dispatch();
+        
+    }
+    var onSeeked = function(event) {
+        var testSeeked = Math.abs(timeMem - video.currentTime);
+        
+        console.log("VIDEO onSeeked" + testSeeked + " video.currentTime => " + video.currentTime)
+        
+        if(testSeeked > 0.01){
+            timeMem = 0;
+            //video.removeEventListener("playing", onSeeked);
+            video.removeEventListener("timeupdate", onSeeked);
+            reelPlayer.on.bufferFull.dispatch();
+            video.play();
+            console.log("forcePlay")
+        }
     }
     
     var onEvent1 = function(event) {
@@ -370,9 +399,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         video.removeEventListener("seeked", onSeekedChapter)
         reelPlayer.on.readyToPlayAfterSeek.dispatch();
     }
-    
-    
-    
+
     var dektopReady = function(event) {
         video.removeEventListener("canplaythrough", dektopReady);
         console.log("canplaythrough Desktop");        
@@ -384,16 +411,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var fadeButtonText = function() {
-        TweenMax.to(playButton, 0.3, {
-            textShadow:"1px 1px 1px rgba(255, 255, 255, 0)",
-            color:"rgba(255,255,255,0)"});
+        TweenMax.to(playButtonContent, 0.3, {
+            delay:0.2,
+            autoAlpha:0
+        });
     }
     
     var fadeButton = function() {
         if(!playButton) return;
         TweenMax.to(playButton,0.2, {
             delay:1.3,
-            opacity:0,
+            autoAlpha:0,
             onComplete:function(){
                 if(!playButton) return;
                 playButton.remove();
@@ -504,7 +532,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var seekTo = function(time){
         var isSeekable = seekable(time);
         if(isSeekable){
+            timeMem = video.currentTime;
             video.currentTime = time;
+            onSeeking(null)
         }
     }
     

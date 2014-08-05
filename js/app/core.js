@@ -35,6 +35,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if(navigator.userAgent.toLowerCase().indexOf('chrome') == -1) return false;            
             return (parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10) > 35);
         });
+        Modernizr.addTest('ios7', function () {return !!navigator.userAgent.match(/OS 7_\d/i);});
         
         CONFIG.isRetina = Modernizr.highresdisplay;
         CONFIG.isiOs = Modernizr.appleios;
@@ -228,6 +229,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.on.creationProgress.add(overlay.updateProgress);
                 MODULES.folio.on.creationComplete.add(overlay.hide);
+                MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
                 MODULES.folio.init(pageId, sectionId);
 
             })
@@ -314,6 +316,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.hideGmd.add(onHideGmd);
                 MODULES.reel.on.enableOverlayClicks.add(overlay.enableClicks);
                 MODULES.reel.on.highlightButtonsHeader.add(onHighLightButtonsHeader);
+                MODULES.reel.on.bufferFull.add(overlay.onBufferFull);
+                MODULES.reel.on.bufferEmpty.add(overlay.onBufferEmpty);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
                 MODULES.reel.on.changeChapter.add(onChangeChapter);
                 if(seekFunction){
@@ -384,7 +388,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.header.on.close.add(onCloseHeader)
                 if(initFunc) MODULES.header.on.initialized.add(initFunc);
                 MODULES.header.on.open.add(onOpenHeader)
-                if(MODULES.reel)MODULES.header.on.toggleTimeline.add(MODULES.reel.toggleTimeline)
+                /*if(MODULES.reel)MODULES.header.on.toggleTimeline.add(MODULES.reel.toggleTimeline)*/
                 MODULES.header.init();
                 MODULES.header.show(stealthMode);
             })
@@ -463,6 +467,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var onTouchStart = function(event){
         event.preventDefault();
         targetTouch = event.target
+        console.log("onTouchStart - " + event.target)
         
         if(MODULES.folio) MODULES.folio.onTouchStart(event);
         if(MODULES.header) MODULES.header.close();
@@ -480,6 +485,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         if(MODULES.folio) MODULES.folio.onTouchEnd(event);
         
         if(target == targetTouch){
+            console.log("onTouchClick - " + event.target)
             if(!processRegularLink(target)){
                 // regular link didn't work so, we try modules.
                 if(MODULES.header){

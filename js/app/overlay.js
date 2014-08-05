@@ -70,6 +70,14 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         console.log("999 @@@@@@@ removed GMD");
     }*/
     
+    overlay.onBufferFull = function() {
+        overlay.hide(overlay.LOADER)
+    }
+    
+    overlay.onBufferEmpty = function() {
+        overlay.show(overlay.LOADER)
+    }
+    
     overlay.show = function(element){
         showMain();
         var newEl = getAssociatedElement(element);

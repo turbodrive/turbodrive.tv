@@ -126,12 +126,12 @@ define(["signals"], function (signals)
         /*img_background:{src:"mainImage", scale:0.8, position:pageInfo.ABSOLUTE_P,
             x:-260, y:0, z:-3500, rPointX:0, rPointY:0, width:1280, height:720},*/
         img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
-            z:-1200,
+            z:-100,
             rrcX:0, rrcY:0.1,  rrcXOffset:0, rrcYOffset:-20,
             rPointX:0, rPointY:0, width:1366, height:665},
         img_bgOpt:{html:"<img src='images/about_opt.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
-            z:-3000, rrcX:-0.20, rrcY:-0.40, rrcXOffset:-150, rrcYOffset:50,
-            width:739, height:698}
+            z:-300, rrcX:-0.20, rrcY:-0.40, rrcXOffset:-150, rrcYOffset:50,
+            width:739, height:698} // z = -3000
     };
     
     pageInfo.SKILLS_LAYOUT = {

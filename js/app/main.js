@@ -56,7 +56,6 @@ UTILS.shapeWrapper = function(lineHeight,Xs,container, nbrLines) {
 	}
 }
 
-
 var GLOBAL_ACCESS = this;
 
 if (!window.requestAnimationFrame) {
@@ -67,7 +66,6 @@ if (!window.requestAnimationFrame) {
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
                 function (callback,  element) {
-                    console.log("use Timeout as requestAnimationFrame");
                     window.setTimeout(callback, 1000 / 20);
                 };
 
@@ -93,4 +91,5 @@ require.config({
     
 });
 
-require(['js/app/core.js']);
+var arrayRequire = ['js/app/core.js']
+require(arrayRequire);

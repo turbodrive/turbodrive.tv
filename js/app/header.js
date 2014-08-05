@@ -10,13 +10,14 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     var navMenuHeight = 50;
     var stealthEnabled = false;
     var isOpen = false;
+    var timeClose = 0;
     
     // header Signal Events
     header.on = {
         initialized : new signals.Signal(),
         open : new signals.Signal(),
         close : new signals.Signal(),
-        toggleTimeline : new signals.Signal()
+        toggleRenderer : new signals.Signal()
     } 
     
     /* initialize events and header behaviors */
@@ -33,6 +34,11 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         $(".button-menu, .button-contact").on("click", function (event){
             event.preventDefault();
             controlMenuState($(this).attr("id"),0.3);
+        })
+        
+         $(".toggle-renderer").on("click", function (event){
+            event.preventDefault();
+            header.on.toggleRenderer.dispatch();
         }) 
 
         $(".closeMenuPicto").on("click", function (event){
@@ -48,13 +54,12 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             highlightContactPanel("contact",0.3)
         });
 
-        TweenMax.set($(".menu3D"),{height:-panelHeight, autoAlpha:1})
+        TweenMax.set($(".menu3D"),{height:panelHeight, y:-panelHeight, autoAlpha:1})
         controlMenuState("",0)   
         header.resize();
         header.on.initialized.dispatch();
-        
+
         /*$("[data-toggle='tooltip']").tooltip();*/
-        
         //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
     }
     
@@ -91,8 +96,12 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     header.onTouchClick = function(element) {
         if(!header.contains(element)) return;
         
-        var className = element.className
-        console.log("className >> " + className)
+        var className = element.className;
+        
+        if(className.indexOf("button-toggle")>-1){
+            console.log("dispatch toggle renderer")
+            header.on.toggleRenderer.dispatch();
+        }
         
         if(className.indexOf("button-menu")>-1 || className.indexOf("menu-icon")>-1 || className.indexOf("button-contact")){
             if(className.indexOf("about-button") == -1){
@@ -138,6 +147,8 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     }
     
     controlMenuState = function (idButton, duration) {
+        
+        
         if(currentMenuState == "" && idButton == "") return
         if(idButton == "toggleTimeline"){
             header.on.toggleTimeline.dispatch();
@@ -146,7 +157,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         
         header.resize();
         if (duration == null) duration = 0.3;
-        //console.trace("idButton >> " + idButton)
+        console.log("controlMenuState idButton >> " + idButton)
         
         var yTarget = 0;
         var xTargetContent = 0;
@@ -154,26 +165,29 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         var hTarget = 200;
         var alphaBgTarget = 0.8
 
-        if (idButton == "about") {
-            //gotoAbout();
-        }
-
         if (currentMenuState == idButton) {
             // toggle
+            var tme = new Date().getTime()-timeClose;
+            console.log("close after reclick - " + tme);
+            
+            if(tme < 500) return
+            
             yTarget = -panelHeight;
 
             if (currentMenuState == "contact" || currentMenuState == "share") {
                 xTargetContent = -LAYOUT.viewportW;
             }
-
+            
             currentMenuState = "";
-
+            
         } else {
+            
             if (idButton == "about" || idButton == "") {
                 yTarget = -panelHeight;
             } else {
                 yTarget = 0;
             }
+            
             if (idButton == "contact" || idButton == "share") {
                 xTargetContent = -LAYOUT.viewportW;
                 hTarget = panelHeight+navMenuHeight;
@@ -200,18 +214,26 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
 
             currentMenuState = (idButton == "about") ? "" : idButton
         }
-
+        timeClose = new Date().getTime();
         highlightContactPanel(currentMenuState, duration);
         
         TweenMax.to($(".menuContent"), duration, {
             x: xTargetContent,
             y: yTargetContent
         })
-        TweenMax.to($(".menu3D"), duration, {
-            backgroundColor: "rgba(36,22,37,"+alphaBgTarget+")",
-            height: hTarget,
-            y: yTarget
-        })
+        
+        if((!isOpen && yTarget == 0) || (isOpen && yTarget != 0)){
+            TweenMax.to($(".menu3D"), duration, {
+                backgroundColor: "rgba(36,22,37,"+alphaBgTarget+")",
+                height: hTarget,
+                y: yTarget
+            })
+        }else {
+            TweenMax.to($(".menu3D"), duration, {
+                backgroundColor: "rgba(36,22,37,"+alphaBgTarget+")",
+                height: hTarget
+            })
+        }
         
         if(yTarget == -panelHeight){
             header.on.close.dispatch();
@@ -220,6 +242,8 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             header.on.open.dispatch();
             isOpen = true;
         }
+        console.log("panel is open : " + isOpen)
+        
         updateStealthStatus();
     }
     

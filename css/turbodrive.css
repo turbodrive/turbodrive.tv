@@ -72,9 +72,14 @@
 	display: inline-block!important;
 	height:30px;
 	width: 30px;
+    margin: 0px;
+    padding: 0px;
 	margin-right: 18px;
+    margin-top: 4px;
 	padding-bottom: 25px!important;
     color: #53444D!important;
+    border: none;
+    outline: none;
 }
 
 .button-contact:hover {
@@ -106,12 +111,26 @@ body {
 	background-position: center center;
 }
 
+@media (orientation:landscape) {
+	html.ios7 > body {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 672px !important;
+        min-height: 672px !important;
+	}
+}
+
 div {
     pointer-events:auto;
 }
 
 a:focus {
   outline: none; /*firefox*/
+}
+
+button {
+    background: transparent;
 }
 
 .timeline{
@@ -412,10 +431,29 @@ button.videoNoise {
 button#play-pause {
     font-size: 45px;
     cursor: pointer;
-    line-height: 53px;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+    line-height: 45px;
+    /*text-shadow: 1px 1px 1px rgba(0,0,0,0.6);*/
     visibility:hidden;
 }
+
+button.videoNoise .cta-start-text{
+    border: 4px solid rgba(239, 236, 225,0.1);
+    width: 230px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 7px 0px 14px 0px;
+}
+
+button.videoNoise:active .cta-start-text ,
+button.videoNoise:hover .cta-start-text {
+    border-color: rgba(239, 236, 225,1);
+}
+
+button.videoNoise:focus .cta-start-text {
+    border-color: rgba(239, 236, 225,0.1);
+}
+
+
 
 #folioContent {
     overflow: hidden;
@@ -493,10 +531,10 @@ a.share-img { background: url('../images/menu_share.svg');}*/
 	}
 }
 
-.button-menu, .about-button, .blog-button {
+.button-menu, .about-button, .blog-button, .button-toggle {
     -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
     transition: .15s;
-    
+    text-align: left;
 	display: inline-block!important;
     overflow: hidden;
 	height:35px;
@@ -515,10 +553,13 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     line-height: 13px!important;
     -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+    border: none;
+    outline: none;
 }
 
 .about-button:hover,
 .button-menu:hover,
+.button-toggle:hover,
 .blog-button:hover{
     color: #CECEC4;
 }
@@ -527,8 +568,8 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     color: #CECEC4!important;
 }
 
-a.blog-button,
-a.about-button {
+.blog-button,
+.about-button {
     padding-top: 18px!important;
     padding-bottom: 20px!important;
 }
@@ -992,22 +1033,20 @@ a.github:active {
     opacity: 0.7;
 }
 
-
-
 /***** HYPERDRIVE 3D ****/
 
-.hyperdrive-particle {
+.hd-prtcle {
     display: block;
-    width: 1200px;
-    height: 15px;
+    width: 130px;
+    height: 20px;
 }
 
-.hyperdrive-particle-texture {
+.hd-prtcle-tex {
     display: block;
     background-image: url(../images/hyperdrive_beam.png);
     background-size: 100% 100%;
-    height: 15px;
-    width: 1200px;
+    width: 130px;
+    height: 20px;    
 }
 /***** SPRITE 3D ****/
 
@@ -1251,7 +1290,8 @@ button.icon-play:active {
     font-size: 12px;
     margin-bottom: 12px;
     letter-spacing: 1px;
-    position:fixed;
+    /*position:fixed;*/
+    position: absolute;
 }
 
 .about h3 {
@@ -1271,10 +1311,16 @@ h3.timelineDate {
 /******************* ABOUT - Skills Field menu *************************/
 /***********************************************************************/
 
+
+.about-menu {
+    /*position: absolute;*/
+}
+
 .about-menu ul {
     display: block;
     height: 242px;
     padding: 0px;
+    /*position: absolute;*/
 }
 
 .about-menu li {
@@ -1845,7 +1891,7 @@ div.skill-section {
 
 /**BUTTONS***/
 
-.redButton {
+.red-button {
     transition: 0.15s;
     -webkit-transition:0.15s;
     -moz-transition:0.15s;
@@ -1859,7 +1905,7 @@ div.skill-section {
     font-family: "texgyreadventorbold";
 }
 
-.redButton:after {
+.red-button:after {
     content: "\e60b";
     font-family: 'turbodrive'; /* BYO icon font, mapped smartly */
     font-size: 11px;
@@ -1871,10 +1917,17 @@ div.skill-section {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.redButton:hover {
+.red-button:hover {
     background-color: #EFECE1;
     color: #907F80;
     text-decoration: none;
+}
+
+.android-fix {
+    background: transparent;
+    background-color: transparent;
+    display: block;
+    position: absolute !important;
 }
 
 .wireframeButton {

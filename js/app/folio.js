@@ -92,17 +92,34 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             folio.on.pageLoaded.dispatch(pageId, sectionId);
         }
     }
-
+    
+    var autoLoadSiblings = false;
+    
     this.onImageLoaded = function (pageId, sectionId) {
         //pageInfo.on.imagesLoaded.remove(onImageLoaded);
         //console.log("FOLIO >> " + pageId + " loaded !");
         folio.on.pageLoaded.dispatch(pageId, sectionId);
+        folio.on.creationComplete.dispatch();
+        
+        if(autoLoadSiblings) loadSiblings(pageId);;
+    }
+
+    var loadSiblings = function(pageId) {
+        autoLoadSiblings = true;
         prebuildPages(pageId);
         
         folio.load(pageInfo.getNextPageId(pageId));
         folio.load(pageInfo.getPrevPageId(pageId));
     }
-
+    
+    var prebuildPages = function(pageId) {
+        var page = pageInfo.getPageInfo(pageId);
+        if(!page.built){
+            var page3D = buildPage3D(pageInfo.getPageInfo(pageId));
+            updatePage3D(page3D, page)
+        }
+    }
+    
     folio.resize = function () {
         if (!scene3DBuilt) return
         
@@ -373,7 +390,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if(interactTx > 0 && objTmx.twPos == pageInfo.content.length-1) return;
         if(interactTx < 0 && objTmx.twPos == 0) return;
         if(Math.abs(interactTx) > limitSwitchMini){
-            if(nextPrev) nextPrev.hide(true);
+            //if(nextPrev) nextPrev.hide(true);
         }
         
         
@@ -384,13 +401,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 
                 targetTransition = interactTx > 0 ? Math.round(Number(objTmx.twPos) + forceStep) : Math.round(Number(objTmx.twPos) - forceStep);
                 
-                
-                if(targetTransition < 0 || targetTransition > pageInfo.content.length-1) return
-                
+                if(targetTransition < 0 || targetTransition > pageInfo.content.length-1){
+                    return
+                }
                 targetPage = pageInfo.content[targetTransition].id;
                 // prepare page in case of...
                 prepPgeForTransition(targetPage);
-                
             }
         }
         
@@ -400,7 +416,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             if (Math.abs(interactTx) > 0.01 && Math.abs(interactTx) < limitSwitch) {
                 vx += (0 - interactTx) * elasticCoef;
                 interactTx += Number(vx *= friction);
-                if(nextPrev) nextPrev.show();
+                //if(nextPrev) nextPrev.show();
                 
             } else if (Math.abs(interactTx) > limitSwitch) {
                 if(targetTransition < 0){
@@ -417,6 +433,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 touchEnd = false
             }
         }
+        
         if (touchEnd2) {
             var dfX = (targetTransition - Number(objTmx.twPos));
             var vx2 = dfX * 0.09; //0.09
@@ -440,7 +457,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 transitionComplete(targetPage)
             }
         } else {
-            //console.log("interactTx > " + interactTx)
+            //if(Math.abs(interactTx) > 0.01) console.log("interactTx > " + interactTx)
             var prct = interactTx / (LAYOUT.viewportW);
             objTmx.twPos = Number(sourceTwPosition) + (0.5 * prct)
         }
@@ -459,16 +476,25 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     var stopRendering = function () {
-        isRendering = true;
+        isRendering = false;
     }
 
     var enterFrame = function () {        
         if (isRendering) {
             requestAnimationFrame(enterFrame);
         }
-
         renderContainer();
         updateContainerInteraction();
+    }
+    
+    folio.toggleRenderer = function() {
+        if(isRendering){
+            console.log("STOP Rendering");
+            stopRendering();
+        }else {
+            console.log("START Rendering");
+            startRendering();   
+        }
     }
 
     /*********************************/
@@ -476,7 +502,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     /*********************************/
 
     renderContainer = function () {
-        if (container) container.update();
+        //console.log("renderContainer")
+        if (container){
+            //console.log("container update")
+            container.update();
+        }
     }
 
     collectContent = function () {
@@ -526,54 +556,49 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     var particles = []
     var nbrParticles = 400; // 400 desktop, même si range Depth est faible /80 tablettes
-    var rangeDepth = 10000;
-    var widthPrtcle = 800;
+    var rangeDepth = 8000;
+    var widthPrtcle = 130;
     var heightPrtcle = 20;
     var alphaPrtcle = 1;
     var prevIntZ = 0;
 
-    var initZ = -50000;
+    var initZ = -50000*2;
     var translateObject = {z:initZ};
     
     var rangeWidth = 2000;
     var rangeHeight = 2000;
     var splitWidth = 100;
     var splitHeight = 100;
-    var timeParticleCreation = 250;
+    var timeParticleCreation = 50;
     var intervalParticlesCreation;
-    var bunchQuantity = 20;
+    var bunchQuantity = 50;
     
     
     if(CONFIG.isMobile) {
         // mobile-tablets only
-        initZ = -40000;
-        nbrParticles = 80;
         rangeDepth = 6000;
-        rangeWidth = rangeHeight = 700;
-        splitHeight = splitWidth = 60;
-        timeParticleCreation = 1000;
-        bunchQuantity = 5
+        nbrParticles = 200;
+        rangeWidth = 1500;
+        rangeHeight = 1500;
     }
     
-    var nbrBunchParticles = nbrParticles/bunchQuantity;
+    var nbrBunchParticles = CONFIG.hyperDriveTransition ? nbrParticles/bunchQuantity : 0;
+    var limitLoopParticle = (widthPrtcle+800)
+    var totalPrcle = 0;
     
     var enterFrameHyperDrive = function () {
         var interactZ = interactContainer.z
-        var newZ = -interactZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
-        var speedIntZ = interactZ - prevIntZ;
-        var factSpeed = speedIntZ / 60;
-        
         for (var i = nbrParticles - 1; i >= 0; i--) {
             var prtcle = particles[i];
-            if (interactZ + prtcle.z > widthPrtcle) {
+            if (interactZ + prtcle.z > limitLoopParticle) {
+                var newZ = prtcle.z - rangeDepth;
+                //console.log("old " + prtcle.z + " new " + newZ)
                 prtcle.setZ(newZ).update();
             }
         }
-        prevIntZ = interactZ;
     }
     
     var tmpPageIdHd, tmpSectionIdHd;
-    
     folio.startIntroTransition = function(pageId, sectionId) {
         tmpPageIdHd = pageId;
         tmpSectionIdHd = sectionId; 
@@ -594,14 +619,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
         interactContainer.setRotation(0,-90,-70).update();
-        
+        /*var baseZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
+        var multZ = rangeDepth/nbrParticles;
+            
         // particles Z
         for(var i = 0 ; i< nbrParticles ;i++) {
             var prtcle = particles[i]
-            var randZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth) + (Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
+            var randZ =  parseInt(baseZ + (multZ*i))
+            console.log("randZ >> " + randZ);
             prtcle.setZ(randZ).update();
-        }
+            console.log("prtcleZ = " + prtcle.z);
+        }*/
     }
+    
+    var baseZ;
+    var multZ;
     
     var buildHyperDriveScene = function () {
         console.log("FOLIO buildHyperDriveScene")
@@ -610,16 +642,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             .setId("hyperdriveContainer")
             .setRegistrationPoint(0, 0, 0);
         
-        hyperdriveContainer.setPosition(-400, -10, 0);
+        hyperdriveContainer.setPosition(-(widthPrtcle/2), -(heightPrtcle/2), 0);
         hyperdriveContainer.setRotateFirst(false);
         hyperdriveContainer.update();
         
         $(".hyperdrive-particle").css("width", widthPrtcle + "px");
-        $(".hyperdrive-particle").css("height", heightPrtcle + "px"); 
+        $(".hyperdrive-particle").css("height", heightPrtcle + "px");
         
+        baseZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth);
+        multZ = rangeDepth/nbrParticles;
+            
         intervalParticlesCreation = setInterval(createBunchOfParticles,timeParticleCreation)
     }
-        
+    
+    
+    
     var createBunchOfParticles = function() {
         if(particles.length >= nbrParticles){
             clearInterval(intervalParticlesCreation);
@@ -627,13 +664,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         }else{
             console.log("create" + bunchQuantity + " particles");
             for (var i = 0; i < bunchQuantity; i++) {
+                totalPrcle ++
                 var particle = new Sprite3D();
                 particle.setId("prtcle"+i+"")
-                particle.setInnerHTML("<div class='hyperdrive-particle-texture'></div>");
-                particle.addClassName("hyperdrive-particle")
+                particle.setInnerHTML("<div class='hd-prtcle-tex'></div>");
+                particle.addClassName("hd-prtcle")
                 var randX = (Math.random() * rangeWidth) - (rangeWidth >> 1);
                 var randY = (Math.random() * rangeHeight) - (rangeHeight >> 1);
-                //var randZ = -initZ - LAYOUT_3D.PX_PERFECT_DISTANCE - (rangeDepth) + (Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
                 particle.setRotateFirst(false);
 
 
@@ -653,15 +690,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                         }
                     }
                 }
-
-                particle.setPosition(randX, randY, 0);
-                particle.setOpacity((0.1 + Math.random()*0.9));
+                
+                var randZ =  parseInt(baseZ + (multZ*totalPrcle))//(Math.random() * rangeDepth) /* - (rangeDepth>>1);*/                
+                
+                particle.setPosition(randX, randY, randZ);
+                particle.setOpacity((0.3 + Math.random()*0.75));
                 var rotX = (Math.atan2(randY, randX) * 180 / Math.PI);
-                particle.setRotation(-rotX, 90, 0);
-                //particle.update();
+                particle.setRotation(-rotX, 90, 0).update();
                 particles.push(particle)
-
-                //console.log(particle.x + " - " + particle.y + " - " + particle.z);
                 hyperdriveContainer.addChild(particle); 
             }
             updateCreation();
@@ -674,7 +710,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         prepareHyperDriveScene();
         
         var delay = 0.5;
-        var duration = 5;
+        var duration = 5*2;
         var endDuration = 1.2;
         var total = (delay+duration);
         var endDelay = total-endDuration;
@@ -687,7 +723,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 interactContainer.updateZLast();
                 enterFrameHyperDrive();
             },
-            ease:Power2.easeOut,
+            ease:Power1.easeOut,
             onComplete: hyperDriveTransitionComplete            
         })
         
@@ -702,8 +738,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     var hyperDriveTransitionComplete = function() {
         //if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
-        interactContainer.removeChild(hyperdriveContainer);
+        //interactContainer.removeChild(hyperdriveContainer);
         setTweenPosition(tmpPageIdHd, tmpSectionIdHd);
+        loadSiblings(currentPage3D.getId());
     }
     
     var fireReadyForIntroTransition = function(){
@@ -713,6 +750,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     buildGridTile = function (indexX, indexY) {
         var grid = new Sprite3D()
             .setClassName("grid")
+            .setId("grid-3d")
             .setRotateFirst(false)
             .setPosition(GRID_TILE_COORD.x + (indexX * GRID_TILE_SIZE * GRID_TILE_SCALE), GRID_TILE_COORD.y * indexY, -GRID_TILE_COORD.z)
             .setRotation(-GRID_TILE_COORD.rotationX, -GRID_TILE_COORD.rotationY, GRID_TILE_COORD.rotationZ)
@@ -734,7 +772,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         page3D.setParentSprite(container);
         pages3D.push(page3D);
         page.built = true;
-        console.log("Page [" + page.id + "] is created");
+        console.log("--------- Page [" + page.id + "] is created");
         
         pagesBuild++
         updateCreation();
@@ -795,7 +833,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         var _rY = LAYOUT.viewportH / 720;
 
 
-        var zVisuel = -3500;
+        var zVisuel = -3500; //-200 pour android < 4.4.2
         //var _scaleVisuel = LAYOUT_3D.getPxPerfectScale(zVisuel);
 
         var scaleList = {
@@ -950,7 +988,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 } else {
                     element.setOpacity(elInfo.opacity);
                 }
-
                 element.update();
             }
         }
@@ -978,14 +1015,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     getResolutionOffset = function (m) {
         return offset;
-    }
-
-    prebuildPages = function(pageId) {
-        var page = pageInfo.getPageInfo(pageId);
-        if(!page.built){
-            var page3D = buildPage3D(pageInfo.getPageInfo(pageId));
-            updatePage3D(page3D, page)
-        }
     }
     
     prepPgeForTransition = function (pageId, sectionId, updatePage) {
@@ -1061,6 +1090,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     transitionComplete = function (pageId) {
         transitionStarted = false;
         console.log("transitionComplete >> " + pageId);
+        loadSiblings(pageId);
         setTweenPosition(pageId, tmpSectionId);
         tmpSectionId = null;
         previousPage3D = null;

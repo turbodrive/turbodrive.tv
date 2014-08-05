@@ -66,6 +66,7 @@ define([], function() {
         element.style.margin = "0px";
         element.style.padding = "0px";
         element.style.position = "fixed";
+        /*element.style.webkitBackfaceVisibility = "hidden";*/
         // trigger hardware acceleration even if no property is set
         element.style[ this._transformProperty ] = "translateZ(0px)";
 
