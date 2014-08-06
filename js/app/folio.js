@@ -596,6 +596,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var timeParticleCreation = 50;
     var intervalParticlesCreation;
     var bunchQuantity = 50;
+    var baseZ;
+    var multZ;
     
     
     if(CONFIG.isMobile) {
@@ -644,15 +646,20 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("FOLIO prepareHyperDriveScene")
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
-        interactContainer.setRotation(0,-90,-100).update();
+        interactContainer.setRotation(0,-90,100).update();
         // we prepare here the position of the particles.
         // this method is called eachtime we need to start the transition
         // not only when created.
         
+        for(var i = 0; i< particles.length ;i++){
+            var randZ =  parseInt(baseZ + (multZ*i))//(Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
+            var prtcle = particles[i];
+            prtcle.setZ(randZ).update();
+        }
+        
     }
     
-    var baseZ;
-    var multZ;
+    
     
     var buildHyperDriveScene = function () {
         console.log("FOLIO buildHyperDriveScene")
@@ -710,12 +717,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     }
                 }
                 
-                var randZ =  parseInt(baseZ + (multZ*totalPrcle))//(Math.random() * rangeDepth) /* - (rangeDepth>>1);*/                
                 
-                particle.setPosition(randX, randY, randZ);
+                
+                particle.setPosition(randX, randY, 0);
                 particle.setOpacity((0.3 + Math.random()*0.75));
                 var rotX = (Math.atan2(randY, randX) * 180 / Math.PI);
-                particle.setRotation(-rotX, 90, 0).update();
+                particle.setRotation(-rotX, 90, 0);
                 particles.push(particle)
                 hyperdriveContainer.addChild(particle); 
             }
