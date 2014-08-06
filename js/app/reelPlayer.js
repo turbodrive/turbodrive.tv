@@ -36,7 +36,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var currentPlayPos = 0
     var bufferingFull = false;
     var checkInterval = 150;
-    var bufferInterval;
+    var bufferInterval = -1;
     var bufferMax = 6;
     
     
@@ -90,7 +90,13 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     reelPlayer.play = function () {
         video.play();
-        bufferInterval = setInterval(checkBuffering, checkInterval)
+        startCheckBuffering();
+    }
+    
+    var startCheckBuffering = function(){
+        if(bufferInterval < 0){
+            bufferInterval = setInterval(checkBuffering, checkInterval);
+        }
     }
     
     reelPlayer.resume = function () {
@@ -101,6 +107,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     reelPlayer.pause = function () {
         clearInterval(bufferInterval);
+        bufferInterval = -1
         video.pause();        
         userPausedVideo = true;
     }
@@ -271,6 +278,14 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         console.log("init and seek to chapter" + chapter);
         
         video.addEventListener("playing", onPlayingVideo);
+        video.addEventListener("timeupdate", onTimeUpdate);
+        /*video.addEventListener("seeking", onSeeking);*/
+        //video.addEventListener("seeked", onSeeked);
+        video.addEventListener("waiting", onWaitBuffering);
+        video.addEventListener("ended", function() {
+            reelPlayer.on.videoComplete.dispatch();
+        });
+        
         
         if(CONFIG.isMobile){
             console.log(">> IS MOBILE - " + video)
@@ -285,17 +300,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             timeoutReInit = setTimeout(reInitVideoLoop, 1000)
         }else{
             video.addEventListener("canplaythrough", dektopReady);
-        }
-
-        video.addEventListener("timeupdate", onTimeUpdate);
-        /*video.addEventListener("seeking", onSeeking);*/
-        //video.addEventListener("seeked", onSeeked);
-        video.addEventListener("waiting", onWaitBuffering);
-        video.addEventListener("ended", function() {
-            reelPlayer.on.videoComplete.dispatch();
-        });
+            reelPlayer.play();
+        }       
         
-        reelPlayer.play();
         videoInitialized = true;
         globalVideoOverlay = $(".video-overlay");
     }
@@ -398,6 +405,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var onPlayingVideo = function(event) {
         video.removeEventListener("playing", onPlayingVideo);
         reelPlayer.on.playStarted.dispatch();
+        startCheckBuffering();
         active = true;
         fadeButton();
         if(tmpChapter){
