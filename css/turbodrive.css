@@ -106,9 +106,13 @@ body {
     font-family:"texgyreadventorregular", "helvetica neue", Arial, sans-serif;
     padding-top: 10px;  
     overflow: hidden;
-    background: url('../images/bgProjects.jpg');
+    background: black;
 	background-size:cover;
 	background-position: center center;
+}
+
+body.texture-background {
+    background-image: url('../images/bgProjects.jpg');
 }
 
 @media (orientation:landscape) {
@@ -181,6 +185,10 @@ button {
     left: 0px;
     z-index: 90000;
 }
+
+.overlay-total {
+    z-index: 20000000;
+}
     .landscape-alert-overlay {
         visibility: hidden;
         opacity: 0;
@@ -190,12 +198,31 @@ button {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 35px
+        margin-bottom: 35px;
     }
     
     .landscape-alert-overlay button {
         font-size: 20px;
         cursor:default;
+    }
+
+    .miniloader-overlay {
+        pointer-events: none;
+        position: absolute;
+        display: block;    
+        width: 100%;
+        height: 100%;
+        z-index: 50;
+        background-color: rgba(0,0,0,0);
+    }
+
+    .miniloader-overlay img {
+        display: block;
+        position: absolute;
+        left: 50px;
+        bottom: 50px;
+        opacity: 0.4;
+        width: 80px;
     }
 
     .loader-overlay {
@@ -243,8 +270,6 @@ button {
         margin-right: auto;
     }
 
-    
-    
     .getmore-overlay {
         pointer-events:auto;
         position: absolute;
@@ -257,11 +282,12 @@ button {
         -moz-transform:rotate(-3deg);
         transform:rotate(-3deg);
     }
-        .edgeLoad-gmd-edge { visibility:hidden; }
+    .edgeLoad-gmd-edge { visibility:hidden; }
 
-.overlay-total {
-    z-index: 20000000;
-}
+    .swiffycontainer {
+        width: 100%;
+        height: 100%;
+    }
 
 .next-prev {
     position: absolute;
@@ -1044,16 +1070,16 @@ a.github:active {
 
 .hd-prtcle {
     display: block;
-    width: 130px;
-    height: 10px;
+    width: 220px;
+    height: 15px;
 }
 
 .hd-prtcle-tex {
     display: block;
     background-image: url(../images/hyperdrive_beam.png);
     background-size: 100% 100%;
-    width: 130px;
-    height: 10px;    
+    width: 220px;
+    height: 15px;    
 }
 /***** SPRITE 3D ****/
 

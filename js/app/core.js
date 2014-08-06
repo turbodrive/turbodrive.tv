@@ -144,6 +144,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             if (newEnvIsFolio) {
                 showHeader();
                 $("#reel").css("visibility", "hidden");
+                overlay.show(overlay.LOADER);
                 loadFolio(page, section);
             } else {
                 hideFolioContent();
@@ -153,8 +154,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             // transition between both of Env
             if (newEnvIsFolio) {
                 MODULES.reel.pause();
+                overlay.show(overlay.MINI_LOADER,0.6);
                 loadFolio(page, section/*, onReadyForTransitionToFolio*/);
-                overlay.disable();
+                //overlay.disable();
             }else {
                 /*showHeader(true);*/
                 loadReel(page, onReadyForTransitionToReel);
@@ -176,6 +178,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var onReadyForTransitionToFolio = function() {
         
+        //overlay.disable();
         MODULES.folio.on.readyForIntroTransition.remove(onReadyForTransitionToFolio);
         if(MODULES.reel){
             MODULES.reel.pause();
@@ -220,7 +223,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
         if(!MODULES.folio){
             // show Loader ??
-            overlay.show(overlay.LOADER, false);
+            $("body").addClass("texture-background");
+            
             require(["app/folio"], function(folio){
                 MODULES.folio = folio;
                 MODULES.folio.on.initialized.add(onFolioInitialized);
@@ -231,6 +235,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.folio.on.creationProgress.add(overlay.updateProgress);
                 MODULES.folio.on.creationComplete.add(onCreationComplete);
                 MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
+                MODULES.folio.on.pageCreationComplete.add(onPageCreationComplete);
+                MODULES.folio.on.pageLoading.add(onPageLoading);
                 MODULES.folio.init(pageId, sectionId);
 
             })
@@ -243,11 +249,20 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
     }
     
+    var onPageLoading = function() {
+        MODULES.folio.on.pageLoading.remove(onPageLoading);
+        overlay.show(overlay.MINI_LOADER,0);
+    }
+    
+    var onPageCreationComplete = function() {
+        MODULES.folio.on.pageCreationComplete.remove(onPageCreationComplete);
+        overlay.hide(overlay.MINI_LOADER);
+    }
+    
     var onCreationComplete = function() {
         MODULES.folio.on.creationComplete.remove(onCreationComplete);
         MODULES.folio.on.creationProgress.remove(overlay.updateProgress);
-        console.log("ACCCCh")
-        overlay.hide();
+        overlay.disable();
     }
     
     var onFolioInitialized = function(pageId, sectionId){
@@ -292,6 +307,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         /*overlay.hide();*/
         console.log("readyForIntroTransitionToFolio - " + pageId + " - " + sectionId);
         MODULES.folio.wakeup(pageId);
+        overlay.disable();
         MODULES.folio.startTransition(pageId, sectionId);
         
         if(MODULES.reel){
@@ -326,6 +342,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.reel.on.highlightButtonsHeader.add(onHighLightButtonsHeader);
                 MODULES.reel.on.bufferFull.add(overlay.onBufferFull);
                 MODULES.reel.on.bufferEmpty.add(overlay.onBufferEmpty);
+                MODULES.reel.on.bufferProgress.add(overlay.onBufferProgress);
                 MODULES.reel.on.videoComplete.add(onVideoComplete);
                 MODULES.reel.on.changeChapter.add(onChangeChapter);
                 if(seekFunction){

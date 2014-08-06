@@ -5,18 +5,22 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     var main = $(".video-overlay");
     var gmd = $(".getmore-overlay");
     var lanscapeAlert = $(".landscape-alert-overlay");
+    var miniloader = $(".miniloader-overlay");
     var progressBar = $(".progress-load");
     
-    var listElements = ["loader","getMoreDetails","landscapeAlert"];
+    var listElements = ["loader","getMoreDetails","landscapeAlert", "miniloader"];
     var overlay = {
         LOADER : listElements[0],
         GETMOREDETAILS : listElements[1],
-        LANDSCAPE_ALERT : listElements[2]
+        LANDSCAPE_ALERT : listElements[2],
+        MINI_LOADER : listElements[3]
     };
     
     var currentElName = overlay.LOADER;
     var gmdAnimation;
     var startLoadGmd = false;
+    var bufferEmpty = false;
+    var widthMaxProgressBar = 224;
     
     overlay.on = {
         clickMainOverlay: new signals.Signal()
@@ -41,6 +45,9 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
                 break;
             case overlay.LANDSCAPE_ALERT :
                 return lanscapeAlert;
+                break;
+            case overlay.MINI_LOADER :
+                return miniloader;
                 break;
         }
         return null;
@@ -71,28 +78,46 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }*/
     
     overlay.onBufferFull = function() {
-        overlay.hide(overlay.LOADER)
+        miniloader.css("pointer-events","none")
+        bufferEmpty = false;
+        overlay.hide(overlay.MINI_LOADER);
     }
     
     overlay.onBufferEmpty = function() {
-        overlay.show(overlay.LOADER)
+        miniloader.css("pointer-events", "auto")
+        bufferEmpty = true;
+        overlay.show(overlay.MINI_LOADER,0.8);
     }
     
-    overlay.show = function(element){
+    overlay.onBufferProgress = function(prct) {
+        if(!bufferEmpty) return
+        var target = widthMaxProgressBar*prct;
+        TweenMax.to(progressBar,0.4,{width:target, ease:Power1.easeInOut}); 
+    }
+    
+    overlay.show = function(element, bgAlpha){
         showMain();
+        
+        if(bgAlpha === null) bgAlpha = 1;
+        
         var newEl = getAssociatedElement(element);
         //if(currentElName != "") overlay.hide(currentElName);
+        var duration = 0.5
+        if(element == overlay.MINI_LOADER){
+            duration = 0.2
+        }
         
         if(element == overlay.GETMOREDETAILS){
             TweenMax.set(newEl, {autoAlpha:1});
             gmdAnimation.play()
         }else {
-            TweenMax.to(newEl, 0.5, {autoAlpha:1});
+            TweenMax.set(newEl, {backgroundColor:"rgba(0,0,0,"+bgAlpha+")"})
+            TweenMax.to(newEl, duration, {autoAlpha:1});
         }
         
         if(element == overlay.LOADER){
             TweenMax.set(progressBar, {width:1})
-             TweenMax.fromTo(loaderText, 0.5, {autoAlpha:0, marginTop:60},{delay:0.2, marginTop:0, autoAlpha:1});
+            TweenMax.fromTo(loaderText, 0.5, {autoAlpha:0, marginTop:60},{delay:0.2, marginTop:0, autoAlpha:1});
         }
         
         if(element == overlay.LANDSCAPE_ALERT || element == overlay.LOADER){
@@ -107,18 +132,22 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     overlay.hide = function(element, force){
         //return;
         
-        //console.trace("HIDE")
+        console.log("HIDE - " + element)
         
-        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;       
+        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;
+        if(element == overlay.MINI_LOADER) duration = 0.2;
+        
         if(element == null) {
             for(var i = 0 ;i< listElements.length; i++){
                 overlay.hide(listElements[i], force);
             }
         } else {
-            TweenMax.to(getAssociatedElement(element), duration, {delay:0.2, autoAlpha:0, onComplete:function(){
-            $(main).removeClass("overlay-total");            
-            }
-                                                                 });
+            TweenMax.to(getAssociatedElement(element), duration, {
+                delay:0, autoAlpha:0,
+                onComplete:function(){
+                    $(main).removeClass("overlay-total");            
+                }
+            });
         }
         
         if(element == currentElName) currentElName = "";
@@ -139,11 +168,11 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         overlay.hide();
         main.css("visibility", "hidden");
         overlay.disableClicks();
+        
     }
     
     overlay.updateProgress = function(prct){
-        var widthMax = 224;
-        var target = 224*prct;
+        var target = widthMaxProgressBar*prct;
         TweenMax.to(progressBar,0.4,{width:target, ease:Power1.easeInOut});   
     }
     

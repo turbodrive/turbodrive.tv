@@ -28,9 +28,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var video;
     var videoInitialized = false;
     var playButton, playButtonContent;
-    var pausedVideo = false;
+    var userPausedVideo = false;
     var active = false;
     var p3XConstant;
+    
+    var lastPlayPos    = 0
+    var currentPlayPos = 0
+    var bufferingFull = false;
+    var checkInterval = 150;
+    var bufferInterval;
+    var bufferMax = 6;
+    
     
     // Signal Events
     reelPlayer.on = {
@@ -46,6 +54,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         videoComplete : new signals.Signal(),
         bufferEmpty : new signals.Signal(),
         bufferFull : new signals.Signal(),
+        bufferProgress : new signals.Signal(),
         transitionComplete : new signals.Signal()
     }        
 
@@ -80,18 +89,20 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     reelPlayer.play = function () {
-       video.play();
+        video.play();
+        bufferInterval = setInterval(checkBuffering, checkInterval)
     }
     
     reelPlayer.resume = function () {
-        if(!pausedVideo) return
-        video.play();
-        pausedVideo = false;
+        if(!userPausedVideo) return
+        reelPlayer.play();
+        userPausedVideo = false;
     }
     
     reelPlayer.pause = function () {
-        video.pause();
-        pausedVideo = true;
+        clearInterval(bufferInterval);
+        video.pause();        
+        userPausedVideo = true;
     }
     
     // pause the reel and everything related
@@ -249,7 +260,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         playButton.on("click", function() {
           if (video.paused) {
-              video.play();
+              //video.play();
+              reelPlayer.play();
               fadeButtonText();
           } else {
               video.pause();
@@ -283,7 +295,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             reelPlayer.on.videoComplete.dispatch();
         });
         
-        video.play();
+        reelPlayer.play();
         videoInitialized = true;
         globalVideoOverlay = $(".video-overlay");
     }
@@ -330,8 +342,9 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var onWaitBuffering = function(event) {
         console.log("VIDEO - onWaitBuffering");
-        /*video.addEventListener("playing", onBufferFull);
-        reelPlayer.on.bufferEmpty.dispatch();*/
+        /*video.addEventListener("playing", onBufferFull);*/
+        bufferingFull = false;
+        reelPlayer.on.bufferEmpty.dispatch();
     }
     
     var onBufferFull = function(event) {
@@ -347,6 +360,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
         //video.addEventListener("playing", onSeeked);
         video.addEventListener("timeupdate", onSeeked);
+        bufferingFull = false;
         reelPlayer.on.bufferEmpty.dispatch();
         
     }
@@ -360,7 +374,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             //video.removeEventListener("playing", onSeeked);
             video.removeEventListener("timeupdate", onSeeked);
             reelPlayer.on.bufferFull.dispatch();
-            video.play();
+            //video.play();
             console.log("forcePlay")
         }
     }
@@ -444,6 +458,80 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
                 $(buttons[i]).removeClass("active");   
             }
         }
+    }
+    
+    var countFreeze = 0;
+    var maxFreeze = 3
+    
+    var checkBuffering = function() {
+        currentPlayPos = video.currentTime;
+
+        //var offset = 0.150/* / checkInterval*/
+        console.log("currentPlayPos = " + currentPlayPos + " - compare to " + (lastPlayPos) + " - video.paused " + video.paused + " - userPausedVideo = " + userPausedVideo);
+        
+        if (bufferingFull && currentPlayPos == lastPlayPos && !userPausedVideo) {
+            countFreeze ++
+            console.log("CountFreeze >> " + countFreeze)
+            if(countFreeze > maxFreeze){
+                reelPlayer.on.bufferEmpty.dispatch();
+                bufferingFull = false
+            }      
+            
+            //video.pause();
+            //console.log("videoPause for waiting buffering")
+        }
+        
+        var l = video.buffered.length;
+        var bufferLength = 0;
+        var bufferPrct = 0;
+        if(l > 0){
+            var index = 0;
+            if(l > 1){
+                if(currentPlayPos > video.buffered.start(l-1)){
+                    index = l-1   
+                }else {
+                   for(var i = 1; i < l; i++){
+                        if(video.buffered.start(i) > currentPlayPos){
+                            index = i-1;
+                        }
+                    }
+                }
+            }           
+            
+            var start = video.buffered.start(index);
+            var end = video.buffered.end(index);
+            bufferLength = (end - cTime)
+            //console.log("bufferLength >> " + bufferLength);
+            bufferLength = Math.max(bufferLength,0);
+            //console.log("buffering >> " + l + " - start "+ start + " - end" + end);
+            
+            bufferPrct = bufferLength / bufferMax;
+            bufferPrct = Math.min(bufferPrct,1);
+            reelPlayer.on.bufferProgress.dispatch(bufferPrct);
+        
+            if(!bufferingFull){
+                
+                console.log("LOADING - " + l + " / index " + index +" bufferLength >> " + bufferPrct);
+                if(bufferLength > bufferMax){
+                    //console.log("LOADING - buffer full 5 sec");
+                    video.play();
+                }
+            }else {
+                //console.log("bufferLength >> " + bufferPrct);
+            }
+            
+        }
+        
+        
+        
+        // if we were buffering but the player has advanced,
+        // then there is no buffering
+        if (!bufferingFull && currentPlayPos > lastPlayPos && !userPausedVideo) {
+            reelPlayer.on.bufferFull.dispatch();
+            bufferingFull = true
+            countFreeze = 0
+        }
+        lastPlayPos = currentPlayPos
     }
     
     var onTimeUpdate = function(event) {

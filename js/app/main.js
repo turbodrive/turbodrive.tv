@@ -87,7 +87,8 @@ require.config({
         edgeCta: 'gmdpng_edgePreload',
         crossroads: 'crossroads.min',
         signals:'signals.min',
-        hasher:'hasher.min'
+        hasher:'hasher.min',
+        SwiffyRuntime:'https://www.gstatic.com/swiffy/v7.0/runtime'
     }
     
 });

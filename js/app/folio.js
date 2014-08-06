@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D) {
+define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/pageInfo", "Sprite3D", "app/Page3D", "SwiffyRuntime", "touchAnimation"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D, SwiffyRuntime, touchAnimation) {
     var folio = {};
 
     const DEGREES_TO_RADIANS = Math.PI / 180;
@@ -50,7 +50,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         readyForIntroTransition: new signals.Signal(),
         creationProgress: new signals.Signal(),
         creationComplete: new signals.Signal(),
-        twPositionDefined: new signals.Signal()
+        twPositionDefined: new signals.Signal(),
+        pageLoading: new signals.Signal(),
+        pageCreationComplete: new signals.Signal()
     }
 
     folio.kill = function () {
@@ -109,6 +111,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     var loadSiblings = function(pageId) {
+        if(folio.on.pageLoading){
+            folio.on.pageLoading.dispatch();
+            folio.on.pageLoading = null;
+        }
         autoLoadSiblings = true;
         prebuildPages(pageId);
         
@@ -575,8 +581,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var particles = []
     var nbrParticles = 400; // 400 desktop, même si range Depth est faible /80 tablettes
     var rangeDepth = 8000;
-    var widthPrtcle = 130; // 130
-    var heightPrtcle = 10; //20
+    var widthPrtcle = 220; // 130
+    var heightPrtcle = 15; //20
     var alphaPrtcle = 1;
     var prevIntZ = 0;
 
@@ -638,7 +644,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("FOLIO prepareHyperDriveScene")
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
-        interactContainer.setRotation(0,-90,-70).update();
+        interactContainer.setRotation(0,-90,-220).update();
+        // we prepare here the position of the particles.
+        // this method is called eachtime we need to start the transition
+        // not only when created.
+        
     }
     
     var baseZ;
@@ -737,7 +747,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         })
         
         TweenMax.to(interactContainer, 2, {delay: delay+1,rotationY: 0,ease:Power1.easeInOut});
-        TweenMax.to(interactContainer, 3.6, {delay: delay+1.8,rotationZ: 0,ease:Power1.easeInOut});
+        TweenMax.to(interactContainer, 3, {delay: delay+3.8,rotationZ: 0,ease:Power1.easeInOut});
                 
         TweenMax.fromTo($("#contentContainer"), endDuration*2,
                         {opacity:0},{delay:endDelay-endDuration-0.5,opacity:1, onComplete: function(){
@@ -745,6 +755,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                         }});
         TweenMax.fromTo($("#hyperdriveContainer"), endDuration/3,
                         {opacity:1},{delay:endDelay-(endDuration/2)-0.8,opacity:0});
+        
+        var touchAnim = new swiffy.Stage(document.getElementById('swiffycontainer'),touchAnimation, {  });
+      
+        stage.start();
     }
     
     var hyperDriveTransitionComplete = function() {
@@ -791,6 +805,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         if(pagesBuild >= pageInfo.content.length){
             console.log('page creationComplete')   
+            folio.on.pageCreationComplete.dispatch();
         }
         
         if (page.id == "skillsfield" || page.id == "about") {
