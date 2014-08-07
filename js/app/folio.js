@@ -1057,7 +1057,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         TweenMax.to(sprite3d.domElement, 0.5, {delay:0.2, autoAlpha:1})
         TweenMax.fromTo(sprite3d, 0.5,
                         {z:-500},
-                        {delay:0.2, z:-100,
+                        {delay:0, z:-100,
                             ease:Power2.easeOut,
                            onUpdate:function(){
                                       sprite3d.update();                            
