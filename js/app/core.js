@@ -68,6 +68,13 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         $(window).resize(resizeWindowHandler);
         resizeWindowHandler(null);
         
+        overlay.loadGmd();
+        overlay.on.gmdLoaded.add(startHasher)
+    }
+    
+    var startHasher = function() {
+        overlay.on.gmdLoaded.remove(startHasher);
+        
         if(orientationIsLandscape){
             initializedHasher();
         }else{
@@ -242,7 +249,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onPageCreationComplete = function() {
-        overlay.loadGmd();
+        //overlay.loadGmd();
         MODULES.folio.on.pageCreationComplete.remove(onPageCreationComplete);
         overlay.hide(overlay.MINI_LOADER);
     }

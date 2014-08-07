@@ -23,7 +23,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var currentSectionId;
     var tmpSectionId;
     var tmpPageId;
-    var stage, interactContainer, container;
+    var stage3d, interactContainer, container;
     var hyperdriveContainer;
     var pages3D = [];
     var transitionStarted = false;
@@ -60,14 +60,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         fadeOut(currentPageId);
         previousPage3D = null;
         currentPage3D = null;
-        $(stage).css("visibility", "hidden");
+        $(stage3d).css("visibility", "hidden");
         if(nextPrev) nextPrev.hide();
         console.log("KILL FOLIO");
         // delete all pages
     }
     
     folio.wakeup = function(pageId) {
-        $(stage).css("visibility", "visible");
+        $(stage3d).css("visibility", "visible");
         console.log("WAKEUP FOLIO");
     }
 
@@ -135,8 +135,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         $("#folio").css("left", LAYOUT.vW2)
         $("#folio").css("top", LAYOUT.vH2)
-        stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);
-        stage.translate2D(LAYOUT.vW2, LAYOUT.vH2);
+        stage3d.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE);
+        stage3d.translate2D(LAYOUT.vW2, LAYOUT.vH2);
         
         if (CONFIG.isFirefox || CONFIG.isChrome36) {
             // attention aux anciennes version de chrome (avant v36)!
@@ -554,8 +554,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
                 
     buildScene = function () {
-        stage = Sprite3D.createCenteredContainer();
-        stage.setId("folio");
+        stage3d = Sprite3D.createCenteredContainer();
+        stage3d.setId("folio");
         //interactContainer = new Sprite3D(document.getElementById('folioContent'));
         interactContainer = new Sprite3D()
             .setId("interactContainer")
@@ -565,8 +565,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             .setRotateFirst(true)
             .setRegistrationPoint(0, 0, 0);
         interactContainer.addChild(container);
-        stage.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE)
-        stage.addChild(interactContainer);
+        stage3d.setPerspective(-LAYOUT_3D.PX_PERFECT_DISTANCE)
+        stage3d.addChild(interactContainer);
         
         
         // grid
@@ -651,6 +651,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         // this method is called eachtime we need to start the transition
         // not only when created.
         
+        if(getPage3D(tmpPageIdHd)) fadeInAndActivate(tmpPageIdHd,0)
+        
         for(var i = 0; i< particles.length ;i++){
             var randZ =  parseInt(baseZ + (multZ*i))//(Math.random() * rangeDepth) /* - (rangeDepth>>1);*/
             var prtcle = particles[i];
@@ -734,6 +736,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     var startHyperdriveAnimation = function() {
         prepareHyperDriveScene();
+        
         
         var delay = 0.5;
         var duration = 5*2;

@@ -23,7 +23,8 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     var widthMaxProgressBar = 224;
     
     overlay.on = {
-        clickMainOverlay: new signals.Signal()
+        clickMainOverlay: new signals.Signal(),
+        gmdLoaded: new signals.Signal()
     }
     
     var showMain = function(){
@@ -53,18 +54,20 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         return null;
     }
     
-    GLOBAL_ACCESS.gmdReady = function(sym){
+    document.gmdReady = function(sym){
         gmdAnimation = sym;
+        console.log("GmdEdge - gmdReady " + overlay.gmdLoaded() )
+        overlay.on.gmdLoaded.dispatch();
     }
     
     overlay.loadGmd = function(){
-        
+        console.log("GmdEdge - startLoad" + overlay.gmdLoaded() )
         if(startLoadGmd) return;
         startLoadGmd = true;
         if(gmdAnimation !== undefined) return;
 
         require(["GmdEdge"], function(GmdEdge){
-            
+            console.log("GmdEdge - Loaded" + overlay.gmdLoaded() )
         });
     }
     
@@ -109,6 +112,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         
         if(element == overlay.GETMOREDETAILS){
             TweenMax.set(newEl, {autoAlpha:1});
+            console.log("overlay.gmdLoaded >> " + overlay.gmdLoaded());
             gmdAnimation.play()
         }else {
             TweenMax.set(newEl, {backgroundColor:"rgba(0,0,0,"+bgAlpha+")"})
@@ -129,23 +133,27 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         currentElName = element;
     }
     
-    overlay.hide = function(element, force){
+    overlay.hide = function(element, force, switchMainVisible){
         //return;
         
         //console.log("HIDE - " + element)
         
-        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;
-        if(element == overlay.MINI_LOADER) duration = 0.2;
+        var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.8) : 0.8;
+        if(element == overlay.MINI_LOADER) duration = 0.8;
+        if(switchMainVisible === null) switchMainVisible = false;
+        
+        //console.log("")
         
         if(element == null) {
             for(var i = 0 ;i< listElements.length; i++){
-                overlay.hide(listElements[i], force);
+                overlay.hide(listElements[i], force, switchMainVisible);
             }
         } else {
             TweenMax.to(getAssociatedElement(element), duration, {
                 delay:0, autoAlpha:0,
                 onComplete:function(){
-                    $(main).removeClass("overlay-total");            
+                    $(main).removeClass("overlay-total");
+                    if(switchMainVisible) main.css("visibility", "hidden");
                 }
             });
         }
@@ -165,8 +173,8 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }
     
     overlay.disable = function(){
-        overlay.hide();
-        main.css("visibility", "hidden");
+        overlay.hide(null,false, true);
+        //main.css("visibility", "hidden");
         overlay.disableClicks();
         
     }
