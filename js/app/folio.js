@@ -16,6 +16,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         rotationY: 90,
         rotationZ: 0
     };
+    
+    var vignetInfo;
 
     var scene3DBuilt = false;
     var currentPageId = "",
@@ -63,17 +65,19 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         $(stage3d).css("visibility", "hidden");
         if(nextPrev) nextPrev.hide();
         console.log("KILL FOLIO");
+        TweenMax.to(vignetInfo, 0.2, {autoAlpha:0})
         // delete all pages
     }
     
     folio.wakeup = function(pageId) {
         $(stage3d).css("visibility", "visible");
+        
         console.log("WAKEUP FOLIO");
     }
 
     folio.init = function (pageId, sectionId) {
         maxElements = nbrBunchParticles+1;
-        
+        vignetInfo = $(".touch-anim-container");
         collectContent();
         buildTimelines();
         buildScene();
@@ -644,6 +648,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     var prepareHyperDriveScene = function(){
         console.log("FOLIO prepareHyperDriveScene")
+        TweenMax.set(vignetInfo, {autoAlpha:1})
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
         interactContainer.setRotation(0,-90,-100).update();
@@ -771,6 +776,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         TweenMax.fromTo($("#hyperdriveContainer"), endDuration/3,
                         {opacity:1},{delay:endDelay-(endDuration/2)-0.8,opacity:0});
         
+        TweenMax.fromTo(vignetInfo, 3, {autoAlpha:1}, {delay:duration+delay-0.5, autoAlpha:0})
     }
     
     var hyperDriveTransitionComplete = function() {
