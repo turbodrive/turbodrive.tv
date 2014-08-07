@@ -132,7 +132,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     overlay.hide = function(element, force){
         //return;
         
-        console.log("HIDE - " + element)
+        //console.log("HIDE - " + element)
         
         var duration = (typeof force !== 'undefined') ? (force ? 0 : 0.5) : 0.5;
         if(element == overlay.MINI_LOADER) duration = 0.2;

@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/pageInfo", "Sprite3D", "app/Page3D", "SwiffyRuntime", "app/touchAnimation"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D, SwiffyRuntime, touchAnimation) {
+define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D) {
     var folio = {};
 
     const DEGREES_TO_RADIANS = Math.PI / 180;
@@ -646,7 +646,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("FOLIO prepareHyperDriveScene")
         interactContainer.addChild(hyperdriveContainer);
         interactContainer.setPosition(-LAYOUT.vW2, -LAYOUT.vH2, initZ);
-        interactContainer.setRotation(0,-90,100).update();
+        interactContainer.setRotation(0,-90,-100).update();
         // we prepare here the position of the particles.
         // this method is called eachtime we need to start the transition
         // not only when created.
@@ -759,7 +759,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         TweenMax.to(interactContainer, 2, {delay: delay+1,rotationY: 0,ease:Power1.easeInOut, onComplete:function() {
             //touchAnim.start();
         }});
-        TweenMax.to(interactContainer, 3, {delay: delay+3.8,rotationZ: 0,ease:Power1.easeInOut});
+        TweenMax.to(interactContainer, 4, {delay: delay+3.8,rotationZ: 0,ease:Power1.easeInOut});
                 
         TweenMax.fromTo($("#contentContainer"), endDuration*2,
                         {opacity:0},{delay:endDelay-endDuration-0.5,opacity:1, onComplete: function(){
@@ -768,13 +768,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         TweenMax.fromTo($("#hyperdriveContainer"), endDuration/3,
                         {opacity:1},{delay:endDelay-(endDuration/2)-0.8,opacity:0});
         
-        
-        
     }
     
     var hyperDriveTransitionComplete = function() {
         //if(nextPrev) nextPrev.show(currentPage3D.getPageInfo());
-        //interactContainer.removeChild(hyperdriveContainer);
+        interactContainer.removeChild(hyperdriveContainer);
         setTweenPosition(tmpPageIdHd, tmpSectionIdHd);
         loadSiblings(currentPage3D.getId());
     }
@@ -1033,15 +1031,44 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         $("#" + idElement).css("width", tW);
         $("#" + idElement).css("height", tH);
     }
+    
+    var hideSection = function(sprite3d)
+    {
+        TweenMax.to(sprite3d.domElement, 0.3, {autoAlpha:0})
+        TweenMax.to(sprite3d, 0.5,
+                        {z:400,
+                         ease:Power2.easeIn,
+                           onUpdate:function(){
+                                      sprite3d.update();                            
+                        }})
+    }
+    
+    var showSection = function(sprite3d)
+    {
+        TweenMax.to(sprite3d.domElement, 0.5, {delay:0.2, autoAlpha:1})
+        TweenMax.fromTo(sprite3d, 0.5,
+                        {z:-500},
+                        {delay:0.2, z:-100,
+                            ease:Power2.easeOut,
+                           onUpdate:function(){
+                                      sprite3d.update();                            
+                        }})
+        
+    }
 
     updateSection = function (page3d, sectionId) {
+        
+        
         var sectionsList = page3d.getSections();
+        console.log("UDPATE SECTION > " + sectionId + "nbrSections = " + sectionsList.length)
         for (var i = 0; i < sectionsList.length; i++) {
             var section = sectionsList[i];
             if (section.sectionId == sectionId) {
-                section.setOpacity(1);
+                //section.setOpacity(1);
+                showSection(section);
             } else {
-                section.setOpacity(0);
+                //section.setOpacity(0);
+                hideSection(section);
             }
         }
         currentSectionId = sectionId;
@@ -1108,8 +1135,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             } else {
                 freeTransition(page);
             }
+            
             updatePage3D(getPage3D(pageId)) // only for non-touchtransition 
             fadeInAndActivate(pageId, 1.1);
+            if(sectionId) updateSection(currentPage3D, sectionId)
         }
     }
     
@@ -1128,14 +1157,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var addSecondaryElementAndUpdatePage3DStatus = function(pageId){
         currentPage3D = getPage3D(pageId);
         currentPage3D.addSecondaryElements();
+        
     }
     
     transitionComplete = function (pageId) {
         transitionStarted = false;
-        console.log("transitionComplete >> " + pageId);
+        console.log("transitionComplete >> " + pageId + " - " + tmpSectionId);
         
         addSecondaryElementAndUpdatePage3DStatus(pageId);
-        
         console.log("transitionComplete2 >> " + currentPage3D.getId());        
             
         setTweenPosition(pageId, tmpSectionId);

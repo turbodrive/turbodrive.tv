@@ -274,8 +274,8 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     }
     
     header.resize = function(){
-        var wSc = Math.floor(((LAYOUT.viewportW-20)/8)) - 2;
-        var wBtr = Math.floor(((LAYOUT.viewportW-20)/8)) - 32;
+        var wSc = Math.floor(((LAYOUT.viewportW-20)/8)) - 2-8;
+        var wBtr = Math.floor(((LAYOUT.viewportW-20)/8)) - 32-8;
         $(".menuSelectedCases .buttonSubMenu").width(wSc);
         $(".menuSelectedCases .buttonSubMenu.backToReel").width(wBtr);
 

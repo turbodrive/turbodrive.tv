@@ -109,10 +109,28 @@ body {
     background: black;
 	background-size:cover;
 	background-position: center center;
+    
 }
 
 body.texture-background {
     background-image: url('../images/bgProjects.jpg');
+}
+
+body.active-filter {
+    -webkit-transition: 0.1s;
+    transition: 0.1s;
+    -webkit-filter:none;
+    filter:none;
+}
+
+body.active-filter:active {
+    -webkit-filter:brightness(2.2);
+    filter:brightness(2.2);
+}
+
+body.active-filter:focus {
+    -webkit-filter:none;
+    filter:none;
 }
 
 @media (orientation:landscape) {
@@ -184,7 +202,12 @@ button {
     top: 0px;
     left: 0px;
     z-index: 90000;
+    /*border: none;*/
 }
+
+/*.video-overlay:active {
+    border: 15px solid #d15f5f; 
+}*/
 
 .overlay-total {
     z-index: 20000000;
@@ -326,6 +349,15 @@ button {
         left: 0px;
         visibility: hidden;
         opacity: 0;
+    }
+    
+    .back-to-the-reel a {
+        transition: 0.10s;   
+    }
+
+    .back-to-the-reel a:hover {
+        filter: brightness(1.3);   
+        -webkit-filter: brightness(1.3);
     }
 
     .transverse-nav {
@@ -748,7 +780,7 @@ li.blog > a {
 }
 
 
-.buttonSubMenu.backToReel{
+.buttonSubMenu.backToReel {
     font-size: 25px;
     line-height: 25px;
     font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
@@ -762,7 +794,22 @@ li.blog > a {
 }
 
 .menuSelectedCases .buttonSubMenu {
+    transition: 0.1s linear;
+    -webkit-transition: 0.15s linear;
     width: 80px;
+    border: 4px solid transparent;
+    -webkit-filter: none;
+}
+
+.menuSelectedCases .buttonSubMenu:hover {
+    -webkit-filter: brightness(1.3);
+    filter: brightness(1.3);
+}
+
+.menuSelectedCases .buttonSubMenu:active {
+    -webkit-filter: brightness(2);
+    filter: brightness(2);
+    /*border: 4px solid #EFECE1;*/
 }
 
 .menuMoreProjects .buttonSubMenu {

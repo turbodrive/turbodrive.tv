@@ -35,7 +35,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var lastPlayPos    = 0
     var currentPlayPos = 0
     var bufferingFull = false;
-    var checkInterval = 150;
+    var checkInterval = 50;
     var bufferInterval = -1;
     var bufferMax = 6;
     
@@ -60,9 +60,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
 
     reelPlayer.init = function (chapter) {
         timelineMenu = $(".timeline-menu");
-        
-        
-        //reelPlayer.on.initialized.dispatch();
         initVideoPlayer(chapter);
     }
     
@@ -96,6 +93,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var startCheckBuffering = function(){
         if(bufferInterval < 0){
             bufferInterval = setInterval(checkBuffering, checkInterval);
+            $("body").addClass("active-filter");
         }
     }
     
@@ -107,6 +105,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     reelPlayer.pause = function () {
         clearInterval(bufferInterval);
+        $("body").removeClass("active-filter");
         bufferInterval = -1
         video.pause();        
         userPausedVideo = true;
@@ -127,6 +126,8 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         active = true;
         video.addEventListener("playing", onPlayingVideo);
         reelPlayer.resume();
+        appendTimelineDiv();
+        addEventListenersOnTimeline();
         //reelPlayer.seekToChapter(chapter);
     }
     
@@ -137,7 +138,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             var chapterInfo = timelineChapters[i];
             if(chapterInfo.id == chapterId){
                 //video.currentTime = chapterInfo.startAt;
-                seekTo(chapterInfo.startAt);
+                seekTo(chapterInfo.startAt-2);
                 if(autoCloseTimeline === null) autoCloseTimeline = true;
                 if(autoCloseTimeline) closeTimeline();
             }
@@ -363,7 +364,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var timeMem = 0;
     var onSeeking = function(event) {
         timeMem = video.currentTime
-        console.log("VIDEO onSeeking - " + timeMem + " video.currentTime => " + video.currentTime)
+        //console.log("VIDEO onSeeking - " + timeMem + " video.currentTime => " + video.currentTime)
         
         //video.addEventListener("playing", onSeeked);
         video.addEventListener("timeupdate", onSeeked);
@@ -374,7 +375,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var onSeeked = function(event) {
         var testSeeked = Math.abs(timeMem - video.currentTime);
         
-        console.log("VIDEO onSeeked" + testSeeked + " video.currentTime => " + video.currentTime)
+        //console.log("VIDEO onSeeked" + testSeeked + " video.currentTime => " + video.currentTime)
         
         if(testSeeked > 0.01){
             timeMem = 0;
@@ -382,7 +383,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             video.removeEventListener("timeupdate", onSeeked);
             reelPlayer.on.bufferFull.dispatch();
             //video.play();
-            console.log("forcePlay")
+            //console.log("forcePlay")
         }
     }
     
@@ -469,17 +470,17 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     var countFreeze = 0;
-    var maxFreeze = 3
+    var maxFreeze = 1;
     
     var checkBuffering = function() {
         currentPlayPos = video.currentTime;
 
         //var offset = 0.150/* / checkInterval*/
-        console.log("currentPlayPos = " + currentPlayPos + " - compare to " + (lastPlayPos) + " - video.paused " + video.paused + " - userPausedVideo = " + userPausedVideo);
+        //console.log("currentPlayPos = " + currentPlayPos + " - compare to " + (lastPlayPos) + " - video.paused " + video.paused + " - userPausedVideo = " + userPausedVideo);
         
         if (bufferingFull && currentPlayPos == lastPlayPos && !userPausedVideo) {
             countFreeze ++
-            console.log("CountFreeze >> " + countFreeze)
+            //console.log("CountFreeze >> " + countFreeze)
             if(countFreeze > maxFreeze){
                 reelPlayer.on.bufferEmpty.dispatch();
                 bufferingFull = false
@@ -519,7 +520,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         
             if(!bufferingFull){
                 
-                console.log("LOADING - " + l + " / index " + index +" bufferLength >> " + bufferPrct);
+                //console.log("LOADING - " + l + " / index " + index +" bufferLength >> " + bufferPrct);
                 if(bufferLength > bufferMax){
                     //console.log("LOADING - buffer full 5 sec");
                     video.play();
@@ -622,7 +623,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var seekable = function(time){
         console.log("seekableLength > " + video.seekable.length);
-        return (time >= video.seekable.start(0) && time < video.seekable.end(0))
+        return (time >= video.seekable.start(0) && time < video.seekable.end(0));
     }
     
     var seekTo = function(time){
@@ -668,34 +669,47 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         closeTimeline();
     }
     
-    reelPlayer.toggleTimeline = function() {
+    /*reelPlayer.toggleTimeline = function() {
         if(timelineAdded){
             removeTimelineDiv();      
         }else {
             appendTimelineDiv();
         }
-    }
+    }*/
     
     var jqueryTimeline;
     var timelineAdded = false;
     
     var appendTimelineDiv = function () {
         if(!timelineAdded){
-            console.trace("appendTimelineDiv - " + timelineEl)
-            $(document.body).append(timelineEl);
+            $("body").append(timelineEl);
             timelineAdded = true;
         }
     }
     
-    var removeTimelineDiv = function () {
+    var addEventListenersOnTimeline = function() {
+        $(".timeline").on("mouseover", mouseOverTimelineHandler);
+        $(".timeline").on("mousedown", mouseDownTimelineHandler);
+        $(".timeline").on("mouseout", mouseOutTimelineHandler);
+        $("#bgTimeline").on("click", clickTimelineHandler);
+    }
+    
+    var removeTimeline = function(){
+        timelineAdded = false;
+        clearTimeout(timeOutCloseTimeline)
+        $(".timeline").remove();
+    }
+    
+    /*var removeTimelineDiv = function () {
         if(timelineAdded){
             timelineEl.remove();
             timelineAdded = false;
         }
-    }
+    }*/
     
     reelPlayer.createTimeline = function () {
         if(timelineIsInitialized) return
+        console.log("---- createTimeline")
         appendTimelineDiv();
         $(".timeline").prepend(timelineMenu);
         
@@ -706,10 +720,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         p2Y = p2.attr("y");
         p3 = $("#timelineP3");
         bgTimeline = $("#bgTimeline");
-        $(".timeline").on("mouseover", mouseOverTimelineHandler);
-        $(".timeline").on("mousedown", mouseDownTimelineHandler);
-        $(".timeline").on("mouseout", mouseOutTimelineHandler);
-        $("#bgTimeline").on("click", clickTimelineHandler);
         
         progTimeline = $("#bgProgress");
         bgTimeline.attr("width",twObjects.wBg);
@@ -722,11 +732,14 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             },
             onComplete:function(){
                 timelineIsCreated = true;
+                console.log(".....timelineIsCreated")
             }
         });        
     
         setTimeout(closeTimeline, 2500, true);
         timelineIsInitialized = true;
+        addEventListenersOnTimeline();
+        console.log(".....timelineIsInitialized")
     }
     
     var timeOutCloseTimeline;
@@ -779,10 +792,7 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
         });
     }
     
-    var removeTimeline = function(){
-        clearTimeout(timeOutCloseTimeline)
-        $(".timeline").remove();
-    }
+   
         
     var updateP3Pos = function () {
         // adaptation depuis la version actionscript;

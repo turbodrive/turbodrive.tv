@@ -142,7 +142,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             }
         }else if(currentEnv == ""){
             if (newEnvIsFolio) {
-                showHeader();
                 $("#reel").css("visibility", "hidden");
                 overlay.show(overlay.LOADER);
                 loadFolio(page, section);
@@ -158,7 +157,6 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 loadFolio(page, section/*, onReadyForTransitionToFolio*/);
                 //overlay.disable();
             }else {
-                /*showHeader(true);*/
                 loadReel(page, onReadyForTransitionToReel);
             }
         }
@@ -198,9 +196,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onHeaderInitialized = function() {
+        console.log("header init !")
         MODULES.header.on.initialized.remove(onHeaderInitialized);
-        MODULES.reel.sleep();
-        console.log("header init ! - pause video")
+        if(MODULES.reel) MODULES.reel.sleep();
     }
     
     var hideFolioContent = function() {
@@ -209,20 +207,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         
     /******* FOLIO MODULE *******/
     
-    /*var gatherTimeline = function() {
-        if(!timelineDiv){
-            timelineDiv = $(".timeline");
-            timelineDiv.remove();
-        }
-        return timelineDiv
-    }*/
-    
     var loadFolio = function(pageId, sectionId, initloadFunc2){
-        //gatherTimeline();
-       
         
         if(!MODULES.folio){
-            // show Loader ??
             $("body").addClass("texture-background");
             
             require(["app/folio"], function(folio){
@@ -234,7 +221,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 MODULES.folio.on.twPositionDefined.add(onTwPositionDefined);
                 MODULES.folio.on.creationProgress.add(overlay.updateProgress);
                 MODULES.folio.on.creationComplete.add(onCreationComplete);
-                MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
+                //MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
                 MODULES.folio.on.pageCreationComplete.add(onPageCreationComplete);
                 MODULES.folio.on.pageLoading.add(onPageLoading);
                 MODULES.folio.init(pageId, sectionId);
@@ -255,6 +242,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onPageCreationComplete = function() {
+        overlay.loadGmd();
         MODULES.folio.on.pageCreationComplete.remove(onPageCreationComplete);
         overlay.hide(overlay.MINI_LOADER);
     }
@@ -316,12 +304,12 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
         if(MODULES.header){
             //MODULES.reel.pauseEnv();
-            showHeader(false);
+            setTimeout(showHeader,500,false);
         }else {
-            showHeader(false, onHeaderInitialized);
+            var time = CONFIG.hyperDriveTransition ? 8000 : 500;
+            
+            setTimeout(showHeader,time,false, onHeaderInitialized);
         }
-        
-        //overlay.loadGmd();
     }
     
     /******* REEL MODULE *******/
@@ -329,6 +317,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var loadReel = function(chapter, seekFunction){
         overlay.loadGmd();
         unBindTouchEvents();
+        
         if(!MODULES.reel){
             // show Loader ??
             require(["app/reelPlayer"], function(reelPlayer){
