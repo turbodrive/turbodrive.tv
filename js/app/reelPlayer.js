@@ -300,6 +300,11 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
             
             timeoutReInit = setTimeout(reInitVideoLoop, 1000)
         }else{
+            if(playButton){
+                playButton.remove();
+                playButton = null;
+            }
+            
             video.addEventListener("canplaythrough", dektopReady);
             reelPlayer.play();
         }       
@@ -426,10 +431,6 @@ define(["jquery","TweenMax", "signals"], function ($, TweenMax, signals) {
     var dektopReady = function(event) {
         video.removeEventListener("canplaythrough", dektopReady);
         console.log("canplaythrough Desktop");        
-        if(playButton){
-            playButton.remove();
-            playButton = null;
-        }
         //video.play();
     }
     
