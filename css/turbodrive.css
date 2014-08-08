@@ -236,16 +236,16 @@ button {
         width: 100%;
         height: 100%;
         z-index: 50;
-        background-color: rgba(0,0,0,0);
     }
 
     .miniloader-overlay img {
         display: block;
         position: absolute;
-        left: 80px;
-        top: 80px;
-        opacity: 0.4;
-        width: 80px;
+        left: 100px;
+        top: 49px;
+        opacity: 0.45;
+        height: 6px;
+        width: 216px; /*163px*/
     }
 
     .loader-overlay {
@@ -653,7 +653,7 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     color: #CECEC4;
 }
 
-.navbar a.active {
+.navbar button.active {
     color: #CECEC4!important;
 }
 

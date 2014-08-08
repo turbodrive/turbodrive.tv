@@ -55,6 +55,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         twPositionDefined: new signals.Signal(),
         pageLoading: new signals.Signal(),
         hireMeClicked: new signals.Signal(),
+        pageReady: new signals.Signal(),
         pageCreationComplete: new signals.Signal()
     }
 
@@ -169,6 +170,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             }
         }
         return null;
+    }
+    
+    folio.pageIsProject = function(pageId) {
+        return getPage3D(pageId).getPageInfo().project;
     }
 
     /*********************************/
@@ -343,6 +348,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var memLastPage3D;
     
     folio.onTouchStart = function (event) {
+        if(!transitionSiblingsAvailable) return;
+        
         touchEnd2 = false;
         targetTouch = event.target;
         lastTouch = event.target.className;
@@ -365,6 +372,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
 
     folio.onTouchMove = function (event) {
+        if(!transitionSiblingsAvailable) return;
+        
         var t = event.changedTouches[0];
         interactTx = -(parseInt(t.pageX) - startx)
         interactTy = (parseInt(t.pageY) - starty)
@@ -381,6 +390,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     folio.onTouchEnd = function (event) {
+        if(!transitionSiblingsAvailable) return;
+        
         // trigger autotransition behavior
         if(interactTx > 0 && objTmx.twPos == pageInfo.content.length-1) return;
         if(interactTx < 0 && objTmx.twPos == 0) return;
@@ -821,9 +832,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         pagesBuild++
         
+        folio.on.pageReady.dispatch(page.id);
+        checkControlsEnabled(page.id);
         
         if(pagesBuild >= pageInfo.content.length){
-            console.log('page creationComplete')   
+            console.log('page creationComplete')  
             folio.on.pageCreationComplete.dispatch();
         }
         
@@ -833,11 +846,43 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
         return page3D
     }
+    var transitionSiblingsAvailable = false;
+    
+    var nextPageIsBuilt = function (page) {
+        var nextPageId = pageInfo.getNextPageId(page.getId())
+        if(nextPageId == null) return null;
+        if(getPage3D(nextPageId) == null) return false;
+        return getPage3D(nextPageId).getPageInfo().built;
+    }
+    
+    var prevPageIsBuilt = function (page) {
+        var prevPageId = pageInfo.getPrevPageId(page.getId())
+        if(prevPageId == null) return null;
+        if(getPage3D(prevPageId) == null) return false;
+        return getPage3D(prevPageId).getPageInfo().built;
+    }
+        
+    var pageIsReadyForTouch = function(page) {
+        var nextAvailableForTouch = (nextPageIsBuilt(page) !== false);
+        var prevAvailableForTouch = (prevPageIsBuilt(page) !== false);
+        return (nextAvailableForTouch && prevAvailableForTouch)
+    }
+    
+    var checkControlsEnabled = function(builtPageId) {  
+        if(!currentPage3D) return
+        transitionSiblingsAvailable = pageIsReadyForTouch(currentPage3D);
+        
+        console.log("test - currentPage3D > " + currentPage3D.getId())
+        console.log("nextIsReady >> " + nextPageIsBuilt(currentPage3D));
+        console.log("prevIsReady >> " + prevPageIsBuilt(currentPage3D));
+        console.log("touchReady >> " + pageIsReadyForTouch(currentPage3D));
+        console.log("transitionSiblingsAvailable >> " + transitionSiblingsAvailable);
+    }
     
     folio.getProjectVideo = function(){
         return currentPage3D.video;
     }
-
+    
     initSkillsMenu = function (idPage) {
         $("." + idPage + "-menu li").mouseenter(function () {
             TweenMax.to($(this).find(".skill-bg-over"),0.3,{autoAlpha:1, ease:Power2.easeOut});
@@ -1165,12 +1210,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     }
     
     var addSecondaryElementAndUpdatePage3DStatus = function(pageId){
-        currentPage3D = getPage3D(pageId);
+        currentPage3D = getPage3D(pageId);        
         currentPage3D.addSecondaryElements();
+        checkControlsEnabled();
+        
         $(".hireme-button").click(function(){
             folio.on.hireMeClicked.dispatch();
-        })
-        
+        })   
     }
     
     transitionComplete = function (pageId) {
@@ -1178,7 +1224,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         console.log("transitionComplete >> " + pageId + " - " + tmpSectionId);
         
         addSecondaryElementAndUpdatePage3DStatus(pageId);
-        console.log("transitionComplete2 >> " + currentPage3D.getId());        
+        console.log("transitionComplete2 >> " + currentPage3D.getId());
             
         setTweenPosition(pageId, tmpSectionId);
         

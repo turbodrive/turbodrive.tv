@@ -219,7 +219,6 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             currentMenuState = (idButton == "about") ? "" : idButton
         }
         timeClose = new Date().getTime();
-        highlightContactPanel(currentMenuState, duration);
         
         TweenMax.to($(".menuContent"), duration, {
             x: xTargetContent,
@@ -241,9 +240,11 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         
         if(yTarget == -panelHeight){
             header.on.close.dispatch();
+            downLightContactPanel()
             isOpen = false;
         }else {
             header.on.open.dispatch();
+            highlightContactPanel(currentMenuState, duration);
             isOpen = true;
         }
         console.log("panel is open : " + isOpen)
@@ -256,25 +257,74 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             TweenMax.to($(".contact .content"), duration, {
                 opacity: 1
             })
+            
+            $("#contact").addClass("active");        
+            
         } else {
             TweenMax.to($(".contact .content"), duration, {
                 opacity: 0.35
             })
+            $("#contact").removeClass("active");
         }
 
         if (section == "share") {
             TweenMax.to($(".share .content"), duration, {
                 opacity: 1
             })
+            $("#share").addClass("active");
         } else {
             TweenMax.to($(".share .content"), duration, {
                 opacity: 0.35
             })
+            $("#share").removeClass("active");
         }
+    }
+    
+    var downLightContactPanel = function(){
+        TweenMax.to($(".share .content"), 0.2, {
+                opacity: 0.35
+            })
+        TweenMax.to($(".contact .content"), 0.2, {
+                opacity: 0.35
+            })
+        
+        $("#share").removeClass("active");
+        $("#contact").removeClass("active");
     }
     
     var getWidthPanel = function() {
         return Math.min(LAYOUT.viewportW,1280);
+    }
+    
+    header.updateState = function(pageId, isProject) {
+        console.log("pageId >> " + pageId);
+        
+        var allListElements = $(".buttonSubMenu");
+        for(var i=0 ;i<allListElements.length ;i++){
+            var divEl = $(allListElements[i]);
+            if(divEl.attr("folio-id")){
+                if(divEl.attr("folio-id") == pageId){
+                    divEl.addClass("active")
+                }else {
+                    divEl.removeClass("active")
+                }
+            }
+        }
+        
+        if(pageId == "reel"){
+            $("#selectedCases").removeClass("active");
+            $(".about-button").removeClass("active");
+            return
+        }
+        
+        if(isProject) {
+            $("#selectedCases").addClass("active");
+            $(".about-button").removeClass("active");
+        }else {
+            $("#selectedCases").removeClass("active");
+            $(".about-button").addClass("active");
+        }
+        
     }
     
     header.resize = function(){

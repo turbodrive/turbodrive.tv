@@ -134,10 +134,7 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
     
     nextPrev.hide = function(boost) {
         hidden = true;
-        
-
         if(boost === null) boost = false
-        
         if(boost){
             TweenMax.to(backToTheReel,0.3, {autoAlpha:0});
             TweenMax.to(nextButton,0.3, {autoAlpha:0});
@@ -168,7 +165,6 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
         }
     }
     
-
     nextPrev.updateState = function(newPageInfo) {
         currentPageInfo = newPageInfo;
         nextPageId = pageInfo.getNextPageId(currentPageInfo.id);

@@ -191,9 +191,9 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         }
         if(MODULES.header){
             //MODULES.reel.pauseEnv();
-            showHeader(false);
+            setTimeout(showHeader,8000,false);
         }else {
-            showHeader(false, onHeaderInitialized);
+            setTimeout(showHeader,8000,false, onHeaderInitialized);
         }
     }
     
@@ -203,7 +203,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var onHeaderInitialized = function() {
-        console.log("header init !")
+        console.log("header init !" + MODULES.folio.pageIsProject(currentPage))
+        MODULES.header.updateState(currentPage, MODULES.folio.pageIsProject(currentPage));
         MODULES.header.on.initialized.remove(onHeaderInitialized);
         if(MODULES.reel) MODULES.reel.sleep();
     }
@@ -283,6 +284,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     
     var onTwPositionDefined = function(pageId,sectionId){
         // passer la section ?
+        if(MODULES.header) MODULES.header.updateState(pageId, MODULES.folio.pageIsProject(currentPage));
+        
         if(sectionId) {
             hasher.setHash("folio",pageId+"/"+sectionId+"/");
         }else {
@@ -329,6 +332,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     var loadReel = function(chapter, seekFunction){
         overlay.loadGmd();
         unBindTouchEvents();
+        
+        if(MODULES.header) MODULES.header.updateState("reel", false)
         
         if(!MODULES.reel){
             // show Loader ??

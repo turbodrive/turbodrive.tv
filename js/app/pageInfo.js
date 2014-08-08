@@ -48,7 +48,7 @@ define(["signals"], function (signals)
         var prevIndex = pageIndex-1;
         if(prevIndex < 0) return null;
         return pageInfo.content[prevIndex].id;
-    }
+    }   
     
     
     /*** ASSETS LOADER ***/    
