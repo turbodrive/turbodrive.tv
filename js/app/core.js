@@ -69,7 +69,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
         resizeWindowHandler(null);
         
         overlay.loadGmd();
-        overlay.on.gmdLoaded.add(startHasher)
+        overlay.on.gmdLoaded.add(startHasher);
     }
     
     var startHasher = function() {

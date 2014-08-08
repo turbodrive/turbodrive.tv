@@ -109,20 +109,26 @@ define(["signals"], function (signals)
             z:-800, rrcX:cX, rrcY:cY, rrcXOffset:-00, rrcYOffset:88-90,
             width:590, height:120},
         h3_skillsFieldTitle:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:-0.38, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
+            z:0, rrcX:-0.36, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
             width:166, height:36},
         h3_timelineTitle:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:0.16, rrcY:0.04, rrcXOffset:40, rrcYOffset:0,
+            z:0, rrcX:0.16, rrcY:0.04, rrcXOffset:40, rrcYOffset:40,
             width:246, height:50},
         div_skillsFieldMenu:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:-0.38, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
+            z:0, rrcX:-0.39, rrcY:0.07, rrcXOffset:-80, rrcYOffset:0,
             width:620, height:250},
         a_skillsFieldButton:{position:pageInfo.RES_RC_P,  
-            z:50, rrcX:-0.1, rrcY:0.32, rrcXOffset:0, rrcYOffset:0,
+            z:50, rrcX:-0.1, rrcY:0.35, rrcXOffset:0, rrcYOffset:0,
             width:138, height:28},
         a_timelineButton:{position:pageInfo.RES_RC_P,
-            z:50, rrcX:0.30, rrcY:0.32, rrcXOffset:-40, rrcYOffset:0,
+            z:50, rrcX:0.30, rrcY:0.35, rrcXOffset:-40, rrcYOffset:0,
             width:142, height:28},
+        div_hireMeAbout:{
+            position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0.5, rrcY:-0.5, rrcXOffset:-270, rrcYOffset:65,
+            width:360, height:250
+        },
+        
         /*img_background:{src:"mainImage", scale:0.8, position:pageInfo.ABSOLUTE_P,
             x:-260, y:0, z:-3500, rPointX:0, rPointY:0, width:1280, height:720},*/
         img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
@@ -157,6 +163,11 @@ define(["signals"], function (signals)
         _motionSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-415, rrcYOffset:-80,
             width:990, height:268, opacity:1, sectionId:"motion"},
+        div_hireMeSkills:{
+            position:pageInfo.RES_RC_P,
+            z:-100, rrcX:0.5, rrcY:-0.5, rrcXOffset:-270, rrcYOffset:65,
+            width:360, height:250
+        },
     };
     
     var scaleH3 = 1.4
