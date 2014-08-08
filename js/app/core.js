@@ -231,6 +231,7 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 //MODULES.header.on.toggleRenderer.add(folio.toggleRenderer);
                 MODULES.folio.on.pageCreationComplete.add(onPageCreationComplete);
                 MODULES.folio.on.pageLoading.add(onPageLoading);
+                MODULES.folio.on.hireMeClicked.add(onHireMeClicked);
                 MODULES.folio.init(pageId, sectionId);
 
             })
@@ -241,6 +242,10 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
             MODULES.folio.on.pageLoaded.add(onPageLoaded)
             MODULES.folio.load(pageId, sectionId);
         }
+    }
+    
+    var onHireMeClicked = function() {
+        MODULES.header.openHireMe()   
     }
     
     var onPageLoading = function() {

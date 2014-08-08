@@ -54,6 +54,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         creationComplete: new signals.Signal(),
         twPositionDefined: new signals.Signal(),
         pageLoading: new signals.Signal(),
+        hireMeClicked: new signals.Signal(),
         pageCreationComplete: new signals.Signal()
     }
 
@@ -1166,6 +1167,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var addSecondaryElementAndUpdatePage3DStatus = function(pageId){
         currentPage3D = getPage3D(pageId);
         currentPage3D.addSecondaryElements();
+        $(".hireme-button").click(function(){
+            folio.on.hireMeClicked.dispatch();
+        })
         
     }
     

@@ -92,6 +92,10 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         controlMenuState("");
     }
     
+    header.openHireMe = function() {
+        controlMenuState("contact")
+    }
+    
     /* event handler for tablets*/
     header.onTouchClick = function(element) {
         if(!header.contains(element)) return;
@@ -274,8 +278,8 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     }
     
     header.resize = function(){
-        var wSc = Math.floor(((LAYOUT.viewportW-20)/8)) - 2-8;
-        var wBtr = Math.floor(((LAYOUT.viewportW-20)/8)) - 32-8;
+        var wSc = Math.floor(((LAYOUT.viewportW-20)/8)) - 2 - 10;
+        var wBtr = Math.floor(((LAYOUT.viewportW-20)/8)) - 32 - 8;
         $(".menuSelectedCases .buttonSubMenu").width(wSc);
         $(".menuSelectedCases .buttonSubMenu.backToReel").width(wBtr);
 
