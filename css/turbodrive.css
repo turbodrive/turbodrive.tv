@@ -1220,11 +1220,12 @@ h1{
     width: 500px;
     height: 50px;
 	position: fixed;
+    pointer-events: none;
 }
 
 h2{
     color: #8F7E7F;
-    font-family:"texgyreadventorregular", "helvetica neue", Arial, sans-serif;
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
     font-size: 22px;
     padding: 0px;
     margin: 0px;
@@ -1444,7 +1445,7 @@ button.icon-play:active {
     text-transform: uppercase;
 }
 
-.about h3.timelineDate {
+h3.timelineDate {
     font-size: 75px;
 }
 
@@ -2186,15 +2187,18 @@ div.skill-section {
     background-color: #D15F5F;
 }
 
-.textPlane {    
+.textPlane, .textPlane2 {    
     margin: 0px;
     padding: 0px;
 	position: fixed;
-    width : 460px;
+    width : 400px;
     height : 5000px;
     background-color: #201026;
-    /*background-color: red;*/
     opacity: 0.65;
+}
+
+.textPlane2 {    
+    width : 380px;
 }
 
 .panelLeft {

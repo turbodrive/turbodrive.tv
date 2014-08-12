@@ -11,7 +11,7 @@
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:true, volumeReel:0};
+hyperDriveTransition:false, volumeReel:0};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
 
@@ -54,6 +54,40 @@ UTILS.shapeWrapper = function(lineHeight,Xs,container, nbrLines) {
         container.insertBefore(divA, firstNode);
         container.insertBefore(divB, firstNode);
 	}
+}
+
+UTILS.clone = function(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = UTILS.clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = UTILS.clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
 var GLOBAL_ACCESS = this;

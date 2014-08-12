@@ -145,116 +145,20 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     
     Page3D.prototype.build = function()
     {   
-        if(this.pageInfo.project){
-            this.secondaryElements = [];
-            
-            // 1. title
-            var title = new Sprite3D()
-                //.addClassName("title")
-                .addDomElement(addAndroidFix(this.divElement.children("h1")[0]))
-                .setRotationZ(-3)
-                .update();        
-            this.addChild(title);
-            this.title = title;
-
-            // 2. client
-            var client = new Sprite3D()
-                //.addClassName("client")
-                .addDomElement(addAndroidFix(this.divElement.children("h2")[0]))
-                .setRotationZ(-3)
-                .update();
-            //this.addChild(client);
-            this.client = client;
-            this.secondaryElements.push(this.client);
-
-            // 3. redLine
-            var redLine = new Sprite3D()
-                .setClassName("redLine")
-                .setRotateFirst(false)
-                .setRotationZ(-3)
-                .update();
-            this.addChild(redLine);
-            this.redLine = redLine;
-
-            // 4. background
-            var bg = new Sprite3D()
-                .addDomElement(this.pageInfo.mainImage)
-                .update();
-            this.addChild(bg);
-            this.bg = bg;
-
-            // 5. textPlane
-            var rotZPlane = this.pageInfo.layout.id == "right" ? -25 : 34.5;
-            var textPlane = new Sprite3D()
-                .addClassName("textPlane")
-                .setRegistrationPoint(230, 2500, 0)
-                .setRotationZ(rotZPlane)
-                .update();
-            this.addChild(textPlane);
-            this.textPlane = textPlane
-            //msg("textPlane >> " + textPlane)
-            
-            
-            var isRightLayout = (this.pageInfo.layout == pageInfo.RIGHT_LAYOUT)
-            
-            // 6. content
-            this.pictoSkills = this.divElement.children("p")[0];
-            var divText = document.createElement("div");
-            var leftOffset =  isRightLayout ? "20" : "0";
-            var widthContent =  isRightLayout ? "580" : "340";
-            
-            divText.setAttribute("style", "-webkit-transform-style : preserve-3d; transform-style: preserve-3d; position:fixed; left:"+leftOffset+"px; width:"+widthContent+"px ;");
-            divText.appendChild(this.divElement.children("p")[1]);
-            // wrap text to get shapped paragraph
-if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
-            }
-            
-            addAndroidFix(divText)
-            var projectContent = new Sprite3D()
-                .addDomElement(this.pictoSkills) // Picto Skills
-                .addDomElement(divText) // Text
-                .setRotationZ(-3)
-                .update();
-            //this.addChild(projectContent);
-            this.content = projectContent;
-            this.secondaryElements.push(this.content);
-            
-             // 7. projectPlayer
-            this.videoContainer = this.divElement.children(".project-player")[0];
-            
-            var projectPlayer = new Sprite3D()
-                .addDomElement(this.videoContainer)
-                .setRegistrationPoint(50, 50, 0)
-                .setRotationZ(-3)
-                .update();
-            //this.addChild(projectPlayer);
-            this.projectPlayer = projectPlayer;
-            this.projectPlayer.setCSS("visibility", "hidden");
-            this.secondaryElements.push(this.projectPlayer);
-            
-            // 7. pictoPlay
-            var pictoPlay = new Sprite3D()
-                .addDomElement(addAndroidFix(this.divElement.children("button")[0]))
-                .setRegistrationPoint(50, 50, 0)
-                .setRotationZ(-3)
-                /*.setScale(0.85,0.85,0)*/
-                .update();
-            //this.addChild(pictoPlay);
-            this.pictoPlay = pictoPlay;
-            this.secondaryElements.push(this.pictoPlay);
-            
-            
-            pictoPlay.domElement.addEventListener("click", this.playVideo)
-            pictoPlay.domElement.addEventListener("touchstart", this.playVideo)
-            pictoPlay.domElement.self = this;
-            //TweenMax.set(pictoPlay.domElement, {autoAlpha:0});
-            
-            
-        }else {
+        
+        this.secondaryElements = [];
+        
             // infoLayout
-            var infoLayout = this.pageInfo.layout;
-            this.elementList = []
             
+            this.elementList = [];            
+            var infoLayout = UTILS.clone(this.pageInfo.layout);
+            
+            if(this.pageInfo.images != null){
+                for(var q in this.pageInfo.images){
+                    infoLayout["img_"+q] = this.pageInfo.images[q];
+                }                
+            }
+
             for(var p in infoLayout){
                 var elementName = p;
                 if(elementName != "id"){
@@ -268,19 +172,29 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                     }else{
                         tag = elementName.split("_");
                         //get element by 3dId element
-                        domEl = this.divElement.children(tag[0]+"[id3d*='"+tag[1]+"']")[0];}
+                        domEl = this.divElement.children(tag[0]+"[id3d*='"+tag[1]+"']")[0];
+                    }
                     
                     var element3d;
                     if(!domEl) {
                         element3d = this.createElement(tag[0],tag[1],elementInfo);
                     }else {
-                        element3d = this.convertElement(domEl, elementInfo)
-                    }
+                        if(elementInfo.wrapLeftOffset != null){
+                            // wrap the paragraphe text
+                           domEl = wrapText(domEl, elementInfo.width, elementInfo.wrapLeftOffset);
+                        }
+                        
+                        element3d = this.convertElement(domEl, elementInfo);
+                    }     
                     
                     if(elementInfo.position != pageInfo.FREE3D_P){
-                        this.addChild(element3d);
+                        if(elementInfo.secondary){
+                            this.secondaryElements.push(element3d);
+                        }else {                        
+                            this.addChild(element3d);
+                        }
                     }else {
-                        element3d.setRotateFirst(false);   
+                        element3d.setRotateFirst(false);
                     }
                     
                     if(elementInfo.sectionId){
@@ -288,12 +202,14 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
                         this.sectionsList.push(element3d);
                     }
                     
+                    
+                    
                     element3d.update();
                     this.elementList.push({element3d:element3d, info:elementInfo, id:elementName});
                 }
             }
             //this.addFree3dElement();
-        }
+        
         
         this.setCSS("opacity","0");
         this.setCSS("visibility","hidden");
@@ -301,6 +217,17 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
         this.isBuilt = true;
         
         return this;
+    }
+    
+    wrapText = function(domElement, widthContent, leftOffset){
+         var divText = document.createElement("div");
+        divText.setAttribute("style", "-webkit-transform-style : preserve-3d; transform-style: preserve-3d; position:fixed; left:"+leftOffset+"px; width:"+widthContent+"px ;");
+        divText.appendChild(domElement);
+        if(leftOffset > 0) {
+        
+UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133|82.5,37,126|97.5,43,119|112.5,49,113|127.5,55,106|142.5,62,100|157.5,68,93|172.5,74,86|187.5,81,80|202.5,87,73|217.5,93,66|232.5,100,60|247.5,106,53|262.5,112,47|277.5,118,40|292.5,125,33|307.5,0,0|322.5,0,0|", divText, 15);
+        }
+        return divText;
     }
     
     Page3D.prototype.isHidden = function()
@@ -392,7 +319,9 @@ if(isRightLayout){            UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,
             for(var i = 0; i< this.elementList.length ; i++){
                 if(this.elementList[i].info.position == pageInfo.FREE3D_P){
                     if(this.free3DContainer === null) {
-                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer");
+                        var cInfo = this.pageInfo.free3DContainer;
+                        
+                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ).update();
                         this.free3DContainer.setCSS("opacity","0");
                         this.free3DContainer.setCSS("visibility","hidden");
                         this.parentSprite3D.addChild(this.free3DContainer);

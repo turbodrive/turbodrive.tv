@@ -84,18 +84,136 @@ define(["signals"], function (signals)
     pageInfo.TOPRIGHTSCREENRELATIVE_P = "topRightScreenRelativePosition";
     
     
-    pageInfo.RIGHTBOTTOM_LAYOUT = {id:"rightBottom", planeTextX:300, redLine:{x:0.1, y:0.1}, pictoPlay:{x:-0.28, y:0.25}};
-    pageInfo.LEFT_LAYOUT = {id:"left", planeTextX:100, redLine:{x:-0.38, y:-0.20}, pictoPlay:{x:0.28, y:0.25}};
-    /*pageInfo.RIGHT_LAYOUT = {id:"right", planeTextX:280, redLine:{x:0.12, y:-0.17}, pictoPlay:{x:-0.28, y:0.25}};*/
-    pageInfo.RIGHT_LAYOUT = {
-        id:"right",
-        planeTextX:280,
-        redLine:{x:0.12, y:-0.17},
-        pictoPlay:{x:-0.28, y:0.25}
+    pageInfo.LEFT_LAYOUT = {
+        id:"left",
+        div_redLine:{position:pageInfo.RES_RC_P,
+            z:-1200, rrcX:-0.45, rrcY:-0.16, rrcXOffset:50, rrcYOffset:0, rPointX:0, rPointY:-130,
+            rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
+        div_bgContent:{html:"<div class='textPlane2'></div>", position:pageInfo.RES_RC_P,
+            parent : "div_redLine",
+            z:-1500, rrcXOffset:120, rrcYOffset:-1000,
+            rotationZ:34.5, width:400, height:2500},     
+        h2_client:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            parent:"div_redLine",
+            z:-80, rrcXOffset:0, rrcYOffset:-80, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:25},
+        h1_title:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            z:-50, rrcXOffset:0, rrcYOffset:-60, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:50},
+        p_skillsIcon:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-100, rrcXOffset:20, rrcYOffset:20, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:420, height:74},
+        p_content:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-150, rrcXOffset:0, rrcYOffset:95, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:350, height:240, wrapLeftOffset:0},
+        div_player:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:100, height:100},
+        button_playButton:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:0.25, rrcY:0.24, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:620, height:250},
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+            z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+            rPointX:0, rPointY:0, width:1280, height:720}  
     };
     
-    var cX = -0.20; //-265
-    var cY = -0.12;;
+    pageInfo.RIGHTBOTTOM_LAYOUT = {
+        id:"right-bottom-layout",
+        div_redLine:{position:pageInfo.RES_RC_P,
+            z:-1200, rrcX:0.36, rrcY:0.13, rrcXOffset:-320, rrcYOffset:0, rPointX:0, rPointY:-130,
+            rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
+        div_bgContent:{html:"<div class='textPlane2'></div>", position:pageInfo.RES_RC_P,
+            parent : "div_redLine",
+            z:-1500, rrcXOffset:80, rrcYOffset:-1000,
+            rotationZ:34.5, width:400, height:2500},     
+        h2_client:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            parent:"div_redLine",
+            z:-80, rrcXOffset:0, rrcYOffset:-80, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:25},
+        h1_title:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            z:-50, rrcXOffset:0, rrcYOffset:-60, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:50},
+        p_skillsIcon:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-100, rrcXOffset:220, rrcYOffset:-75, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:420, height:74},
+        p_content:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-150, rrcXOffset:0, rrcYOffset:25, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:350, height:240, wrapLeftOffset:0},
+        div_player:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:100, height:100},
+        button_playButton:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:-0.35, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:620, height:250},
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+            z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+            rPointX:0, rPointY:0, width:1280, height:720}  
+    };
+    
+    var cX = 0.33;
+    var cY = -0.12;
+    
+    pageInfo.RIGHT_LAYOUT = {
+        id:"right-layout",
+        div_redLine:{position:pageInfo.RES_RC_P,
+            z:-1200, rrcX:cX, rrcY:cY, rrcXOffset:-320, rrcYOffset:0, rPointX:0, rPointY:-130,
+            rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
+        div_bgContent:{html:"<div class='textPlane'></div>", position:pageInfo.RES_RC_P,
+            parent : "div_redLine",
+            z:-1500, rrcXOffset:-80, rrcYOffset:-1000,
+            rotationZ:-25, width:400, height:2500},     
+        h2_client:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            parent:"div_redLine",
+            z:-80, rrcXOffset:-26, rrcYOffset:-80, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:25},
+        h1_title:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            z:-50, rrcXOffset:-16, rrcYOffset:-60, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:500, height:50},
+        p_skillsIcon:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-100, rrcXOffset:35, rrcYOffset:20, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:420, height:74},
+        p_content:{position:pageInfo.RES_RC_P,
+            parent:"div_redLine",
+            secondary:true,
+            z:-150, rrcXOffset:0, rrcYOffset:100, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            width:560, height:240, wrapLeftOffset:20},
+        div_player:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:100, height:100},
+        button_playButton:{position:pageInfo.RES_RC_P,
+            secondary:true,
+            z:0, rrcX:-0.39, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            rotationZ:-3, width:620, height:250},
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+            z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+            rPointX:0, rPointY:0, width:1280, height:720}
+        
+    };
+    
+    
+    cX = -0.20; //-265
+    cY = -0.12;;
     
     pageInfo.ABOUT_LAYOUT = {
         id:"about-layout",
@@ -175,7 +293,7 @@ define(["signals"], function (signals)
     pageInfo.TIMELINE_LAYOUT = {
         id:"timeline-layout",
         h1:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0.32, rrcY:-0.4, rrcXOffset:-180, rrcYOffset:80, width:356, height:58},
+            z:-100, rrcX:0.5, rrcY:-0.5, rrcXOffset:-320, rrcYOffset:50, width:356, height:58},
         /*p_contentNow:{position:pageInfo.ABSOLUTE_P,
             x:-460,y:-230, z:0, width:490, height:34},*/
         p_contentNow:{position:pageInfo.FOV_RELATED,
@@ -207,7 +325,7 @@ define(["signals"], function (signals)
         h3_dateNow:{position:pageInfo.FREE3D_P,
             x:-900,y:1140, z:940,rX:30, rY:60, rZ:-90, rPointX:-200, scale:scaleH3},
         h3_date2012:{position:pageInfo.FREE3D_P,
-            x:-900,y:890, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
+            x:-730,y:980, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date2006:{position:pageInfo.FREE3D_P,
             x:-900,y:132, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         h3_date2004:{position:pageInfo.FREE3D_P,
@@ -220,8 +338,8 @@ define(["signals"], function (signals)
             x:-900,y:-1068, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         
         
-        img_timeline:{position:pageInfo.FREE3D_P,src:"mainImage",
-                      x:-600, y:-1200, z:1400, rX:0, rY:90, rZ:180, scale:3.5},
+        img_timeline:{position:pageInfo.FREE3D_P,html:"<img src='images/about_timeline.svg'/>",
+                      x:-510, y:-1335, z:1280, rX:0, rY:90, rZ:180, scale:3.5},
         img_tmleBg:{position:pageInfo.FREE3D_P,html:"<img src='images/timeline_0.png'/>",
                       x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},  
         img_line01:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
@@ -240,16 +358,17 @@ define(["signals"], function (signals)
                       x:-850, y:-968, z:1230, rX:0, rY:-40, rZ:0, scale:1},
     };
     //from AEX : - - +
-    
-    
+
     /*img_background:{src:"mainImage", x:733, y:755, z:-143, scale:1.87, rX:142.122, rY:3.39142, rZ:237.937}*/
-    
-    
+
     
     pageInfo.content = [
         {   
             id: "tot",
             project: true,
+            images: {
+                front2:{html:"<img src='images/tot_front.png'/>", position:pageInfo.RES_RC_P, scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0, rPointX:0, rPointY:0, width:1280, height:720}
+            },
             info: {},
             videoId: "OBa37rBBMS4",
             x:3057, y:-3562, z:1310, rotationX:17, rotationY:-170, rotationZ:-30,
@@ -342,7 +461,8 @@ define(["signals"], function (signals)
             x:-1897, y:-646, z:-1902, rotationX:-48.6, rotationY:-392.4, rotationZ:-94.8,
             loaded:loadedDefault,
             built:false,
-            layout:pageInfo.TIMELINE_LAYOUT
+            layout:pageInfo.TIMELINE_LAYOUT,
+            free3DContainer:{x:140,y:0,z:100, rotationX:0, rotationY:0, rotationZ:0}
         },
          {
             id: "skillsfield",

@@ -218,13 +218,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             res = -(pageInfo.content[parseInt(rVal)][propName]);
             //if(log) console.log("NoT0 > " + rVal)
         } else {
-            if (log) console.log("rVal >> " + rVal)
+            if (log) console.log("rVal >> " + rVal);
             var t0 = Math.ceil(rVal - 1);
             var t1 = Math.ceil(rVal);
             if (log) console.log(" - " + t0 + "-" + pageInfo.content[t0])
             var v0 = pageInfo.content[t0][propName];
             var v1 = pageInfo.content[t1][propName];
-            if (log) console.log(t0 + " - " + t1 + " - " + v0 + " - " + v1 + " - " + rVal)
+            if (log) console.log(t0 + " - " + t1 + " - " + v0 + " - " + v1 + " - " + rVal);
             res = -(v0 + ((v1 - v0) * (rVal - (parseInt(rVal)))));
         }
 
@@ -233,7 +233,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     };
 
     setTweenPosition = function (pageId, sectionId, isIntro) {
-        interactTx = startx = 0
+        interactTx = startx = 0;
         touchEnd = touchEnd2 = false;
         console.log("setTweenPosition >> " + pageId + " - " + sectionId);
 
@@ -241,12 +241,12 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         sourceTwPosition = objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
         updateWindowStatus(pageId, sectionId);
         
-        if(isIntro === null) isIntro = false
+        if(isIntro === null) isIntro = false;
         if(!isIntro) {        
             if(nextPrev) nextPrev.updateState(currentPage3D.getPageInfo());
             if(currentPage3D.getPageInfo().project){
                 currentPage3D.preloadVideo();
-            } 
+            }  
         }
     }
     
@@ -399,7 +399,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if(touchTransitionPlaying){
             touchEnd2 = true;
             if(interruptWhenPlaying){
-                console.log("!!! INTERRUPT !!!!! switch")
                 interruptWhenPlaying = false;
                 hideExceptPage(targetPage,0);
                 fadeInAndActivate(targetPage, 0.2);
@@ -939,9 +938,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         scaleList._scaleAboutVisuel = Math.min(scaleList._scaleAboutVisuel, 1.2);
         //console.log("scaleBg >> " + scaleBg);
 
-        /*var dfX = ((LAYOUT.viewportW-1280)/2)*_scaleVisuel
-        var dfY = ((LAYOUT.viewportH-720)/2)*_scaleVisuel*/
-
         page3D.setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)
             .setPosition(currentPageInfo.x, currentPageInfo.y, currentPageInfo.z)
             .setRotation(currentPageInfo.rotationX, currentPageInfo.rotationY, currentPageInfo.rotationZ)
@@ -949,59 +945,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         page3D.setScale(retinaScale, retinaScale, retinaScale)
         page3D.update();
 
-        if (currentPageInfo.project) {
-
-            /*page3D.bg.setPosition(LAYOUT.vW2+dfX, LAYOUT.vH2+dfY, zVisuel)
-                .setRegistrationPoint(LAYOUT.vW2+dfX, LAYOUT.vH2+dfY, 0)*/
-            /* page3D.bg.setPosition(LAYOUT.vW2, LAYOUT.vH2, zVisuel)
-                .setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)*/
-
-            // BACKGROUND
-            var scaleVisuel = getRatioPxPerfect(zVisuel)*scaleList._scaleVisuel;
-            page3D.bg.setPosition(0, 0, zVisuel)
-            //.setRegistrationPoint(LAYOUT.vW2, LAYOUT.vH2, 0)
-            .setScale(scaleVisuel, scaleVisuel, 1)
-                .update();
-            
-            // PROJECT-PLAYER
-            page3D.projectPlayer.setPosition((tW*0.10), 270, -20).update();
-            
-            // PICTOPLAY
-            page3D.pictoPlay.setPosition(tW * (0.5 + layout.pictoPlay.x), tH * (0.5 + layout.pictoPlay.y), 0).update();
-
-            // REDLINE
-            var xRedLine = tW * (0.5 + (layout.redLine.x));
-            var yRedLine = tH * (0.5 + (layout.redLine.y));
-            page3D.redLine.setPosition(xRedLine, yRedLine, -50) //75
-            .setRegistrationPoint(2500, 2, 0) //2500,2,0
-            .update();
-
-            // TITLE
-            var oY = -70 - ((invRetinaScale - 1) * 10);
-            var oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.title.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //100
-            .setRegistrationPoint(0, 0, 0)
-                .update();
-
-            // CLIENT
-            oY = -95 - ((invRetinaScale - 1) * 10);
-            oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.client.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //50
-            .setRegistrationPoint(0, 0, 0)
-                .update();
-
-            // CONTENT
-            oY = 25 * retinaScale;
-            oX = (Math.sin(3 * DEGREES_TO_RADIANS) * oY);
-            page3D.content.setPosition(xRedLine - (10 * retinaScale) + oX, yRedLine + oY, -50) //5
-            .setRegistrationPoint(0, 0, 0)
-                .update();
-
-            //page3D.textPlane.setPosition(xRedLine+layout.planeTextX, yRedLine, -250).update();
-            
-            // TEXTPLANE
-            page3D.textPlane.setPosition(xRedLine + layout.planeTextX, yRedLine, -150).update();
-        } else {
+        
             var nbrElements = page3D.elementList.length;
             for (var i = 0; i < nbrElements; i++) {
                 var element = page3D.elementList[i].element3d;
@@ -1026,17 +970,44 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                         element.setScale(ratioPx, ratioPx, 1);
                     }
                 }
-
-
+                
+                /** ROTATION Z **/
+                var rotationZ = 0
+                if(elInfo.rotationZ != null){
+                    rotationZ = elInfo.rotationZ;
+                }else if(elInfo.parent != null){
+                    var parentInfo = getParent(page3D, elInfo.parent).info;
+                    if(parentInfo.rotationZ != null){
+                        rotationZ = parentInfo.rotationZ;
+                    }
+                }
+                
+                if(rotationZ) element.setRotationZ(rotationZ);
+                
+                /** POSITION **/
                 var xF, yF, scaleF;
                 if (elInfo.position == pageInfo.ABSOLUTE_P) {
                     xF = (LAYOUT.vW2) + (elInfo.x * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y * ratioPx) - (elInfo.height * 0.5);
                     element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.RES_RC_P) {
-                    xF = (LAYOUT.vW2) + (((LAYOUT.viewportW * elInfo.rrcX) + elInfo.rrcXOffset) * ratioPx) - (elInfo.width * 0.5);
-                    yF = (LAYOUT.vH2) + (((LAYOUT.viewportH * elInfo.rrcY) + elInfo.rrcYOffset) * ratioPx) - (elInfo.height * 0.5);
-                    element.setPosition(Math.round(xF), Math.round(yF), elInfo.z);
+                    var tXF, tYF;
+                    if(elInfo.parent != null){
+                        var parentInfo = getParent(page3D, elInfo.parent).info;
+                        tYF = Math.round(parentInfo.tYF + elInfo.rrcYOffset)
+                        tXF = Math.round(parentInfo.tXF + elInfo.rrcXOffset)+(Math.sin(-rotationZ * DEGREES_TO_RADIANS) * elInfo.rrcYOffset);         
+                    } else {
+                        tXF = (LAYOUT.viewportW * elInfo.rrcX) + elInfo.rrcXOffset;
+                        tYF = (LAYOUT.viewportH * elInfo.rrcY) + elInfo.rrcYOffset;
+                    }
+                    
+                    elInfo.tXF = tXF;
+                    elInfo.tYF = tYF;
+                    
+                    xF = (LAYOUT.vW2) + (tXF * ratioPx) - elInfo.width * 0.5;
+                    yF = (LAYOUT.vH2) + (tYF * ratioPx) - elInfo.height * 0.5;
+                    
+                    element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.TOPLEFTSCREENRELATIVE_P) {
                     xF = tW * (elInfo.x) * ratioPx;
                     yF = tH * (elInfo.y) * ratioPx;
@@ -1047,19 +1018,14 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     xF = (LAYOUT.vW2) + (getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL) * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL) * ratioPx) - (elInfo.height * 0.5);
 
-
-                    /*xF =  getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL);
-                    yF =  getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL);*/
                     if (elInfo.scale != null && elInfo.scale.minL) {
                         scaleF = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL);
                         element.setScale(scaleF * ratioPx, scaleF * ratioPx, 1);
-                        //console.log("ratioPx")
                     } else {
                         element.setScale(ratioPx, ratioPx, 1);
                     }
                     element.setPosition(xF, yF, elInfo.z);
                     element.update();
-                    //console.log("xF >> " + xF + " scaleF >>" + scaleF);
                 }
 
                 if (!isNaN(elInfo.rPointX) && !isNaN(elInfo.rPointY)) {
@@ -1081,10 +1047,18 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 }
                 element.update();
             }
-        }
+        
 
         $("#" + idElement).css("width", tW);
         $("#" + idElement).css("height", tH);
+    }
+    
+    var getParent = function(page3D, parentName) {
+        for(var i = 0; i< page3D.elementList.length; i++){
+            if(page3D.elementList[i].id == parentName){
+                return page3D.elementList[i];
+            }
+        }
     }
     
     var hideSection = function(sprite3d)
