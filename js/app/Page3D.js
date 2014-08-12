@@ -53,8 +53,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     
     Page3D.prototype.playVideo = function(event)
     {   
-        var page = event.currentTarget.self;
-
+        var page = event.currentTarget.self;        
+        
         TweenMax.to(page.videoContainer,0.5, {delay:0.2, autoAlpha:1});
         page.projectPlayer.setCSS("visibility", "visible");
         TweenMax.to(page.pictoPlay.domElement,0.5, {autoAlpha:0});
@@ -64,9 +64,9 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.onClickVideo = function(event) {
         var currentVideo = event.currentTarget;
         if(currentVideo.paused){
-            currentVideo.play()
+            currentVideo.self.resumeVideo();
         }else {
-            currentVideo.pause();
+            currentVideo.self.pauseVideo();
         }
     }
     
@@ -90,6 +90,19 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     Page3D.prototype.preloadVideo = function() {
         //TweenMax.to(this.pictoPlay.domElement, 1.25, {delay: 0.5, autoAlpha:1});
         
+        for(var i = 0; i < this.secondaryElements.length; i++){
+            console.log("PRELOAD >>> " + this.secondaryElements[i].getId());
+            if(this.secondaryElements[i].getId() == "div_player"){
+                this.projectPlayer = this.secondaryElements[i];
+                this.projectPlayer.addClassName("project-player")
+                this.videoContainer = this.projectPlayer.domElement;
+            }
+            
+            if(this.secondaryElements[i].getId() == "button_playButton"){
+                this.pictoPlay = this.secondaryElements[i];
+            }
+        }
+        
         if(this.videoContainer){
             this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"></video>';
             this.video = this.videoContainer.firstElementChild;
@@ -101,20 +114,20 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             this.video.addEventListener("touchend", this.onTouchEndVideo);
         }
         
-        /*if(!this.pictosInitialized){
-            this.pictosInitialized = true;        
-            var pictos = $(this.pictoSkills).children(".icon-skill")
-            for(var i = 0; i<pictos.length; i++){
-                pictos[i].addEventListener("touchstart", this.onTouchStartPicto);
-                pictos[i].addEventListener("touchend", this.onTouchEndVideo);
-                //console.log("addEventlistener to "  + pictos[i] + "pictoLength"  + pictos.length)
-            }
-        }*/
+        this.resize();
+    }
+    
+    Page3D.prototype.resumeVideo = function() {
+        if(this.video){
+            this.video.play();
+            this.video.className = this.video.className.replace("pause-video", '');
+        }
     }
     
     Page3D.prototype.pauseVideo = function() {
         if(this.video){
             this.video.pause();
+            this.video.className += " pause-video ";
         }
     }
     
@@ -131,6 +144,25 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                                                   onCompleteParams:[this]
             });
             TweenMax.to(this.pictoPlay.domElement,0.3, {autoAlpha:1});
+        }
+    }
+    
+    Page3D.prototype.resize = function() {
+        if(this.projectPlayer){
+            var _rX = LAYOUT.viewportW / 1280;
+            var _rY = LAYOUT.viewportH / 720;
+            var __scale = _rX > _rY ? _rX : _rY;
+            var __width = Math.round(1280*__scale*0.55);
+            var __height = Math.round(720*__scale*0.55);
+            
+            TweenMax.set(this.projectPlayer.domElement,
+                         {width:__width,
+                          height:__height
+                         })
+            TweenMax.set(this.video,
+                         {width:__width-20,
+                          height:__height-20
+                         })
         }
     }
     
@@ -187,6 +219,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                         element3d = this.convertElement(domEl, elementInfo);
                     }     
                     
+                    element3d.setId(elementName);
+                    
                     if(elementInfo.position != pageInfo.FREE3D_P){
                         if(elementInfo.secondary){
                             this.secondaryElements.push(element3d);
@@ -202,6 +236,11 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                         this.sectionsList.push(element3d);
                     }
                     
+                    if(elementInfo.clickHandler != null){
+                        element3d.domElement.addEventListener("click", this[elementInfo.clickHandler]);
+                        element3d.domElement.addEventListener("touchstart ", this[elementInfo.clickHandler]);
+                        element3d.domElement.self = this;
+                    }                  
                     
                     
                     element3d.update();
@@ -214,6 +253,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         this.setCSS("opacity","0");
         this.setCSS("visibility","hidden");
             //page3D.contentSprite3D.push(title, client, redLine,bg, textPlane, projectContent, pictoPlay)
+        this.resize();
         this.isBuilt = true;
         
         return this;
@@ -241,8 +281,7 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
     Page3D.prototype.addSecondaryElements = function()
     {
         if(this.secElementsAdded) return
-        
-        console.log("addSecondaryElements >> " + this.getId() + " - nbrElements = " + this.secondaryElements.length)
+
        for(var i = 0; i< this.secondaryElements.length; i++ ){
            var el = this.secondaryElements[i];
            el.setCSS("opacity", "0");
@@ -352,7 +391,7 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
     Page3D.prototype.createElement = function(tag, id3d, info)
     {
         var el = new Sprite3D();
-        el.setId(id3d);
+        
         if(info.src){
             el.addDomElement(this.pageInfo[info.src]);
         }else{

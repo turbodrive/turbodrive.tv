@@ -73,7 +73,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     folio.wakeup = function(pageId) {
         $(stage3d).css("visibility", "visible");
-        
         console.log("WAKEUP FOLIO");
     }
 
@@ -213,7 +212,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
 
     getValForProp = function (propName, rVal, log) {
         var res;
-
         if (rVal == parseInt(rVal)) {
             res = -(pageInfo.content[parseInt(rVal)][propName]);
             //if(log) console.log("NoT0 > " + rVal)
@@ -735,8 +733,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     }
                 }
                 
-                
-                
                 particle.setPosition(randX, randY, 0);
                 particle.setOpacity((0.3 + Math.random()*0.75));
                 var rotX = (Math.atan2(randY, randX) * 180 / Math.PI);
@@ -944,6 +940,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
             .setRotateFirst(false)
         page3D.setScale(retinaScale, retinaScale, retinaScale)
         page3D.update();
+        page3D.resize();
 
         
             var nbrElements = page3D.elementList.length;

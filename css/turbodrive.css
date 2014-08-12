@@ -1398,14 +1398,21 @@ button.icon-play:active {
 }
 
 #project-video {
-    top: 2%;
-    left: 2%;
-    width: 96%;
-    height: 96%;
+    top: 10px;
+    left: 10px;
+    /*width: 96%;
+    height: 96%;*/
     position: absolute;
     background-color: #000000;
     padding: 0px;
     margin: 0px;
+    transition: 0.3s;
+}
+
+#project-video.pause-video {
+    /*filter:brightness(0.5);
+    -webkit-filter:brightness(0.5);*/
+    opacity: 0.3;
 }
 
 /***********************************************************************/

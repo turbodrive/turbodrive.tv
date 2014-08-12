@@ -114,15 +114,15 @@ define(["signals"], function (signals)
             width:350, height:240, wrapLeftOffset:0},
         div_player:{position:pageInfo.RES_RC_P,
             secondary:true,
-            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            z:0, rrcX:-0.25, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
             secondary:true,
             z:0, rrcX:0.25, rrcY:0.24, rrcXOffset:0, rrcYOffset:0,
-            rotationZ:-3, width:620, height:250},
+            rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
         img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
-            rPointX:0, rPointY:0, width:1280, height:720}  
+            rPointX:0, rPointY:0, width:1280, height:720}
     };
     
     pageInfo.RIGHTBOTTOM_LAYOUT = {
@@ -155,12 +155,12 @@ define(["signals"], function (signals)
             width:350, height:240, wrapLeftOffset:0},
         div_player:{position:pageInfo.RES_RC_P,
             secondary:true,
-            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            z:0, rrcX:-0.41, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
             secondary:true,
             z:0, rrcX:-0.35, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
-            rotationZ:-3, width:620, height:250},
+            rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
         img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
             rPointX:0, rPointY:0, width:1280, height:720}  
@@ -199,12 +199,12 @@ define(["signals"], function (signals)
             width:560, height:240, wrapLeftOffset:20},
         div_player:{position:pageInfo.RES_RC_P,
             secondary:true,
-            z:0, rrcX:-0.16, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            z:0, rrcX:-0.41, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
             secondary:true,
             z:0, rrcX:-0.39, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
-            rotationZ:-3, width:620, height:250},
+            rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
         img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
             rPointX:0, rPointY:0, width:1280, height:720}
