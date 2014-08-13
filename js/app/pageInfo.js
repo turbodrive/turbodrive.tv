@@ -128,7 +128,7 @@ define(["signals"], function (signals)
     pageInfo.RIGHTBOTTOM_LAYOUT = {
         id:"right-bottom-layout",
         div_redLine:{position:pageInfo.RES_RC_P,
-            z:-1200, rrcX:0.37, rrcY:0.15, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
+            z:-1200, rrcX:0.41, rrcY:0.17, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
         div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
             parent : "div_redLine",
@@ -146,13 +146,13 @@ define(["signals"], function (signals)
         p_skillsIcon:{position:pageInfo.RES_RC_P,
             parent:"div_redLine",
             secondary:true,
-            z:-100, rrcXOffset:220, rrcYOffset:-75, // no need of rrcX or rrcY, parent's rrcX & rrcY used
+            z:-100, rrcXOffset:200, rrcYOffset:-75, // no need of rrcX or rrcY, parent's rrcX & rrcY used
             width:420, height:74},
         p_content:{position:pageInfo.RES_RC_P,
             parent:"div_redLine",
             secondary:true,
             z:-150, rrcXOffset:0, rrcYOffset:25, // no need of rrcX or rrcY, parent's rrcX & rrcY used
-            width:350, height:240, wrapLeftOffset:0},
+            width:330, height:240, wrapLeftOffset:0},
         div_player:{position:pageInfo.RES_RC_P,
             secondary:true,
             z:0, rrcX:-0.41, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
@@ -163,7 +163,7 @@ define(["signals"], function (signals)
             rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
         img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.9, src:"mainImage",
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
-            rPointX:500, rPointY:-100, width:1280, height:720}
+            rPointX:450, rPointY:-100, width:1280, height:720}
     };
     
     var cX = 0.33;
@@ -208,7 +208,7 @@ define(["signals"], function (signals)
     };
     
     pageInfo.IKAF_LAYOUT = UTILS.clone(pageInfo.RIGHT_LAYOUT);
-    pageInfo.IKAF_LAYOUT.div_redLine.rrcX = 0.39;
+    pageInfo.IKAF_LAYOUT.div_redLine.rrcX = 0.38;
     pageInfo.IKAF_LAYOUT.div_redLine.rrcY = -0.18;
     pageInfo.IKAF_LAYOUT.p_content.width = 500;
     pageInfo.IKAF_LAYOUT.div_bgContent.html = "<div class='textPlane380'></div>";
@@ -257,9 +257,11 @@ define(["signals"], function (signals)
             z:-1000,
             rrcX:0, rrcY:0.1,  rrcXOffset:0, rrcYOffset:-20,
             rPointX:0, rPointY:0, width:1366, height:665},
-        img_bgOpt:{html:"<img src='images/about_opt.png'/>", scale:"_scaleAboutVisuel", position:pageInfo.RES_RC_P,
-            z:-3000, rrcX:-0.20, rrcY:-0.40, rrcXOffset:-150, rrcYOffset:50,
-            width:739, height:698} // z = -3000
+        img_bgOpt:{html:"<img src='images/about_opt.png'/>",
+                   scale:"_scaleVisuel", position:pageInfo.RES_RC_P,
+            z:-6000, rrcX:-0.28, rrcY:-0.27, rrcXOffset:70, rrcYOffset:50,
+                rPointX:0,rPointY:0,
+            width:1280, height:720} // z = -3000
     };
     
     pageInfo.SKILLS_LAYOUT = {
@@ -301,25 +303,25 @@ define(["signals"], function (signals)
         /*p_contentNow:{position:pageInfo.ABSOLUTE_P,
             x:-460,y:-230, z:0, width:490, height:34},*/
         p_contentNow:{position:pageInfo.FOV_RELATED,
-            x:{minL:-208, maxL:-421},y:{minL:-196, maxL:-364}, z:-350,
+            x:{minL:87-340, maxL:374-960},y:{minL:12-188, maxL:174-540}, z:0,
             width:490, height:34},
         p_content2012:{position:pageInfo.FOV_RELATED,
-            x:{minL:-169, maxL:-349},y:{minL:-178, maxL:-322}, z:-300,
+            x:{minL:122-340, maxL:448-960},y:{minL:45-188, maxL:221-540}, z:0,
             width:490, height:60},
         p_content2006:{position:pageInfo.FOV_RELATED,
-            x:{minL:-40, maxL:-86},y:{minL:-118, maxL:-187}, z:-250,
+            x:{minL:224-340, maxL:695-960},y:{minL:112-188, maxL:396-540}, z:0,
             width:490, height:40},
         p_content2004:{position:pageInfo.FOV_RELATED,
-            x:{minL:19, maxL:35},y:{minL:-85, maxL:-127}, z:-200,
+            x:{minL:265-340, maxL:792-960},y:{minL:143-188, maxL:468-540}, z:0,
             width:490, height:40},
         p_content2001:{position:pageInfo.FOV_RELATED,
-            x:{minL:95, maxL:179},y:{minL:-45, maxL:-50}, z:-150,
+            x:{minL:327-340, maxL:934-960},y:{minL:194-188, maxL:583-540}, z:0,
             width:490, height:20},
         p_content1999:{position:pageInfo.FOV_RELATED,
-            x:{minL:179, maxL:336},y:{minL:-08, maxL:30}, z:-100,
+            x:{minL:380-340, maxL:1042-960},y:{minL:230-188, maxL:652-540}, z:0,
             width:490, height:40},
         p_content1997:{position:pageInfo.FOV_RELATED,
-            x:{minL:228, maxL:427},y:{minL:20, maxL:71}, z:-50,
+            x:{minL:434-340, maxL:1161-960},y:{minL:274-188, maxL:737-540}, z:0,
             width:490, height:60},
         /*img_timelinehelper:{position:pageInfo.FOV_RELATED,
             html:"<img src='images/timeline_helper_001.png'/>",
@@ -345,21 +347,27 @@ define(["signals"], function (signals)
         img_timeline:{position:pageInfo.FREE3D_P,html:"<img src='images/about_timeline.svg'/>",
                       x:-510, y:-1335, z:1280, rX:0, rY:90, rZ:180, scale:3.5},
         img_tmleBg:{position:pageInfo.FREE3D_P,html:"<img src='images/timeline_0.png'/>",
-                      x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},  
-        img_line01:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:1138, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line02:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:910, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line03:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:187, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line04:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:-102, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line05:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:-449, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line06:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:-795, z:1230, rX:0, rY:-40, rZ:0, scale:1},
-        img_line07:{position:pageInfo.FREE3D_P,html:"<img src='images/white_line.png'/>",
-                      x:-850, y:-968, z:1230, rX:0, rY:-40, rZ:0, scale:1},
+                      x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},
+        
+        div_block:{position:pageInfo.FREE3D_P,html:"<div class='block01'></div>",
+                      x:-800, y:-2500, z:140, rX:0, rY:90, rZ:0, scale:1},
+            
+        
+        
+        img_line01:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:1138, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line02:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:910, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line03:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:187, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line04:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:-65, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line05:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:-421, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line06:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:-659, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line07:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+                      x:-850, y:-898, z:1166, rX:0, rY:-40, rZ:0, scale:1},
     };
     //from AEX : - - +
 
@@ -389,8 +397,8 @@ define(["signals"], function (signals)
             project: true,
             images: {
                 background:{src:"mainImage", position:pageInfo.RES_RC_P,
-                        scale:"_scaleVisuel", z:-1000, rrcX:0.1, rrcY:0,
-                        rPointX:100, rPointY:-50,
+                        scale:"_scaleVisuel", extraScale:0.95, z:-1000, rrcX:0.15, rrcY:0,
+                        rPointX:150, rPointY:-50,
                         rrcXOffset:-130, rrcYOffset:0, width:1280, height:720},
             },
             info: {},
@@ -465,7 +473,7 @@ define(["signals"], function (signals)
             },
             info: {},
             videoId: "A85dZro-wr4",
-            x:1990, y:-152, z:1088, rotationX:15, rotationY:-170, rotationZ:-14,
+            x:3000, y:-1152, z:1600, rotationX:15, rotationY:-170, rotationZ:-23,
             bgX:1.65,
             loaded:loadedDefault,
             built:false,
@@ -486,11 +494,11 @@ define(["signals"], function (signals)
             id: "timeline",
             project: false,
             info: {},
-            x:-1897, y:-646, z:-1902, rotationX:-48.6, rotationY:-392.4, rotationZ:-94.8,
+            x:-4200, y:-646, z:-1902, rotationX:-48.6, rotationY:-400, rotationZ:-94.8,
             loaded:loadedDefault,
             built:false,
             layout:pageInfo.TIMELINE_LAYOUT,
-            free3DContainer:{x:140,y:0,z:100, rotationX:0, rotationY:0, rotationZ:0}
+            free3DContainer:{x:-500,y:1000,z:-1100, rotationX:0, rotationY:0, rotationZ:0, scale:1.65}
         },
          {
             id: "skillsfield",

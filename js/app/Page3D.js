@@ -360,7 +360,13 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
                     if(this.free3DContainer === null) {
                         var cInfo = this.pageInfo.free3DContainer;
                         
-                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ).update();
+                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ);
+                        
+                        if(cInfo.scale != null){
+                            this.free3DContainer.setScale(cInfo.scale, cInfo.scale, cInfo.scale);
+                        }
+                        
+                        this.free3DContainer.update();
                         this.free3DContainer.setCSS("opacity","0");
                         this.free3DContainer.setCSS("visibility","hidden");
                         this.parentSprite3D.addChild(this.free3DContainer);

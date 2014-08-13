@@ -866,12 +866,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var checkControlsEnabled = function(builtPageId) {  
         if(!currentPage3D) return
         transitionSiblingsAvailable = pageIsReadyForTouch(currentPage3D);
-        
-        console.log("test - currentPage3D > " + currentPage3D.getId())
-        console.log("nextIsReady >> " + nextPageIsBuilt(currentPage3D));
-        console.log("prevIsReady >> " + prevPageIsBuilt(currentPage3D));
-        console.log("touchReady >> " + pageIsReadyForTouch(currentPage3D));
-        console.log("transitionSiblingsAvailable >> " + transitionSiblingsAvailable);
     }
     
     folio.getProjectVideo = function(){

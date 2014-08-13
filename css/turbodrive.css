@@ -433,7 +433,7 @@ button {
     }
 
     .prev-button .menu-icon:before {
-        left: 50%;
+        left: 25%;
         top: 18%;
     }
 
@@ -446,7 +446,7 @@ button {
     }
 
     .next-button .menu-icon:before {
-        right: 50%;
+        right: 25%;
         bottom: 10%;
     }
 
@@ -815,7 +815,7 @@ li.blog > a {
     line-height: 19px;
     text-align: center;
     letter-spacing: 0px;
-    background-image: url(../images/videoNoise_menu.gif);
+    /*background-image: url(../images/videoNoise_menu.gif);*/
     
 }
 
@@ -1262,7 +1262,7 @@ p.skills-icon a {
     width: 54px;
     text-align: center;
     border: 2px solid transparent;
-    margin: 0px 20px 20px 0px;
+    margin: 0px 10px 20px 0px;
     padding: 13px 0px 2px 0px;
 }
 
@@ -1455,6 +1455,17 @@ button.icon-play:active {
 
 h3.timelineDate {
     font-size: 75px;
+}
+
+img.white-line {
+    width : 300px;
+    height: 3px;
+}
+
+div.block01 {
+    background-color: rgba(32, 16, 38, 0.65);
+    width: 2200px;
+    height: 7000px;
 }
 
 .hireme-button {
@@ -2034,6 +2045,8 @@ div.skill-section {
     color: #EFECE1;
     font-size: 38px;
     display: inline-block;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 .skill-section table {
