@@ -951,22 +951,30 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 var ratioPx = (getRatioPxPerfect(elInfo.z));
                 //var sc = Math.abs(ratioPx-2)
                 //console.log("elInfo Z = " + elInfo.z + " ->> " + ratioPx + " > ")
+                
+                /** SCALE **/
+                var sc
                 if (elInfo.position != pageInfo.FOV_RELATED) {
                     if (elInfo.scale) {
                         if (isNaN(elInfo.scale)) {
-                            var sc = ratioPx * scaleList[elInfo.scale];
-                            element.setScale(sc, sc, 1);
+                            sc = ratioPx * scaleList[elInfo.scale];
                         } else {
                             if (elInfo.position == pageInfo.FREE3D_P) {
-                                element.setScale(elInfo.scale, elInfo.scale, elInfo.scale);
+                                sc = elInfo.scale
                             } else {
-                                element.setScale(elInfo.scale * ratioPx, elInfo.scale * ratioPx, 1);
+                               sc = elInfo.scale * ratioPx
                             }
                         }
                     } else {
-                        element.setScale(ratioPx, ratioPx, 1);
+                        sc = ratioPx;
                     }
                 }
+                if(elInfo.extraScale != null) {
+                    sc *= elInfo.extraScale;   
+                }
+                
+                element.setScale(sc, sc, 1);
+                
                 
                 /** ROTATION Z **/
                 var rotationZ = 0
@@ -992,7 +1000,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     if(elInfo.parent != null){
                         var parentInfo = getParent(page3D, elInfo.parent).info;
                         tYF = Math.round(parentInfo.tYF + elInfo.rrcYOffset)
-                        tXF = Math.round(parentInfo.tXF + elInfo.rrcXOffset)+(Math.sin(-rotationZ * DEGREES_TO_RADIANS) * elInfo.rrcYOffset);         
+                        tXF = Math.round(parentInfo.tXF + elInfo.rrcXOffset)+(Math.sin(-rotationZ * DEGREES_TO_RADIANS) * elInfo.rrcYOffset);                             
                     } else {
                         tXF = (LAYOUT.viewportW * elInfo.rrcX) + elInfo.rrcXOffset;
                         tYF = (LAYOUT.viewportH * elInfo.rrcY) + elInfo.rrcYOffset;

@@ -89,7 +89,7 @@ define(["signals"], function (signals)
         div_redLine:{position:pageInfo.RES_RC_P,
             z:-1200, rrcX:-0.45, rrcY:-0.16, rrcXOffset:50, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
-        div_bgContent:{html:"<div class='textPlane2'></div>", position:pageInfo.RES_RC_P,
+        div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
             parent : "div_redLine",
             z:-1500, rrcXOffset:120, rrcYOffset:-1000,
             rotationZ:34.5, width:400, height:2500},     
@@ -128,9 +128,9 @@ define(["signals"], function (signals)
     pageInfo.RIGHTBOTTOM_LAYOUT = {
         id:"right-bottom-layout",
         div_redLine:{position:pageInfo.RES_RC_P,
-            z:-1200, rrcX:0.36, rrcY:0.13, rrcXOffset:-320, rrcYOffset:0, rPointX:0, rPointY:-130,
+            z:-1200, rrcX:0.37, rrcY:0.15, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
-        div_bgContent:{html:"<div class='textPlane2'></div>", position:pageInfo.RES_RC_P,
+        div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
             parent : "div_redLine",
             z:-1500, rrcXOffset:80, rrcYOffset:-1000,
             rotationZ:34.5, width:400, height:2500},     
@@ -161,9 +161,9 @@ define(["signals"], function (signals)
             secondary:true,
             z:0, rrcX:-0.35, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.9, src:"mainImage",
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
-            rPointX:0, rPointY:0, width:1280, height:720}  
+            rPointX:500, rPointY:-100, width:1280, height:720}
     };
     
     var cX = 0.33;
@@ -204,12 +204,16 @@ define(["signals"], function (signals)
         button_playButton:{position:pageInfo.RES_RC_P,
             secondary:true,
             z:0, rrcX:-0.39, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
-            rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
-            z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
-            rPointX:0, rPointY:0, width:1280, height:720}
-        
+            rotationZ:-3, width:620, height:250, clickHandler:"playVideo"}
     };
+    
+    pageInfo.IKAF_LAYOUT = UTILS.clone(pageInfo.RIGHT_LAYOUT);
+    pageInfo.IKAF_LAYOUT.div_redLine.rrcX = 0.37;
+    pageInfo.IKAF_LAYOUT.div_redLine.rrcY = -0.15;
+    pageInfo.IKAF_LAYOUT.p_content.width = 500;
+    pageInfo.IKAF_LAYOUT.div_bgContent.html = "<div class='textPlane380'></div>";
+    pageInfo.IKAF_LAYOUT.div_bgContent.width = 380;
+    //pageInfo.IKAF_LAYOUT.div_redLine.rrcYOffset = -40;
     
     
     cX = -0.20; //-265
@@ -367,7 +371,10 @@ define(["signals"], function (signals)
             id: "tot",
             project: true,
             images: {
-                front2:{html:"<img src='images/tot_front.png'/>", position:pageInfo.RES_RC_P, scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0, rPointX:0, rPointY:0, width:1280, height:720}
+                front:{html:"<img src='images/tot_front.png'/>", position:pageInfo.RES_RC_P, scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0, rPointX:0, rPointY:0, width:1280, height:720},
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+            z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+            rPointX:0, rPointY:0, width:1280, height:720}
             },
             info: {},
             videoId: "OBa37rBBMS4",
@@ -375,18 +382,24 @@ define(["signals"], function (signals)
             bgX:1.7,
             loaded:loadedDefault,
             built:false,
-            layout:pageInfo.RIGHT_LAYOUT
+            layout:pageInfo.IKAF_LAYOUT
         },
         {
             id: "ikaf",
             project: true,
+            images: {
+                background:{src:"mainImage", position:pageInfo.RES_RC_P,
+                        scale:"_scaleVisuel", z:-1000, rrcX:0.1, rrcY:0,
+                        rPointX:100, rPointY:-50,
+                        rrcXOffset:-130, rrcYOffset:0, width:1280, height:720},
+            },
             info: {},
             videoId: "kiX1dpp7_C4",
             x:-1952, y:-1456, z: -3537, rotationX: -7, rotationY:11, rotationZ:25,
             bgX:1.7,
             loaded:loadedDefault,
             built:false,
-            layout:pageInfo.RIGHT_LAYOUT
+            layout:pageInfo.IKAF_LAYOUT
         },
         {
             id: "borgia",
@@ -424,24 +437,37 @@ define(["signals"], function (signals)
         {
             id: "greetings",
             project: true,
+            images: {
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+                        z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+                        rPointX:0, rPointY:0, width:1280, height:720}
+            },
             info: {},
             videoId: "inoqVpPplYw",
             x:576, y:4432, z:1927, rotationX:-0.8, rotationY:-154.2, rotationZ:92.5,
             bgX:1.6,
             loaded:loadedDefault,
             built:false,
-            layout:pageInfo.RIGHT_LAYOUT
+            layout:pageInfo.IKAF_LAYOUT
         },
         {
             id: "ikaf2",
             project: true,
+            images: {
+                front:{html:"<img src='images/ikaf2_front.png'/>", position:pageInfo.RES_RC_P,
+                       scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0,
+                       rrcYOffset:0, rPointX:380, rPointY:-85, width:343, height:582},
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+                        z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
+                        rPointX:0, rPointY:0, width:1280, height:720}
+            },
             info: {},
             videoId: "A85dZro-wr4",
             x:1990, y:-152, z:1088, rotationX:15, rotationY:-170, rotationZ:-14,
             bgX:1.65,
             loaded:loadedDefault,
             built:false,
-            layout:pageInfo.RIGHT_LAYOUT
+            layout:pageInfo.IKAF_LAYOUT
         },
         {
             id: "about",
