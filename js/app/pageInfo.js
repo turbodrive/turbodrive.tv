@@ -208,8 +208,8 @@ define(["signals"], function (signals)
     };
     
     pageInfo.IKAF_LAYOUT = UTILS.clone(pageInfo.RIGHT_LAYOUT);
-    pageInfo.IKAF_LAYOUT.div_redLine.rrcX = 0.37;
-    pageInfo.IKAF_LAYOUT.div_redLine.rrcY = -0.15;
+    pageInfo.IKAF_LAYOUT.div_redLine.rrcX = 0.39;
+    pageInfo.IKAF_LAYOUT.div_redLine.rrcY = -0.18;
     pageInfo.IKAF_LAYOUT.p_content.width = 500;
     pageInfo.IKAF_LAYOUT.div_bgContent.html = "<div class='textPlane380'></div>";
     pageInfo.IKAF_LAYOUT.div_bgContent.width = 380;
@@ -378,7 +378,7 @@ define(["signals"], function (signals)
             },
             info: {},
             videoId: "OBa37rBBMS4",
-            x:3057, y:-3562, z:1310, rotationX:17, rotationY:-170, rotationZ:-30,
+            x:4500, y:-3562, z:1000, rotationX:17, rotationY:-170, rotationZ:-30,
             bgX:1.7,
             loaded:loadedDefault,
             built:false,
@@ -395,7 +395,7 @@ define(["signals"], function (signals)
             },
             info: {},
             videoId: "kiX1dpp7_C4",
-            x:-1952, y:-1456, z: -3537, rotationX: -7, rotationY:11, rotationZ:25,
+            x:-2952, y:-1456, z: -3537, rotationX: -7, rotationY:11, rotationZ:27,
             bgX:1.7,
             loaded:loadedDefault,
             built:false,
@@ -406,7 +406,8 @@ define(["signals"], function (signals)
             project: true, 
             info: {},           
             videoId: "IS4Khh9rmi4",
-            x:1882, y:-386, z:-1906, rotationX:3, rotationY:-3, rotationZ:194,
+            x:4550, y:-386, z:-6, rotationX:12, rotationY:17, rotationZ:210,
+            //x:1882, y:-386, z:-1906, rotationX:3, rotationY:-3, rotationZ:194,
             bgX:1.6,
             loaded:loadedDefault,
             built:false,
@@ -417,7 +418,7 @@ define(["signals"], function (signals)
             project: true,
             info: {},
             videoId: "43Dury8SEGs",
-            x:-1367, y:1288, z:-240, rotationX:1, rotationY:-15, rotationZ:201,
+            x:-2057, y:1288, z:-240, rotationX:1, rotationY:-5, rotationZ:201,
             bgX:1.85,
             loaded:loadedDefault,
             built:false,
@@ -428,7 +429,7 @@ define(["signals"], function (signals)
             project: true,
             info: {},
             videoId: "4CF2R2Luvg0",
-            x:-2573, y:-137, z:-2763, rotationX:1, rotationY:-21, rotationZ:147,
+            x:-2573, y:-137, z:-2763, rotationX:11, rotationY:-5, rotationZ:150,
             bgX:1.90,
             loaded:loadedDefault,
             built:false,
@@ -444,7 +445,8 @@ define(["signals"], function (signals)
             },
             info: {},
             videoId: "inoqVpPplYw",
-            x:576, y:4432, z:1927, rotationX:-0.8, rotationY:-154.2, rotationZ:92.5,
+            x:2576, y:4432, z:873, rotationX:-7.8, rotationY:-154.2, rotationZ:89.5,
+            //x:576, y:4432, z:1927, rotationX:-0.8, rotationY:-154.2, rotationZ:92.5,
             bgX:1.6,
             loaded:loadedDefault,
             built:false,

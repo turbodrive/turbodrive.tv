@@ -434,7 +434,7 @@ button {
 
     .prev-button .menu-icon:before {
         left: 50%;
-        top: 20%;
+        top: 18%;
     }
 
     .prev-button .transverse-nav-bg {
@@ -447,7 +447,7 @@ button {
 
     .next-button .menu-icon:before {
         right: 50%;
-        bottom: 25%;
+        bottom: 10%;
     }
 
     .next-button .transverse-nav-bg {
@@ -653,7 +653,8 @@ a.share-img { background: url('../images/menu_share.svg');}*/
     color: #CECEC4;
 }
 
-.navbar button.active {
+.navbar button.active,
+.navbar a.active {
     color: #CECEC4!important;
 }
 
@@ -1195,7 +1196,7 @@ a.github:active {
 .grid {
 	width: 1280px;
 	height: 1280px;
-    background: url('../images/cellRow_1280_addflat.png');
+    background: url('../images/cellRow_1280_addflat2.png');
     background-repeat: repeat-y;
     /*border:5px solid red;*/
 }

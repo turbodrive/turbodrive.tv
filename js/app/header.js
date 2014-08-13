@@ -103,7 +103,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         var className = element.className;
         
         if(className.indexOf("button-toggle")>-1){
-            console.log("dispatch toggle renderer")
+            //console.log("dispatch toggle renderer")
             header.on.toggleRenderer.dispatch();
         }
         
@@ -161,7 +161,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         
         header.resize();
         if (duration == null) duration = 0.3;
-        console.log("controlMenuState idButton >> " + idButton)
+        //console.log("controlMenuState idButton >> " + idButton)
         
         var yTarget = 0;
         var xTargetContent = 0;
@@ -172,7 +172,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         if (currentMenuState == idButton) {
             // toggle
             var tme = new Date().getTime()-timeClose;
-            console.log("close after reclick - " + tme);
+
             
             if(tme < 500) return
             
@@ -247,7 +247,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
             highlightContactPanel(currentMenuState, duration);
             isOpen = true;
         }
-        console.log("panel is open : " + isOpen)
+        //console.log("panel is open : " + isOpen)
         
         updateStealthStatus();
     }
@@ -297,7 +297,7 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
     }
     
     header.updateState = function(pageId, isProject) {
-        console.log("pageId >> " + pageId);
+        //console.log("pageId >> " + pageId);
         
         var allListElements = $(".buttonSubMenu");
         for(var i=0 ;i<allListElements.length ;i++){
