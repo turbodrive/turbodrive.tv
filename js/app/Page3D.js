@@ -1,3 +1,7 @@
+/* Turbodrive - Page3D
+ * Author : Silvère Maréchal
+ */
+
 define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, TweenMax) {
     
     const USE_AEX_COORD = true;    
@@ -91,15 +95,15 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         //TweenMax.to(this.pictoPlay.domElement, 1.25, {delay: 0.5, autoAlpha:1});
         
         for(var i = 0; i < this.secondaryElements.length; i++){
-            console.log("PRELOAD >>> " + this.secondaryElements[i].getId());
-            if(this.secondaryElements[i].getId() == "div_player"){
-                this.projectPlayer = this.secondaryElements[i];
+            //console.log("PRELOAD >>> " + this.secondaryElements[i].getId());
+            if(this.secondaryElements[i].id == "div_player"){
+                this.projectPlayer = this.secondaryElements[i].element3d;
                 this.projectPlayer.addClassName("project-player")
                 this.videoContainer = this.projectPlayer.domElement;
             }
             
-            if(this.secondaryElements[i].getId() == "button_playButton"){
-                this.pictoPlay = this.secondaryElements[i];
+            if(this.secondaryElements[i].id == "button_playButton"){
+                this.pictoPlay = this.secondaryElements[i].element3d;
             }
         }
         
@@ -193,10 +197,12 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
 
             for(var p in infoLayout){
                 var elementName = p;
-                if(elementName != "id"){
+                if(elementName != "id" && elementName != "grid"){
                     var elementInfo = infoLayout[p];
                     var domEl;
                     var tag;
+                    var objectElement = {info:elementInfo, id:elementName};
+                    
                     if(elementName.search("_") == -1){
                         //dom element
                         tag = elementName;
@@ -219,12 +225,12 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                         element3d = this.convertElement(domEl, elementInfo);
                     }     
                     
+                    objectElement.element3d = element3d;
+                    
                     element3d.setId(elementName);
                     
                     if(elementInfo.position != pageInfo.FREE3D_P){
-                        if(elementInfo.secondary){
-                            this.secondaryElements.push(element3d);
-                        }else {                        
+                        if(!elementInfo.secondary){                     
                             this.addChild(element3d);
                         }
                     }else {
@@ -240,11 +246,14 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                         element3d.domElement.addEventListener("click", this[elementInfo.clickHandler]);
                         element3d.domElement.addEventListener("touchstart ", this[elementInfo.clickHandler]);
                         element3d.domElement.self = this;
-                    }                  
+                    }
                     
+                    if(elementInfo.secondary){
+                        this.secondaryElements.push(objectElement);   
+                    }                    
                     
                     element3d.update();
-                    this.elementList.push({element3d:element3d, info:elementInfo, id:elementName});
+                    this.elementList.push(objectElement);
                 }
             }
             //this.addFree3dElement();
@@ -283,10 +292,18 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
         if(this.secElementsAdded) return
 
        for(var i = 0; i< this.secondaryElements.length; i++ ){
-           var el = this.secondaryElements[i];
+           var obj = this.secondaryElements[i];
+           var info = obj.info;
+           var delayAlpha = info.delayAlpha != null ? info.delayAlpha : 0.1*i;
+           var el = obj.element3d;
            el.setCSS("opacity", "0");
-           TweenMax.to(el.domElement, 0.3, {alpha:1, delay:0.2*i})
-           this.addChild(el);
+           //el.setCSS("border", "5px solid white");
+           TweenMax.to(el.domElement, 0.3, {alpha:1, delay:delayAlpha})
+           if(info.position == pageInfo.FREE3D_P){
+                this.free3DContainer.addChild(el)   
+           }else {
+                this.addChild(el);
+           }
        }
         this.secElementsAdded = true;
     }
@@ -295,8 +312,8 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
     {
         if(!this.secElementsAdded) return
        for(var i = 0; i< this.secondaryElements.length; i++ ){
-           var el = this.secondaryElements[i];
-           this.removeChild(el);
+           var el = this.secondaryElements[i].element3d;
+           el.getParent().removeChild(el);
        }
         
         this.secElementsAdded = false;
@@ -308,7 +325,7 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
         
         if(!this.twFadeIn || !this.twFadeIn.isActive()){
             if(this.twFadeOut) this.twFadeOut.pause();
-            console.log("fadein >> " + this.getId());
+            //console.log("fadein >> " + this.getId());
             this.twFadeIn = TweenMax.to(this.domElement, 0.5, {
                 delay: delay,
                 autoAlpha:1
@@ -332,7 +349,7 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
         this.removeSecondaryElements();
         
         if(!this.twFadeOut || !this.twFadeOut.isActive()){
-            if(this.twFadeIn) this.twFadeIn.pause();
+            //if(this.twFadeIn) this.twFadeIn.pause();
             console.log("fadeout >> " + this.getId())
             this.twFadeOut = TweenMax.to(this.domElement, 0.3, {delay:delay,
                 autoAlpha:0, ease:Linear.easeNone
@@ -352,14 +369,12 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
         return this.sectionsList;
     }
     
-    Page3D.prototype.addFree3dElement = function()
+    Page3D.prototype.getFree3dContainer = function()
     {
-        if(this.elementList){
-            for(var i = 0; i< this.elementList.length ; i++){
-                if(this.elementList[i].info.position == pageInfo.FREE3D_P){
-                    if(this.free3DContainer === null) {
-                        var cInfo = this.pageInfo.free3DContainer;
-                        
+        if(this.free3DContainer === null){
+            var cInfo = this.pageInfo.free3DContainer;
+            console.log("cInfo >> " + this.pageInfo);
+            console.dir(cInfo);
                         this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ);
                         
                         if(cInfo.scale != null){
@@ -370,11 +385,25 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
                         this.free3DContainer.setCSS("opacity","0");
                         this.free3DContainer.setCSS("visibility","hidden");
                         this.parentSprite3D.addChild(this.free3DContainer);
+        }
+        
+        return this.free3DContainer;
+    }
+    
+    Page3D.prototype.addFree3dElement = function()
+    {
+        if(this.elementList){
+            for(var i = 0; i< this.elementList.length ; i++){
+                if(this.elementList[i].info.position == pageInfo.FREE3D_P){
+                    if(this.elementList[i].info.secondary){
+                    }else{                        this.getFree3dContainer().addChild(this.elementList[i].element3d);
                     }
-                    this.free3DContainer.addChild(this.elementList[i].element3d);
                 }
             }
         }
+        /*for(var i = 0; i< this.secondaryElements.length ; i++){
+            this.secondaryElements[i].info.container = this.getFree3dContainer();
+        }*/
     }
     
     Page3D.prototype.getFree3DContainer = function() {

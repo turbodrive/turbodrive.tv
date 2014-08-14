@@ -750,6 +750,14 @@ define([], function() {
         return this;
     };    
 
+    
+    /**
+     */
+    Sprite3D.prototype.getParent = function() {
+        return this.parentSprite3D;
+    };
+
+    
     /**
      * Adds a Sprite3D object to this Sprite3D children.
      * @param {Sprite3D} e The Sprite3D object to add

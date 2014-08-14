@@ -344,6 +344,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     var targetTransition = -1;
     var interruptWhenPlaying = false;
     var memLastPage3D;
+    var commonGrid;
     
     folio.onTouchStart = function (event) {
         if(!transitionSiblingsAvailable) return;
@@ -583,7 +584,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         
         
         // grid
-        buildGridTile(0, 1);
+        commonGrid = buildGridTile(0, 1);
         //buildGridTile(-1,1);
         //buildGridTile(1,1);
 
@@ -891,7 +892,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         return ratio;
     }
 
-
     updatePage3D = function (page3D, currentPageInfo) {
         if (currentPageInfo == null) {
             //console.log("updatePage3D >> " + page3D + " ID = " + pageInfo.id);
@@ -950,7 +950,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 var sc
                 if (elInfo.position != pageInfo.FOV_RELATED) {
                     if (elInfo.scale) {
-                        if (isNaN(elInfo.scale)) {
+                        if(elInfo.scale.minL && elInfo.scale.maxL){
+                            sc = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL)*ratioPx;
+                            
+                        }else if (isNaN(elInfo.scale)) {
                             sc = ratioPx * scaleList[elInfo.scale];
                         } else {
                             if (elInfo.position == pageInfo.FREE3D_P) {
@@ -963,6 +966,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                         sc = ratioPx;
                     }
                 }
+                
                 if(elInfo.extraScale != null) {
                     sc *= elInfo.extraScale;   
                 }
@@ -984,7 +988,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 if(rotationZ) element.setRotationZ(rotationZ);
                 
                 /** POSITION **/
-                var xF, yF, scaleF;
+                var xF, yF, zF, scaleF;
                 if (elInfo.position == pageInfo.ABSOLUTE_P) {
                     xF = (LAYOUT.vW2) + (elInfo.x * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y * ratioPx) - (elInfo.height * 0.5);
@@ -1012,7 +1016,25 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     yF = tH * (elInfo.y) * ratioPx;
                     element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.FREE3D_P) {
-                    element.setPosition(elInfo.x, elInfo.y, elInfo.z);
+                    if(elInfo.x.minL){
+                        xF = getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL);
+                    } else {
+                        xF = elInfo.x;
+                    }
+                    
+                    if(elInfo.y.minL){
+                        yF = getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL);
+                    } else {
+                        yF = elInfo.y
+                    }
+                    
+                    if(elInfo.z.minL){
+                        zF = getRelatedToFovValue(elInfo.z.minL, elInfo.z.maxL);
+                    } else {
+                        zF = elInfo.z;   
+                    }
+                        
+                    element.setPosition(xF, yF, zF);
                 } else if (elInfo.position == pageInfo.FOV_RELATED) {
                     xF = (LAYOUT.vW2) + (getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL) * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL) * ratioPx) - (elInfo.height * 0.5);
@@ -1180,6 +1202,18 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         if(pageId == undefined) return;
         console.log("@@@@@@@@ SHOW " + pageId);
         getPage3D(pageId).show(delay);
+        //
+        
+        if(!commonGrid) return
+        
+        var targetAlphaGrid = 1;
+        var infoGrid = pageInfo.getPageInfo(pageId).layout.grid;
+        if(infoGrid != null){
+            if(infoGrid.alpha){
+                targetAlphaGrid = infoGrid.alpha
+            }
+        }
+        TweenMax.to(commonGrid.domElement, 0.5, {alpha:targetAlphaGrid})   
     }
     
     var addSecondaryElementAndUpdatePage3DStatus = function(pageId){
@@ -1194,10 +1228,10 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
     
     transitionComplete = function (pageId) {
         transitionStarted = false;
-        console.log("transitionComplete >> " + pageId + " - " + tmpSectionId);
+        //console.log("transitionComplete >> " + pageId + " - " + tmpSectionId);
         
         addSecondaryElementAndUpdatePage3DStatus(pageId);
-        console.log("transitionComplete2 >> " + currentPage3D.getId());
+        //console.log("transitionComplete2 >> " + currentPage3D.getId());
             
         setTweenPosition(pageId, tmpSectionId);
         

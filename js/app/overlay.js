@@ -1,3 +1,7 @@
+/* Turbodrive - Overlay Module
+ * Author : Silvère Maréchal
+ */
+
 define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     
     var loader = $(".loader-overlay");

@@ -1,3 +1,7 @@
+/* Turbodrive - Stylesheet
+ * Author : Silvère Maréchal
+ */
+
 @font-face {
     font-family: 'texgyreadventorbold';
     src: url('fonts/texgyreadventor-bold-webfont.eot');
@@ -1453,21 +1457,6 @@ button.icon-play:active {
     text-transform: uppercase;
 }
 
-h3.timelineDate {
-    font-size: 75px;
-}
-
-img.white-line {
-    width : 300px;
-    height: 3px;
-}
-
-div.block01 {
-    background-color: rgba(32, 16, 38, 0.65);
-    width: 2200px;
-    height: 7000px;
-}
-
 .hireme-button {
     width: 360px;
     height: 250px;
@@ -1806,20 +1795,39 @@ div.block01 {
 }
 
 .timeline-info h3 {
-    color: #EFECE1;
+    color: #CECEC4;
     padding: 0px;
-    font-size: 35px;
+    font-size: 46px;
     text-transform: uppercase;
-    letter-spacing: -0.7px;
+    letter-spacing: -1px;
+    margin: 20px 0px 0px 0px;
 }
 
 .timeline-info p {
-    color: #CECEC4;
+    color: #8F7E7F;
     padding: 0px;
-    width: 490px;
+    /*max-width: 200px;*/
     font-size: 11px;
-    line-height: 20px;
+    line-height: 13px;
+    /*background: url(../images/timeline_placer.png);
+    background-repeat: no-repeat;*/
+    height:35px;
+    margin-top: 15px;
+    
 }
+
+.timeline-info p.right-now {
+    text-overflow:nowrap;
+    line-height: 20px;
+    color: #CECEC4;
+    margin-top: 9px;
+}
+
+.timeline-info p.limit-width {
+    text-overflow:ellipsis;
+    max-width: 200px;
+}
+
 
 .timeline-info .date {
     color: #CECEC4;
@@ -1829,17 +1837,67 @@ div.block01 {
 
 .ready-now {
     display: block;
-    font-size: 13px;
+    font-size: 26px;
     text-transform: uppercase;
-    line-height: 14px;
+    line-height: 18px;
 }
 
 .ready-work {
     text-transform: uppercase;
-    font-size: 19px;
+    font-size: 38px;
     font-family: "texgyreadventorbold";
-    line-height: 5px;
+    line-height: 44px;
     letter-spacing: -0.3px;
+}
+
+/*h3.timelineDate {
+    font-size: 75px;
+}*/
+
+img.white-line {
+    width : 250px;
+    height: 5px;
+}
+
+div.block01 {
+    /*background-color: rgba(32, 16, 38, 0.65);*/
+    width: 2200px;
+    height: 7000px;
+    background: url(../images/timeline_title_bgblue.png);
+    background-size: contain;
+}
+
+div.block02 {
+    width:  500px;
+    height: 4000px;
+    background: #988888; /* Old browsers */
+    background: -moz-linear-gradient(left,  #988888 43%, #beb4af 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(43%,#988888), color-stop(100%,#beb4af)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  #988888 43%,#beb4af 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  #988888 43%,#beb4af 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  #988888 43%,#beb4af 100%); /* IE10+ */
+    background: linear-gradient(to right,  #988888 43%,#beb4af 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#988888', endColorstr='#beb4af',GradientType=1 ); /* IE6-9 */
+
+}
+
+div.block03,
+div.block-corner {
+    background-color: #201523;
+    width: 200px;
+    height: 4000px;
+}
+
+div.block-corner {
+    background-color: #2A1F2E;
+}
+
+div.block04 {
+    background-color: transparent;
+    width: 2200px;
+    height: 4000px;
+    background-image: url(../images/timeline_title_face01.svg);
+    background-size: contain;
 }
 
 

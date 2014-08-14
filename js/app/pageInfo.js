@@ -1,3 +1,7 @@
+/* Turbodrive - pageInfo Module
+ * Author : Silvère Maréchal
+ */
+
 define(["signals"], function (signals)
 {
     var pageInfo = {};
@@ -295,53 +299,62 @@ define(["signals"], function (signals)
     };
     
     var scaleH3 = 1.4
+    var offsetXDate = 80; 
+    var offsetXT1 = -10; 
+    var offsetYT1 = 5; 
     
     pageInfo.TIMELINE_LAYOUT = {
         id:"timeline-layout",
+        grid:{alpha:0.5},
         h1:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0.5, rrcY:-0.5, rrcXOffset:-320, rrcYOffset:50, width:356, height:58},
-        /*p_contentNow:{position:pageInfo.ABSOLUTE_P,
-            x:-460,y:-230, z:0, width:490, height:34},*/
+            z:-100, rrcX:0.2, rrcY:-0.39, rrcXOffset:-120, rrcYOffset:0, width:356, height:58, scale:{minL:0.8, maxL:1.5}},
         p_contentNow:{position:pageInfo.FOV_RELATED,
-            x:{minL:87-340, maxL:374-960},y:{minL:12-188, maxL:174-540}, z:0,
-            width:490, height:34},
+            x:{minL:84.5-340, maxL:366-960},y:{minL:12-188, maxL:179-540}, z:0,
+            secondary:true, rPointX:-140, rPointY:0,
+            width:586, height:35, scale:{minL:0.5, maxL:0.8}},
         p_content2012:{position:pageInfo.FOV_RELATED,
-            x:{minL:122-340, maxL:448-960},y:{minL:45-188, maxL:221-540}, z:0,
+            x:{minL:113.5-340+offsetXDate+offsetXT1, maxL:438-960+offsetXDate+offsetXT1},y:{minL:36-188+offsetYT1, maxL:231-540+offsetYT1}, z:0,
+            secondary:true,
             width:490, height:60},
         p_content2006:{position:pageInfo.FOV_RELATED,
-            x:{minL:224-340, maxL:695-960},y:{minL:112-188, maxL:396-540}, z:0,
+            x:{minL:217-340+offsetXDate+offsetXT1, maxL:682-960+offsetXDate+offsetXT1},y:{minL:113-188+offsetYT1, maxL:411-540+offsetYT1}, z:0,
+            secondary:true,
             width:490, height:40},
         p_content2004:{position:pageInfo.FOV_RELATED,
-            x:{minL:265-340, maxL:792-960},y:{minL:143-188, maxL:468-540}, z:0,
-            width:490, height:40},
+            x:{minL:257-340+offsetXDate+offsetXT1, maxL:774-960+offsetXDate+offsetXT1},y:{minL:142-188+offsetYT1, maxL:478-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:40},
         p_content2001:{position:pageInfo.FOV_RELATED,
-            x:{minL:327-340, maxL:934-960},y:{minL:194-188, maxL:583-540}, z:0,
-            width:490, height:20},
+            x:{minL:323-340+offsetXDate+offsetXT1, maxL:923-960+offsetXDate+offsetXT1},y:{minL:193-188+offsetYT1, maxL:588.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:20},
         p_content1999:{position:pageInfo.FOV_RELATED,
-            x:{minL:380-340, maxL:1042-960},y:{minL:230-188, maxL:652-540}, z:0,
-            width:490, height:40},
+            x:{minL:370-340+offsetXDate+offsetXT1, maxL:1028-960+offsetXDate+offsetXT1},y:{minL:230-188+offsetYT1, maxL:666.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:40},
         p_content1997:{position:pageInfo.FOV_RELATED,
-            x:{minL:434-340, maxL:1161-960},y:{minL:274-188, maxL:737-540}, z:0,
-            width:490, height:60},
+            x:{minL:423-340+offsetXDate+offsetXT1, maxL:1144-960+offsetXDate+offsetXT1},y:{minL:269-188+offsetYT1, maxL:751.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:60},
         /*img_timelinehelper:{position:pageInfo.FOV_RELATED,
             html:"<img src='images/timeline_helper_001.png'/>",
             x:{minL:-91, maxL:-199},y:{minL:46, maxL:72}, z:0,
             scale:{minL:0.52, maxL:1}, width:919, height:497, rPointX:0, rPointY:0},*/
+        h3_date2012:{position:pageInfo.FOV_RELATED,
+            x:{minL:113.5-340+offsetXT1, maxL:438-960+offsetXT1},y:{minL:36-188+offsetYT1, maxL:231-540+offsetYT1}, z:0,
+            secondary:true, width:60, height:40, scale:{minL:0.5, maxL:1}},
+        h3_date2006:{position:pageInfo.FOV_RELATED,
+            x:{minL:217-340+offsetXT1, maxL:682-960+offsetXT1},y:{minL:113-188+offsetYT1, maxL:411-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:40, scale:{minL:0.5, maxL:1}},
+        h3_date2004:{position:pageInfo.FOV_RELATED,
+            x:{minL:257-340+offsetXT1, maxL:774-960+offsetXT1},y:{minL:142-188+offsetYT1, maxL:478-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:40, scale:{minL:0.5, maxL:1}},
+        h3_date2001:{position:pageInfo.FOV_RELATED,
+            x:{minL:323-340+offsetXT1, maxL:923-960+offsetXT1},y:{minL:193-188+offsetYT1, maxL:588.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:20, scale:{minL:0.5, maxL:1}},
+        h3_date1999:{position:pageInfo.FOV_RELATED,
+            x:{minL:370-340+offsetXT1, maxL:1028-960+offsetXT1},y:{minL:230-188+offsetYT1, maxL:666.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:40, scale:{minL:0.5, maxL:1}},
+        h3_date1997:{position:pageInfo.FOV_RELATED,
+            x:{minL:423-340+offsetXT1, maxL:1144-960+offsetXT1},y:{minL:269-188+offsetYT1, maxL:751.5-540+offsetYT1}, z:0,
+            secondary:true, width:490, height:60, scale:{minL:0.5, maxL:1}},
         
-        h3_dateNow:{position:pageInfo.FREE3D_P,
-            x:-900,y:1140, z:940,rX:30, rY:60, rZ:-90, rPointX:-200, scale:scaleH3},
-        h3_date2012:{position:pageInfo.FREE3D_P,
-            x:-730,y:980, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
-        h3_date2006:{position:pageInfo.FREE3D_P,
-            x:-900,y:132, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
-        h3_date2004:{position:pageInfo.FREE3D_P,
-            x:-900,y:-170, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
-        h3_date2001:{position:pageInfo.FREE3D_P,
-            x:-900,y:-530, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
-        h3_date1999:{position:pageInfo.FREE3D_P,
-            x:-900,y:-885, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
-        h3_date1997:{position:pageInfo.FREE3D_P,
-            x:-900,y:-1068, z:940,rX:30, rY:60, rZ:-90, scale:scaleH3},
         
         
         img_timeline:{position:pageInfo.FREE3D_P,html:"<img src='images/about_timeline.svg'/>",
@@ -350,24 +363,34 @@ define(["signals"], function (signals)
                       x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},
         
         div_block:{position:pageInfo.FREE3D_P,html:"<div class='block01'></div>",
-                      x:-800, y:-2500, z:140, rX:0, rY:90, rZ:0, scale:1},
+                      secondary:true, x:-1470, y:-2500, z:330, rX:0, rY:90, rZ:0, scale:1},            
+        div_block2:{position:pageInfo.FREE3D_P,html:"<div class='block02'></div>",
+                secondary:true, x:-1700, y:-2520,
+                z:{minL:2120, maxL:2350},
+                rX:0, rY:90, rZ:0, scale:1},
+        div_block3:{position:pageInfo.FREE3D_P,html:"<div class='block03'></div>",
+                      secondary:true, x:-691, y:-400, z:0, rX:0, rY:0, rZ:0, scale:1},
+         div_corner:{position:pageInfo.FREE3D_P,html:"<div class='block-corner'></div>",
+                      secondary:true, x:-691, y:-3517, z:-1657, rX:56, rY:0, rZ:0, scale:1},
+        div_block4:{position:pageInfo.FREE3D_P,html:"<div class='block04'></div>",
+                      secondary:true, x:-1791, y:-1200, z:-1100, rX:0, rY:90, rZ:0, scale:1},
             
         
         
-        img_line01:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:1138, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line02:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:910, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line03:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:187, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line04:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:-65, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line05:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:-421, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line06:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:-659, z:1166, rX:0, rY:-40, rZ:0, scale:1},
-        img_line07:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
-                      x:-850, y:-898, z:1166, rX:0, rY:-40, rZ:0, scale:1},
+        img_line01:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:1253, z:1150, rX:60, rY:-40, rZ:0, scale:1},
+        img_line02:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:1002, z:1150, rX:60, rY:-40, rZ:0, scale:1},
+        img_line03:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:246, z:1150, rX:40, rY:-40, rZ:0, scale:1},
+        img_line04:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:-9, z:1150, rX:30, rY:-40, rZ:0, scale:1},
+        img_line05:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:-386, z:1150, rX:20, rY:-40, rZ:0, scale:1},
+        img_line06:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:-635, z:1150, rX:0, rY:-40, rZ:0, scale:1},
+        img_line07:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",secondary:true, 
+                      x:-700, y:-885, z:1150, rX:-20, rY:-40, rZ:0, scale:1},
     };
     //from AEX : - - +
 
