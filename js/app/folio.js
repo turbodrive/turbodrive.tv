@@ -946,13 +946,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 //var sc = Math.abs(ratioPx-2)
                 //console.log("elInfo Z = " + elInfo.z + " ->> " + ratioPx + " > ")
                 
+                var offsetRatioX = 0 ;
+                var offsetRatioY = 0 ;
+                /** ------------------- **/
                 /** SCALE **/
-                var sc
+                var sc = 1
+                var baseSc = 1
                 if (elInfo.position != pageInfo.FOV_RELATED) {
                     if (elInfo.scale) {
                         if(elInfo.scale.minL && elInfo.scale.maxL){
-                            sc = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL)*ratioPx;
-                            
+                            sc = getPropValue(elInfo.scale)*ratioPx;                 
                         }else if (isNaN(elInfo.scale)) {
                             sc = ratioPx * scaleList[elInfo.scale];
                         } else {
@@ -965,6 +968,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     } else {
                         sc = ratioPx;
                     }
+                }else {
+                    if (elInfo.scale != null) {
+                        baseSc = getPropValue(elInfo.scale)
+                        sc = baseSc*ratioPx;        
+                    }else {                        
+                        sc = ratioPx;
+                    }
+                    
+                    offsetRatioX = (elInfo.width*sc) - elInfo.width;
+                    offsetRatioY = (elInfo.height*sc) - elInfo.height;
                 }
                 
                 if(elInfo.extraScale != null) {
@@ -972,9 +985,16 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 }
                 
                 element.setScale(sc, sc, 1);
+                if(elInfo.log){
+                    console.log(" SCALE >> " + sc)   
+                    console.log(" base SC >> " + baseSc)   
+                    console.log(" RATIO PX >> " + ratioPx)
+                    
+                    console.log(" RatioScale >> " + offsetRatioX)   
+                }
                 
-                
-                /** ROTATION Z **/
+                /** ------------------- **/
+                /** ROTATION Z ONLY **/
                 var rotationZ = 0
                 if(elInfo.rotationZ != null){
                     rotationZ = elInfo.rotationZ;
@@ -987,14 +1007,21 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 
                 if(rotationZ) element.setRotationZ(rotationZ);
                 
+                /** ------------------- **/
                 /** POSITION **/
                 var xF, yF, zF, scaleF;
+                var tXF = 0;
+                var tYF = 0;
+                           
                 if (elInfo.position == pageInfo.ABSOLUTE_P) {
+                    /** ABSOLUTE **/
+                    
                     xF = (LAYOUT.vW2) + (elInfo.x * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y * ratioPx) - (elInfo.height * 0.5);
                     element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.RES_RC_P) {
-                    var tXF, tYF;
+                    /** RESOLUTION RELATED, FROM THE CENTER OF THE SCREEN **/
+                                        
                     if(elInfo.parent != null){
                         var parentInfo = getParent(page3D, elInfo.parent).info;
                         tYF = Math.round(parentInfo.tYF + elInfo.rrcYOffset)
@@ -1012,43 +1039,54 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     
                     element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.TOPLEFTSCREENRELATIVE_P) {
+                    /** TOP LEFT SCREEN - CURRENTLY NOT USED **/
+                    
                     xF = tW * (elInfo.x) * ratioPx;
                     yF = tH * (elInfo.y) * ratioPx;
                     element.setPosition(xF, yF, elInfo.z);
                 } else if (elInfo.position == pageInfo.FREE3D_P) {
-                    if(elInfo.x.minL){
-                        xF = getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL);
-                    } else {
-                        xF = elInfo.x;
-                    }
-                    
-                    if(elInfo.y.minL){
-                        yF = getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL);
-                    } else {
-                        yF = elInfo.y
-                    }
-                    
-                    if(elInfo.z.minL){
-                        zF = getRelatedToFovValue(elInfo.z.minL, elInfo.z.maxL);
-                    } else {
-                        zF = elInfo.z;   
-                    }
+                    /** FREE 3D **/
+
+                    xF = getPropValue(elInfo.x);
+                    yF = getPropValue(elInfo.y);
+                    zF = getPropValue(elInfo.z);
                         
                     element.setPosition(xF, yF, zF);
                 } else if (elInfo.position == pageInfo.FOV_RELATED) {
-                    xF = (LAYOUT.vW2) + (getRelatedToFovValue(elInfo.x.minL, elInfo.x.maxL) * ratioPx) - (elInfo.width * 0.5);
-                    yF = (LAYOUT.vH2) + (getRelatedToFovValue(elInfo.y.minL, elInfo.y.maxL) * ratioPx) - (elInfo.height * 0.5);
-
-                    if (elInfo.scale != null && elInfo.scale.minL) {
-                        scaleF = getRelatedToFovValue(elInfo.scale.minL, elInfo.scale.maxL);
-                        element.setScale(scaleF * ratioPx, scaleF * ratioPx, 1);
-                    } else {
-                        element.setScale(ratioPx, ratioPx, 1);
+                    /** FIELD OF VIEW RELATED **/
+                    
+                    if(elInfo.parent != null){
+                        var parentInfo = getParent(page3D, elInfo.parent).info;
+                        tXF = parentInfo.tXF;
+                        tYF = parentInfo.tYF;
                     }
-                    element.setPosition(xF, yF, elInfo.z);
-                    element.update();
+                    
+                    tXF += getPropValue(elInfo.x);
+                    tYF += getPropValue(elInfo.y);                            
+                                        
+                    elInfo.tXF = tXF;
+                    elInfo.tYF = tYF;
+                    
+                    // SCALE
+                    /*tXF -= (1-baseSc)*elInfo.width*0.5;
+                    tYF -= (1-baseSc)*elInfo.height*0.5;*/
+                    
+                    if(elInfo.log){
+                        console.log("Ratio PX >" + ratioPx);   
+                    }
+                                        
+                    xF = LAYOUT.vW2 + (tXF * ratioPx) - (elInfo.width * 0.5);
+                    yF = LAYOUT.vH2 + (tYF * ratioPx) - (elInfo.height * 0.5);
+                    xF += (offsetRatioX/2);
+                    yF += (offsetRatioY/2);
+                    
+                    element.setPosition(xF, yF, getPropValue(elInfo.z));
+                    /*element.update();*/
                 }
-
+                
+                
+                /** ------------------- **/
+                /** REGISTRATION POINT **/                
                 if (!isNaN(elInfo.rPointX) && !isNaN(elInfo.rPointY)) {
                     element.setRegistrationPoint(elInfo.rPointX, elInfo.rPointY, 0);
                 } else if (elInfo.width && elInfo.height) {
@@ -1056,7 +1094,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 } else {
                     element.setRegistrationPoint(0, 0, 0);
                 }
-
+                
+               
+                
+                /** ------------------- **/
+                /** ROTATION **/
                 if (elInfo.rX != null && elInfo.rY != null && elInfo.rZ != null) {
                     element.setRotation(elInfo.rX, elInfo.rY, elInfo.rZ);
                 }
@@ -1066,9 +1108,9 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                 } else {
                     element.setOpacity(elInfo.opacity);
                 }
+                
                 element.update();
             }
-        
 
         $("#" + idElement).css("width", tW);
         $("#" + idElement).css("height", tH);
@@ -1124,6 +1166,13 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         currentSectionId = sectionId;
     }
 
+    getPropValue = function (obj) {
+        if(obj.minL != null && obj.maxL != null){
+            return getRelatedToFovValue(obj.minL, obj.maxL);
+        }        
+        return obj
+    }
+    
     getRelatedToFovValue = function (minL, maxL) {
         return minL + (LAYOUT_3D.fovMult001 * (maxL - minL));
     }

@@ -294,7 +294,7 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
        for(var i = 0; i< this.secondaryElements.length; i++ ){
            var obj = this.secondaryElements[i];
            var info = obj.info;
-           var delayAlpha = info.delayAlpha != null ? info.delayAlpha : 0.1*i;
+           var delayAlpha = info.secondary.delay != null ? info.secondary.delay : 0.1*i;
            var el = obj.element3d;
            el.setCSS("opacity", "0");
            //el.setCSS("border", "5px solid white");
@@ -375,16 +375,16 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
             var cInfo = this.pageInfo.free3DContainer;
             console.log("cInfo >> " + this.pageInfo);
             console.dir(cInfo);
-                        this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ);
+            this.free3DContainer = new Sprite3D().setId(this.getId()+"-externalContainer").setPosition(cInfo.x, cInfo.y, cInfo.z).setRotation(cInfo.rotationX, cInfo.rotationY, cInfo.rotationZ);
                         
-                        if(cInfo.scale != null){
-                            this.free3DContainer.setScale(cInfo.scale, cInfo.scale, cInfo.scale);
-                        }
+            if(cInfo.scale != null){
+                this.free3DContainer.setScale(cInfo.scale, cInfo.scale, cInfo.scale);
+            }
                         
-                        this.free3DContainer.update();
-                        this.free3DContainer.setCSS("opacity","0");
-                        this.free3DContainer.setCSS("visibility","hidden");
-                        this.parentSprite3D.addChild(this.free3DContainer);
+            this.free3DContainer.update();
+            this.free3DContainer.setCSS("opacity","0");
+            this.free3DContainer.setCSS("visibility","hidden");
+            this.parentSprite3D.addChild(this.free3DContainer);
         }
         
         return this.free3DContainer;

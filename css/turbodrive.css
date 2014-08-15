@@ -1770,28 +1770,29 @@ button.icon-play:active {
     font-family: "texgyreadventorbold";
     color: #CECEC4;
     padding: 0px;
-    font-size: 60px;
+    font-size: 120px;
     text-transform: uppercase;
     letter-spacing: 0px;
     display: inline-block;
+    width: 1280px;
 }
 
 .timeline-info h1 > .years {
-    font-size: 20px;
+    font-size: 40px;
     display: inline-block;
     position:absolute;
     float: right;
-    padding-left: 4px;
-    margin-top: 11px;
+    padding-left: 8px;
+    margin-top: 22px;
 }
 
 .timeline-info h1 > .digital {
-    font-size: 32px;
+    font-size: 64px;
     color: #8F7E7F;
     display: inline-block;
-    padding-left: 4px;
-    margin-top: 4px;
-    letter-spacing: -0.5px;
+    padding-left: 8px;
+    margin-top: 8px;
+    letter-spacing: -1px;
 }
 
 .timeline-info h3 {
@@ -1800,32 +1801,58 @@ button.icon-play:active {
     font-size: 46px;
     text-transform: uppercase;
     letter-spacing: -1px;
-    margin: 20px 0px 0px 0px;
+    /*margin: 20px 0px 0px 0px;
+    /*background: url(../images/timeline_placer.png);
+    background-repeat: no-repeat;*/
+    margin: 0px;
+}
+
+.timeline-info h3.helper {
+    text-indent: -9999px;
+    margin: 0px;
+    padding: 0px;
+    width: 100px;
+    height: 50px;
+    display: block;
+    background: url(../images/timeline_helper01.png)
 }
 
 .timeline-info p {
     color: #8F7E7F;
     padding: 0px;
     /*max-width: 200px;*/
-    font-size: 11px;
-    line-height: 13px;
+    font-size: 15px;
+    line-height: 18px;
     /*background: url(../images/timeline_placer.png);
     background-repeat: no-repeat;*/
-    height:35px;
-    margin-top: 15px;
+    /*height:35px;*/
+    /*margin-top: 15px;*/
     
 }
+
 
 .timeline-info p.right-now {
     text-overflow:nowrap;
     line-height: 20px;
     color: #CECEC4;
-    margin-top: 9px;
+    margin-top: 0px;
 }
 
 .timeline-info p.limit-width {
     text-overflow:ellipsis;
-    max-width: 200px;
+    max-width: 300px;
+}
+
+.timeline-info p.helper {
+    margin: 0px;
+    padding: 0px;
+    text-indent: -9999px;
+    color: rgba(0,0,0,0);
+    max-width: none;
+    width: 150px;
+    height: 75px;
+    display: block;
+    background: url(../images/timeline_helper02.png)
 }
 
 
