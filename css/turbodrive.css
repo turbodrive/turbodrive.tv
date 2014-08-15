@@ -1843,6 +1843,19 @@ button.icon-play:active {
     max-width: 300px;
 }
 
+
+.timeline-info p.open {
+    color: #EFECE1;
+    border: 2px solid #efece1;
+    padding: 10px 10px 20px 130px;
+    background-color: rgba(36,19,34,0.8);
+    box-shadow: inset 0px 0px 20px #D15F5F,
+                0px 0px 20px #D15F5F,
+                0px 0px 160px 60px #1D1020;
+    max-width: 400px;
+    
+}
+
 .timeline-info p.helper {
     margin: 0px;
     padding: 0px;

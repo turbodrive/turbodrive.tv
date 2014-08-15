@@ -308,10 +308,11 @@ define(["signals"], function (signals)
     pageInfo.TIMELINE_LAYOUT = {
         id:"timeline-layout",
         grid:{alpha:0.5},
+        
         h1:{position:pageInfo.FOV_RELATED,
-            x:{minL:585-340, maxL:1150-960},
+            x:{minL:505-340, maxL:1150-960},
             y:{minL:60-188, maxL:80-540},
-            z:0,
+            z:-200,
             width:620, height:132,
             scale:{minL:0.4, maxL:0.9}},
         
@@ -344,17 +345,17 @@ define(["signals"], function (signals)
                 x:-691, y:-3517,
                 z:{minL:-1657, maxL:-1857},
                 rX:56, rY:0, rZ:0, scale:1},
-        div_block4:{position:pageInfo.FREE3D_P,
+        /*div_block4:{position:pageInfo.FREE3D_P,
                 html:"<div class='block04'></div>",
                 secondary:{delay:7},
                 x:-1791, y:-1200,
                 z:{minL:-1100, maxL:-1300},
-                rX:0, rY:90, rZ:0, scale:1},
+                rX:0, rY:90, rZ:0, scale:1},*/
         
         
         p_contentNow:{position:pageInfo.FOV_RELATED,
-            x:{minL:70-340, maxL:336-960},
-            y:{minL:18-188, maxL:164-540},
+            x:{minL:60-340, maxL:336-960},
+            y:{minL:10-188, maxL:164-540},
             z:-3500,
             //x:{minL:0, maxL:0},y:{minL:0, maxL:0}, z:0,
             secondary:{delay:0.73},
