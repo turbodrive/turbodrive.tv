@@ -297,13 +297,20 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
            var delayAlpha = info.secondary.delay != null ? info.secondary.delay : 0.1*i;
            var el = obj.element3d;
            el.setCSS("opacity", "0");
+           el.setCSS("visibility", "hidden");
            //el.setCSS("border", "5px solid white");
-           TweenMax.to(el.domElement, 0.3, {alpha:1, delay:delayAlpha})
-           if(info.position == pageInfo.FREE3D_P){
-                this.free3DContainer.addChild(el)   
-           }else {
-                this.addChild(el);
-           }
+           TweenMax.to(el.domElement, 0.3, {
+               autoAlpha:1,
+               delay:delayAlpha,
+               onStartParams:[el, info, this],
+               onStart:function(el, info, currentObj){
+                   if(info.position == pageInfo.FREE3D_P){
+                    currentObj.free3DContainer.addChild(el);
+                   }else {
+                    currentObj.addChild(el);
+                   }
+                }
+           });
        }
         this.secElementsAdded = true;
     }
