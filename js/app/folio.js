@@ -1068,8 +1068,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     elInfo.tYF = tYF;
                     
                     // SCALE
-                    /*tXF -= (1-baseSc)*elInfo.width*0.5;
-                    tYF -= (1-baseSc)*elInfo.height*0.5;*/
+                    /*tXF += (1-baseSc)*elInfo.width*0.5;
+                    tYF += (1-baseSc)*elInfo.height*0.5;*/
                     
                     if(elInfo.log){
                         console.log("Ratio PX >" + ratioPx);   
@@ -1077,8 +1077,11 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                                         
                     xF = LAYOUT.vW2 + (tXF * ratioPx) - (elInfo.width * 0.5);
                     yF = LAYOUT.vH2 + (tYF * ratioPx) - (elInfo.height * 0.5);
-                    xF += (offsetRatioX/2);
-                    yF += (offsetRatioY/2);
+                    
+                    if(elInfo.useOffsetRatio){
+                        xF += (offsetRatioX/2);
+                        yF += (offsetRatioY/2);
+                    }
                     
                     element.setPosition(xF, yF, getPropValue(elInfo.z));
                     /*element.update();*/
