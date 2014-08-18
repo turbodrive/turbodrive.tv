@@ -1608,7 +1608,7 @@ button.icon-play:active {
 .skill-bg-out {
     display: block;
     background-image: url(../images/menu_about@2x.png);
-    background-image: 1200px 800px;
+    background-size: 1200px 800px;
     z-index: -2;
     top: 0;
     left: 0;
@@ -1956,12 +1956,13 @@ div.block04 {
 
 .skillsfield-menu ul {
     display: block;
-    height: 346px;
+    height: 150px;
     padding: 0px;
+    width: 1424px;
 }
 
 .skillsfield-menu [data-icon]:before {
-    font-size: 44px;
+    font-size: 88px;
 }
 
 .skillsfield-menu li {
@@ -1976,23 +1977,25 @@ div.block04 {
     
     color: #77646B;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 20px;
     font-family: "texgyreadventorbold";
 
     text-align: center;
-    line-height: 12px;
+    line-height: 24px;
 }
 
 .skillsfield-menu li a {
-    margin-top: 32px;
+    margin-top: 64px;
 }
 
 .skillsfield-menu .skill-bg-out {
-    background-image: url(../images/menu_skills.png);
+    background-image: url(../images/menu_skills@2x.png);
+    background-size: 1600px 800px;
 }
 
 .skillsfield-menu .skill-bg-over {
-    background-image: url(../images/menu_skills.png);
+    background-image: url(../images/menu_skills@2x.png);
+    background-size: 1600px 800px;
 }
 
 /*@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
@@ -2025,110 +2028,108 @@ div.block04 {
 }
 
 .skillsfield-menu li.editing {
-    width: 128px;
-    height: 89px;
-    padding-left: 30px;
+    width: 256px;
+    height: 178px;
+    padding-left: 60px;
     left: 0px;
-    top: 49px;
+    top: 98px;
 }
 
 .skillsfield-menu li.editing .skill-bg-out {
-    background-position: 0px -14px;
+    background-position: 0px -28px;
 }
 
 .skillsfield-menu li.editing .skill-bg-over {
-    background-position: 0px -134px;
+    background-position: 0px -268px;
 }
     
 .skillsfield-menu li.three {
-    width: 108px;
-    height: 93px;
-    top: 35px;
+    width: 216px;
+    height: 186px;
+    top: 70px;
 }
 
 .skillsfield-menu li.three .skill-bg-out {
-    background-position: -128px 0px;
+    background-position: -256px 0px;
 }
 
 .skillsfield-menu li.three .skill-bg-over {
-    background-position: -128px -120px;
+    background-position: -256px -240px;
 }
 
 .skillsfield-menu li.research {
-    width: 106px;
-    height: 106px;
-    top: 40px;
+    width: 212px;
+    height: 212px;
+    top: 80px;
 }
 
 .skillsfield-menu li.research .skill-bg-out {
-    background-position: -236px -40px;
+    background-position: -472px -80px;
 }
 
 .skillsfield-menu li.research .skill-bg-over {
-    background-position: -236px -185px;
+    background-position: -472px -370px;
 }
 
 .skillsfield-menu li.research > span.skill-icon {
-    margin-top: 36px;
+    margin-top: 72px;
 }
 
 .skillsfield-menu li.compositing {
-    width: 105px;
-    height: 106px;
-    top: 26px;
+    width: 210px;
+    height: 212px;
+    top: 52px;
 }
 
 .skillsfield-menu li.compositing .skill-bg-out {
-    background-position: -342px -26px;
+    background-position: -684px -52px;
 }
 
 .skillsfield-menu li.compositing .skill-bg-over {
-    background-position: -342px -171px;
+    background-position: -684px -342px;
     
 }
 
 .skillsfield-menu li.compositing a {
-    margin-top: 38px;
+    margin-top: 76px;
 }
 
 .skillsfield-menu li.front {
-    background-position: -447px -12px;
-    width: 109px;
-    height: 106px;
-    top: 12px;
+    width: 218px;
+    height: 212px;
+    top: 24px;
 }
 
 .skillsfield-menu li.front .skill-bg-out {
-    background-position: -447px -12px;
+    background-position: -894px -24px;
 }
 
 .skillsfield-menu li.front .skill-bg-over {
-    background-position: -447px -157px;
+    background-position: -894px -314px;
     
 }
 
 .skillsfield-menu li.front a {
-    margin-top: 33px;
+    margin-top: 66px;
 }
 
 .skillsfield-menu li.motion {
-    background-position: -556px 0px;
-    width: 156px;
-    height: 106px;
+    width: 312px;
+    height: 212px;
     top: 0px;
-    padding-right: 40px;
+    padding-right: 80px;
 }
 
 .skillsfield-menu li.motion .skill-bg-out {
-    background-position: -556px 0px;
+    background-position: -1112px 0px;
 }
 
 .skillsfield-menu li.motion .skill-bg-over {
-    background-position: -556px -145px;
+    background-position: -1112px -290px;
     
 }
 .skillsfield-menu li.motion a {
-    margin-top: 34px;
+    margin-top: 68px;
 }
 
 /***********************************************************************/

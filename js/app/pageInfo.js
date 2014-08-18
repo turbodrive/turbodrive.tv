@@ -256,9 +256,7 @@ define(["signals"], function (signals)
             z:-600,
             width:1130, height:216,
             scale:{minL:0.4, maxL:0.6} // max 0.6
-       },
-        
-        
+        },
         h3_skillsFieldTitle:{position:pageInfo.FOV_RELATED,
             x:{minL:-5-340, maxL:250-960},
             y:{minL:240-188, maxL:650-540},            
@@ -284,10 +282,14 @@ define(["signals"], function (signals)
         
         a_skillsFieldButton:{position:pageInfo.RES_RC_P,  
             z:50, rrcX:-0.14, rrcY:0.30, rrcXOffset:-15, rrcYOffset:30,
-            width:276, height:56, extraScale:0.5},
+            width:276, height:56,
+            secondary:true,              
+            extraScale:0.5},
         a_timelineButton:{position:pageInfo.RES_RC_P,
             z:50, rrcX:0.30, rrcY:0.35, rrcXOffset:-40, rrcYOffset:0,
-            width:284, height:56, extraScale:0.5},
+            width:284, height:56,
+            secondary:true,
+            extraScale:0.5},
         
         img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>",
                    position:pageInfo.RES_RC_P,
@@ -311,10 +313,11 @@ define(["signals"], function (signals)
             rPointX:0, rPointY:0, width:1568, height:641,
             scale:{minL:0.7, maxL:1.3},           
             },
+        
         _skillsMenu:{position:pageInfo.RES_RC_P,
-            z:50, rrcX:0, rrcY:0.24, rrcXOffset:-366, rrcYOffset:-40,
-            scale:{minL:0.9, maxL:1.2},
-            width:712, height:346},
+            z:50, rrcX:0, rrcY:0.175, rrcXOffset:-733, rrcYOffset:-55,
+            scale:{minL:0.45, maxL:0.65},
+            width:1424, height:150},
         
         _editingSection:{position:pageInfo.RES_RC_P,
             z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-245, rrcYOffset:-80,
