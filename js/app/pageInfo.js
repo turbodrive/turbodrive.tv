@@ -117,7 +117,7 @@ define(["signals"], function (signals)
             z:-150, rrcXOffset:0, rrcYOffset:95, // no need of rrcX or rrcY, parent's rrcX & rrcY used
             width:350, height:240, wrapLeftOffset:0},
         div_player:{position:pageInfo.RES_RC_P,
-            secondary:true,
+            secondary:{stayHidden:true},
             z:0, rrcX:-0.25, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
@@ -158,7 +158,7 @@ define(["signals"], function (signals)
             z:-150, rrcXOffset:0, rrcYOffset:25, // no need of rrcX or rrcY, parent's rrcX & rrcY used
             width:330, height:240, wrapLeftOffset:0},
         div_player:{position:pageInfo.RES_RC_P,
-            secondary:true,
+            secondary:{stayHidden:true},
             z:0, rrcX:-0.41, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
@@ -202,7 +202,7 @@ define(["signals"], function (signals)
             z:-150, rrcXOffset:0, rrcYOffset:100, // no need of rrcX or rrcY, parent's rrcX & rrcY used
             width:560, height:240, wrapLeftOffset:20},
         div_player:{position:pageInfo.RES_RC_P,
-            secondary:true,
+            secondary:{stayHidden:true},
             z:0, rrcX:-0.41, rrcY:-0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
@@ -224,14 +224,7 @@ define(["signals"], function (signals)
     cY = -0.12;;
     
     pageInfo.ABOUT_LAYOUT = {
-        id:"about-layout",
-        
-        /*h1:{position:pageInfo.FOV_RELATED,
-            x:{minL:505-340, maxL:1150-960},
-            y:{minL:60-188, maxL:80-540},
-            z:-200,
-            width:620, height:132,
-            scale:{minL:0.4, maxL:0.9}},*/
+        id:"about-layout",        
         
         div_hireMeAbout:{position:pageInfo.RES_RC_P,  
             z:100, rrcX:0.30, rrcY:-0.45, rrcXOffset:10, rrcYOffset:35,
@@ -252,7 +245,7 @@ define(["signals"], function (signals)
             parent:"h1_title",
             x:0,
             y:{minL:-20, maxL:-30},        
-            z:-200,
+            z:-300,
             width:422, height:49,
             scale:{minL:0.4, maxL:0.7} // max 0.7
         },
@@ -260,7 +253,7 @@ define(["signals"], function (signals)
             parent:"h1_title",
             x:{minL:0, maxL:5}, 
             y:{minL:60, maxL:80},       
-            z:-400,
+            z:-600,
             width:1130, height:216,
             scale:{minL:0.4, maxL:0.6} // max 0.6
        },
@@ -273,32 +266,20 @@ define(["signals"], function (signals)
             scale:{minL:0.35, maxL:0.8}, // max 0.7
             width:332, height:72},
         
-        /*h3_skillsFieldTitle:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:-0.36, rrcY:0.08, rrcXOffset:-80, rrcYOffset:0,
-            width:166, height:36},*/
-        
         h3_timelineTitle:{position:pageInfo.FOV_RELATED,
             x:{minL:320-340, maxL:1300-960},
             y:{minL:200-188, maxL:700-540},            
             z:-400,
             scale:{minL:0.35, maxL:0.8}, // max 0.7
             width:492, height:100},
-        
-        /*h3_timelineTitle:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:0.16, rrcY:0.04, rrcXOffset:40, rrcYOffset:40,
-            width:246, height:50},*/
-        
+
         
         div_skillsFieldMenu:{position:pageInfo.FOV_RELATED,
-            x:{minL:-200-340, maxL:70-960},
-            y:{minL:120-188, maxL:620-540},            
-            z:-300,
+            x:{minL:-160-340, maxL:90-960},
+            y:{minL:180-188, maxL:620-540},
+            z:-500,
             scale:{minL:0.32, maxL:0.7}, // max 0.7
             width:1240, height:500},
-        
-        /*div_skillsFieldMenu:{position:pageInfo.RES_RC_P,
-            z:0, rrcX:-0.39, rrcY:0.07, rrcXOffset:-80, rrcYOffset:0,
-            width:620, height:250},*/
         
         
         a_skillsFieldButton:{position:pageInfo.RES_RC_P,  
@@ -308,13 +289,9 @@ define(["signals"], function (signals)
             z:50, rrcX:0.30, rrcY:0.35, rrcXOffset:-40, rrcYOffset:0,
             width:284, height:56, extraScale:0.5},
         
-        
-        
-        /*img_background:{src:"mainImage", scale:0.8, position:pageInfo.ABSOLUTE_P,
-            x:-260, y:0, z:-3500, rPointX:0, rPointY:0, width:1280, height:720},*/
         img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>",
                    position:pageInfo.RES_RC_P,
-                    z:-1000,
+                    z:-2000,
             rrcX:0, rrcY:0.05,  rrcXOffset:0, rrcYOffset:50,
             rPointX:0, rPointY:0, width:1366, height:665,
             scale:{minL:0.65, maxL:1.6},
@@ -385,7 +362,7 @@ define(["signals"], function (signals)
         h1:{position:pageInfo.FOV_RELATED,
             x:{minL:505-340, maxL:1150-960},
             y:{minL:60-188, maxL:80-540},
-            z:-200,
+            z:-200, useOffsetRatio:true,
             width:620, height:132,
             scale:{minL:0.4, maxL:0.9}},
         
@@ -418,12 +395,12 @@ define(["signals"], function (signals)
                 x:-691, y:-3517,
                 z:{minL:-1657, maxL:-1857},
                 rX:56, rY:0, rZ:0, scale:1},
-        /*div_block4:{position:pageInfo.FREE3D_P,
+        div_block4:{position:pageInfo.FREE3D_P,
                 html:"<div class='block04'></div>",
                 secondary:{delay:7},
                 x:-1791, y:-1200,
                 z:{minL:-1100, maxL:-1300},
-                rX:0, rY:90, rZ:0, scale:1},*/
+                rX:0, rY:90, rZ:0, scale:1},
         
         
         p_contentNow:{position:pageInfo.FOV_RELATED,

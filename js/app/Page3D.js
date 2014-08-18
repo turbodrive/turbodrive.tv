@@ -292,29 +292,38 @@ UTILS.shapeWrapper(15,"7.5,5,159|22.5,11,152|37.5,18,146|52.5,24,139|67.5,30,133
         if(this.secElementsAdded) return
 
        for(var i = 0; i< this.secondaryElements.length; i++ ){
-           var obj = this.secondaryElements[i];
-           var info = obj.info;
-           var delayAlpha = info.secondary.delay != null ? info.secondary.delay : 0.1*i;
-           var el = obj.element3d;
-           el.setCSS("opacity", "0");
-           el.setCSS("visibility", "hidden");
-           //el.setCSS("border", "5px solid white");
-           TweenMax.to(el.domElement, 0.3, {
-               autoAlpha:1,
-               delay:delayAlpha,
-               onStartParams:[el, info, this],
-               onStart:function(el, info, currentObj){
-                   if(info.position == pageInfo.FREE3D_P){
-                    currentObj.free3DContainer.addChild(el);
-                   }else {
-                    currentObj.addChild(el);
-                   }
-                }
-           });
+            var obj = this.secondaryElements[i];
+            var info = obj.info;
+            var el = obj.element3d;
+            el.setCSS("opacity", "0");
+            el.setCSS("visibility", "hidden");
+           
+           if(info.secondary.stayHidden){
+               this.addChildAsSecondary(el, info, this)
+           }else{
+               var delayAlpha = info.secondary.delay != null ? info.secondary.delay : 0.1*i;
+              
+               //el.setCSS("border", "5px solid white");
+               TweenMax.to(el.domElement, 0.3, {
+                   autoAlpha:1,
+                   delay:delayAlpha,
+                   onStartParams:[el, info, this],
+                   onStart:this.addChildAsSecondary
+               });
+           }
        }
         this.secElementsAdded = true;
     }
            
+    Page3D.prototype.addChildAsSecondary = function(el, info, currentObj)
+    {
+        if(info.position == pageInfo.FREE3D_P){
+            currentObj.free3DContainer.addChild(el);
+        }else {
+            currentObj.addChild(el);
+        }
+    }
+    
     Page3D.prototype.removeSecondaryElements = function()
     {
         if(!this.secElementsAdded) return
