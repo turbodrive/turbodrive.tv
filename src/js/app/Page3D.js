@@ -65,6 +65,35 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         page.video.play();
     }
     
+    Page3D.prototype.openDatePanel = function(event)
+    {   
+        var page = event.currentTarget.self;
+        var target = event.currentTarget;
+        console.log('clickPanel >> ' + target);
+        console.log('clickPanel >> ' + target.id);
+        console.log('this.secondaryElements >> ' + page.secondaryElements);
+        var nameOpenPanel = target.id+"_open";
+        
+        for(var i = 0; i < page.secondaryElements.length; i++){
+            //console.log("PRELOAD >>> " + this.secondaryElements[i].getId());
+            if(page.secondaryElements[i].id == nameOpenPanel){
+                var el = page.secondaryElements[i].element3d;
+                var info = page.secondaryElements[i].info;
+                
+                TweenMax.to(el.domElement, 0.3, {
+                   autoAlpha:1,
+                   onStartParams:[el, info, page],
+                   onStart:page.addChildAsSecondary
+               });
+                /*page.addChild(this.secondaryElements[i].element3d)*/
+            }
+        }
+        // hide init content
+        TweenMax.to(target.domElement, 0.3, {autoAlpha:0});
+        
+        
+    }
+    
     Page3D.prototype.onClickVideo = function(event) {
         var currentVideo = event.currentTarget;
         if(currentVideo.paused){
@@ -250,7 +279,15 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
                     
                     if(elementInfo.secondary){
                         this.secondaryElements.push(objectElement);   
-                    }                    
+                    }
+                    
+                    if(elementInfo.opacity != null){
+                        element3d.setOpacity(elementInfo.opacity);
+                    }
+                    
+                    if(elementInfo.visibility != null){
+                        element3d.setCSS("visibility", elementInfo.visibility);
+                    } 
                     
                     element3d.update();
                     this.elementList.push(objectElement);

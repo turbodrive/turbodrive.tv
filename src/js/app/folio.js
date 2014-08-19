@@ -1018,7 +1018,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     
                     xF = (LAYOUT.vW2) + (elInfo.x * ratioPx) - (elInfo.width * 0.5);
                     yF = (LAYOUT.vH2) + (elInfo.y * ratioPx) - (elInfo.height * 0.5);
-                    element.setPosition(xF, yF, elInfo.z);
+                    element.setPosition(Math.round(xF), Math.round(yF), elInfo.z);
                 } else if (elInfo.position == pageInfo.RES_RC_P) {
                     /** RESOLUTION RELATED, FROM THE CENTER OF THE SCREEN **/
                                         
@@ -1037,7 +1037,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     xF = (LAYOUT.vW2) + (tXF * ratioPx) - elInfo.width * 0.5;
                     yF = (LAYOUT.vH2) + (tYF * ratioPx) - elInfo.height * 0.5;
                     
-                    element.setPosition(xF, yF, elInfo.z);
+                    element.setPosition(Math.round(xF), Math.round(yF), elInfo.z);
                 } else if (elInfo.position == pageInfo.TOPLEFTSCREENRELATIVE_P) {
                     /** TOP LEFT SCREEN - CURRENTLY NOT USED **/
                     
@@ -1051,7 +1051,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     yF = getPropValue(elInfo.y);
                     zF = getPropValue(elInfo.z);
                         
-                    element.setPosition(xF, yF, zF);
+                    element.setPosition(Math.round(xF), Math.round(yF), zF);
                 } else if (elInfo.position == pageInfo.FOV_RELATED) {
                     /** FIELD OF VIEW RELATED **/
                     
@@ -1083,7 +1083,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                         yF += (offsetRatioY/2);
                     }
                     
-                    element.setPosition(xF, yF, getPropValue(elInfo.z));
+                    element.setPosition(Math.round(xF), Math.round(yF), getPropValue(elInfo.z));
                     /*element.update();*/
                 }
                 
@@ -1106,9 +1106,7 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
                     element.setRotation(elInfo.rX, elInfo.rY, elInfo.rZ);
                 }
 
-                if (elInfo.opacity === null) {
-
-                } else {
+                if (elInfo.opacity !== null) {
                     element.setOpacity(elInfo.opacity);
                 }
                 

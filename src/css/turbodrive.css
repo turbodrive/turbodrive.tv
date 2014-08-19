@@ -1,4 +1,4 @@
-/* Turbodrive - Stylesheet
+/*! Turbodrive Stylesheet
  * Author : Silvère Maréchal
  */
 
@@ -441,6 +441,10 @@ button {
         top: 18%;
     }
 
+    .prev-button .about:before {
+        top: 40%;
+    }
+
     .prev-button .transverse-nav-bg {
         left: -750%;
     }
@@ -452,6 +456,10 @@ button {
     .next-button .menu-icon:before {
         right: 25%;
         bottom: 10%;
+    }
+
+    .next-button .about:before {
+        bottom: 32%;
     }
 
     .next-button .transverse-nav-bg {
@@ -1448,7 +1456,7 @@ button.icon-play:active {
     /*position:fixed;*/
     position: absolute;
     -webkit-font-smoothing: subpixel-antialiased;
-	-moz-osx-font-smoothing: none;
+	-moz-osx-font-smoothing: auto;
 }
 
 .about h3 {
@@ -1827,18 +1835,21 @@ button.icon-play:active {
 }
 
 .timeline-info p {
+    transition: 0.15s;
+    cursor: pointer;
     color: #8F7E7F;
     padding: 0px;
     /*max-width: 200px;*/
     font-size: 15px;
     line-height: 18px;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
     /*background: url(../images/timeline_placer.png);
     background-repeat: no-repeat;*/
     /*height:35px;*/
     /*margin-top: 15px;*/
     
 }
-
 
 .timeline-info p.right-now {
     text-overflow:nowrap;
@@ -1852,16 +1863,55 @@ button.icon-play:active {
     max-width: 300px;
 }
 
+.timeline-info p [data-icon]:before {
+    font-size: 20px;
+    position: absolute;
+    right: -38px;
+    top: 2px;
+    opacity: 1;
+}
 
-.timeline-info p.open {
-    color: #EFECE1;
+.timeline-info p:hover {
+    color: #CECEC4;
+    opacity: 1;
+}
+
+
+.timeline-info p.opendate {
+    color: #CECEC4;
+    font-size: 12px;
     border: 2px solid #efece1;
-    padding: 10px 10px 20px 130px;
-    background-color: rgba(36,19,34,0.8);
-    box-shadow: inset 0px 0px 20px #D15F5F,
+    padding: 14px 5px 20px 14px;
+    background-color: rgba(29, 16, 32, 0.9);
+    box-shadow: inset 0px 0px 30px #D15F5F,
                 0px 0px 20px #D15F5F,
-                0px 0px 160px 60px #1D1020;
+                0px 0px 260px 160px rgba(29, 16, 32, 0.9);
     max-width: 400px;
+}
+
+.timeline-info p.opendate .content {
+    margin-left: 70px;
+    display: block;
+    position: relative;
+    opacity: 1;
+    padding: 0px;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.timeline-info p.opendate .year {
+    font-family: "texgyreadventorbold";
+    color: #CECEC4;
+    padding: 0px;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin: 0px;
+    display: block;
+    float: left;
+    position: relative;
+    padding-left: 0px;
+    padding-top: 6px;
     
 }
 
@@ -2197,7 +2247,7 @@ div.skill-section {
 .skill-section p {
     color: #CECEC4;
     -webkit-font-smoothing: subpixel-antialiased;
-	-moz-osx-font-smoothing: none;
+	-moz-osx-font-smoothing: auto;
     margin-bottom: 15px;
     width: 550px;
 }

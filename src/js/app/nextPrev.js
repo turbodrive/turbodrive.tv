@@ -12,6 +12,7 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
     var nextPageId = "";
     var prevPageId = "";
     var hidden = true;
+    var alphaOut = 0.15;
     
     var nextPrev = {}
     nextPrev.on = {
@@ -76,9 +77,19 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
         }else {
             var btn = event.currentTarget;
             var bg = $(btn).children(".transverse-nav-bg")[0];
-            TweenMax.to(btn, 0.3, {autoAlpha:0.2});
+            TweenMax.to(btn, 0.3, {autoAlpha:alphaOut});
             TweenMax.to(bg, 0.5, {autoAlpha:0});
         }
+    }
+    
+    var updateNextPrevPositions = function(){
+       if(currentPageInfo.project){
+            $(".prev-button .menu-icon").removeClass("about");
+            $(".next-button .menu-icon").removeClass("about");
+       }else{
+            $(".prev-button .menu-icon").addClass("about");
+            $(".next-button .menu-icon").addClass("about");
+       }
     }
     
     var overNextPrevHandler = function(event) {
@@ -129,7 +140,7 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
     var outNextPrevHandler = function(event) {
         if(hidden) return
         
-        rolloutButton(event.currentTarget, 0.2)
+        rolloutButton(event.currentTarget, alphaOut)
     }
     
     nextPrev.hide = function(boost) {
@@ -152,24 +163,25 @@ define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, 
     }
     
     var showIfNeeded = function() {
-         if(currentPageInfo.project){
-            hidden = false;
-            
-            TweenMax.to(backToTheReel,1.5, {autoAlpha:1});
-            if(nextPageId != null){
-                TweenMax.to(nextButton,1.5, {autoAlpha:0.2});
-            }
-            if(prevPageId != null){
-                TweenMax.to(prevButton,1.5, {autoAlpha:0.2});
-            }
+        if(nextPageId != null){
+                TweenMax.to(nextButton,1.5, {autoAlpha:alphaOut});
         }
+        if(prevPageId != null){
+                TweenMax.to(prevButton,1.5, {autoAlpha:alphaOut});
+        }
+        
+         if(currentPageInfo.project){     
+            TweenMax.to(backToTheReel,1.5, {autoAlpha:1});
+        }
+        hidden = false;   
     }
     
     nextPrev.updateState = function(newPageInfo) {
         currentPageInfo = newPageInfo;
         nextPageId = pageInfo.getNextPageId(currentPageInfo.id);
         prevPageId = pageInfo.getPrevPageId(currentPageInfo.id);
-        showIfNeeded();        
+        showIfNeeded();
+        updateNextPrevPositions();
     }
     
     return nextPrev;
