@@ -1,0 +1,322 @@
+/*! Turbodrive Stylesheet
+ * Author : Silvère Maréchal
+ */
+
+@font-face {
+    font-family: 'texgyreadventorbold';
+    src: url('fonts/texgyreadventor-bold-webfont.eot');
+    src: url('fonts/texgyreadventor-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/texgyreadventor-bold-webfont.woff') format('woff'),
+         url('fonts/texgyreadventor-bold-webfont.ttf') format('truetype'),
+         url('fonts/texgyreadventor-bold-webfont.svg#texgyreadventorbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'texgyreadventorregular';
+    src: url('fonts/texgyreadventor-regular-webfont.eot');
+    src: url('fonts/texgyreadventor-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/texgyreadventor-regular-webfont.woff') format('woff'),
+         url('fonts/texgyreadventor-regular-webfont.ttf') format('truetype'),
+         url('fonts/texgyreadventor-regular-webfont.svg#texgyreadventorregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'turbodrive';
+	src:url('fonts/turbodrive.eot?bch85c');
+	src:url('fonts/turbodrive.eot?#iefixbch85c') format('embedded-opentype'),
+		url('fonts/turbodrive.woff?bch85c') format('woff'),
+		url('fonts/turbodrive.ttf?bch85c') format('truetype'),
+		url('fonts/turbodrive.svg?bch85c#turbodrive') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[data-icon]:before {
+    font-family: 'turbodrive'; /* BYO icon font, mapped smartly */
+    content: attr(data-icon);
+    font-size: 30px;
+    speak: none; /* Not to be trusted, but hey. */    
+    
+}
+
+html, body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #2F1D33;
+    font-family: "texgyreadventorregular";
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    font-family: "texgyreadventorbold";
+    font-size: 18px;
+}
+
+p, button, a, h1, h2, h3, h4, span, div{
+    font-weight: 300;
+    padding: 0px;
+    margin: 0px;
+    
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+p {
+    color: #CECEC4;
+    font-size: 12px;
+    padding: 10px;
+    letter-spacing: 0px;
+}
+
+
+
+.warning-mobile {
+    width: 100%;
+    height: 250px;
+    position: fixed;
+    left: 0px;
+    bottom: -200px;
+    z-index: 10000;
+}
+
+.warning-mobile .header {
+    background-color: #D15F5F;
+    padding: 0px 20px;
+    margin: 0px;
+    text-transform: uppercase;
+    font-family: "texgyreadventorbold";
+    color: #EFECE1;
+    height: 50px;
+}
+
+.warning-mobile .header [data-icon]:before {
+    font-size: 32px;
+    line-height: 48px;
+}
+
+.warning-mobile .header h1 {
+    max-width: 200px;
+    font-size: 13px;
+    display: inline-block;
+    padding-left: 10px;
+    line-height: 16px;
+    letter-spacing: 0px;
+}
+
+div.white-bg{
+    background-color: #EFECE1;
+    padding: 20px;
+}
+
+div.warning-mobile p{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #907F80;    
+}
+
+.intro-reel {
+    background: #000000;
+    /*background-image: url(../images/videoNoise_25fps.gif);*/
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    pointer-events: none;
+    color: rgba(239, 236, 225, 0.3);
+    text-align: center;
+    padding-top: 5px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    left: 0px;
+    /*display: inline-block;*/
+}
+
+.logo span.title {
+    text-indent: -9999;
+}
+
+.logo [data-icon]:before {
+    font-size: 32px;
+}
+
+button.play-reel {
+    transition: 0.15s;
+    color: #8F7E7F;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;   
+}
+
+button.play-reel:hover { 
+    color: #EFECE1;
+}
+
+button.play-reel [data-icon]:before {
+    font-size: 116px;
+    line-height: 100px;
+}
+
+button .text-play {
+    display: block;
+    text-transform: uppercase;
+    font-family: "texgyreadventorbold";
+    font-size: 16px;
+    letter-spacing: -0.2px;
+    line-height: 16px
+}
+
+div.main-content {
+    background-color: #301E34;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    /*right: -85%;*/
+}
+
+div.main-content .header {
+    border-bottom: 1px solid rgba(239, 236, 225, 0.1);
+    margin: 0px 12px;
+    height: 38px;
+    position: fixed;
+    width: 100%;
+}
+
+div.main-content .logo [data-icon]:before {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+a.menu-button {
+    opacity: 0.3;
+    text-decoration: none;
+    transition: 0.15s;
+}
+
+a.menu-button:hover {
+    opacity: 1;
+}
+
+.icon-menu[data-icon]:before {
+    font-size: 15px;
+    color: rgba(239, 236, 225, 1);
+    padding: 12px 0px;
+    line-height: 40px;
+    vertical-align: top;
+}
+
+.scrollable-content {
+    margin-left: 40px;
+    padding: 12px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.red-button {
+    transition: 0.15s;
+    -webkit-transition:0.15s;
+    -moz-transition:0.15s;
+    background-color: #D15F5F;
+    color: #EFECE1;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 2px 10px 4px 10px;
+    letter-spacing: -0.2px;  
+    line-height: 16px;
+    font-family: "texgyreadventorbold";
+    text-decoration: none;
+}
+
+.red-button:after {
+    content: "\e60b";
+    font-family: 'turbodrive'; /* BYO icon font, mapped smartly */
+    font-size: 11px;
+    vertical-align:text-bottom;
+    padding-left: 7px;
+    
+    speak: none; /* Not to be trusted, but hey. */
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.red-button:hover {
+    background-color: #EFECE1;
+    color: #907F80;
+    text-decoration: none;
+}
+
+h3 {
+    font-family: "texgyreadventorbold";
+    color: #CECEC4;
+    margin-top: 30px;
+    border-bottom: 1px solid #8F7E7F;
+    display: inline-block;
+    padding-bottom: -5px;    
+    text-transform: uppercase;
+    font-size: 26px;
+}
+
+h3.nine {    
+    padding: 0px;
+    font-size: 46px;
+    letter-spacing: 0px;
+    line-height: 38px;
+}
+
+h3 > .years {
+    font-size: 16px;
+    display: inline-block;
+    position:absolute;
+    float: right;
+    padding-left: 1px;
+    margin-top: -8px;
+    letter-spacing: -0.5px;
+}
+
+h3 > .digital {
+    font-size: 24px;
+    color: #8F7E7F;
+    display: inline-block;
+    padding-left: 3px;
+    margin-top: 1px;
+    letter-spacing: -1px;
+}
+
+h4  {
+    text-transform: uppercase;
+    font-family: "texgyreadventorbold";
+    font-size: 20px;
+    color: #8F7E7F;
+    display: block;
+    padding-left: 3px;
+    margin-top: 0px;
+    letter-spacing: 0px;
+    margin-left: -40px;
+}
+
+h4 [data-icon]:before{
+    color: #8F7E7F;
+    font-size: 28px;
+    line-height: 20px;
+    padding-right: 18px;
+    vertical-align: middle;
+}
+
