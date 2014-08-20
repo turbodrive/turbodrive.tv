@@ -224,8 +224,8 @@ a.menu-button:hover {
 }
 
 .scrollable-content {
-    margin-left: 40px;
-    padding: 12px;
+    /*margin-left: 40px;
+    padding: 12px;*/
     margin-top: 50px;
     margin-bottom: 100px;
 }
@@ -272,6 +272,7 @@ h3 {
     padding-bottom: -5px;    
     text-transform: uppercase;
     font-size: 26px;
+    margin-left: 15px;
 }
 
 h3.nine {    
@@ -300,6 +301,123 @@ h3 > .digital {
     letter-spacing: -1px;
 }
 
+.global-timeline {
+    padding-left: 15px;
+}
+
+
+.timeline-blocks {
+    margin-top: 25px;
+    margin-left: 5px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    /*height: 2000px;*/
+}
+
+.tBlock {
+    width:25px;
+    height:68px;
+    background-color: #D15F5F;
+    margin-top: 3px;
+}
+
+
+.blockA11 {
+    background-color: rgba(209, 95, 95, 0.12);
+}
+
+.blockA25 {
+    background-color: rgba(209, 95, 95, 0.25);
+}
+
+.blockA50 {
+    background-color: rgba(209, 95, 95, 0.5);
+}
+
+.blockH104 {
+    height: 104px;
+}
+
+.blockH208 {
+    height: 208px;
+}
+
+.blockArrow {
+    background-color: #FF8383;
+    background: url(../images/smartphone_arrow_timeline.svg);
+    height: 66px;
+}
+
+.tBlock .circle {
+    width: 13px;
+    height: 13px;
+    position: relative;
+    background-color: #ECECE1;
+    border-radius: 50px;
+    border: 3px solid #301E34;
+    left: 15px;
+    top: -11px;
+}
+
+.tBlock .line {
+    width: 35px;
+    height: 2px;
+    position: relative;
+    background-color: #ECECE1;
+    left: 20px;
+    top: -21px;
+}
+
+.tBlock h4 {
+    
+    display: block;
+    position: relative;
+    width: 50px;
+    left: 60px;
+    top: -48px;
+    margin: 0px;
+    padding: 0px;
+    color: #CECEC4;
+    font-size: 26px;
+    letter-spacing: -1px;
+}
+
+
+
+.tBlock p {
+    display: block;
+    position: relative;
+    width: 240px;
+    left: 65px;
+    top: -45px;
+    margin: 0px;
+    padding: 0px;
+    color: #8F7E7F;
+    font-size: 12px;
+    letter-spacing: 0px;
+    line-height: 13px;
+}
+
+.tBlock p.timeline-now {
+    text-transform: uppercase;
+    color: #CECEC4;
+    font-size: 18px;
+    font-family: "texgyreadventorbold";
+    line-height: 14px;
+    /*width: 250px;*/
+    left: 60px;
+    top: -32px;
+}
+
+.tBlock p.timeline-now .small {
+    font-family: "texgyreadventorregular";
+    font-size: 13px;
+    display: block;
+}
+
+/****** SKILLS FIELD *******/
+
 h4  {
     text-transform: uppercase;
     font-family: "texgyreadventorbold";
@@ -307,8 +425,8 @@ h4  {
     color: #8F7E7F;
     display: block;
     padding-left: 3px;
-    margin-top: 0px;
-    letter-spacing: 0px;
+    margin-top: 50px;
+    letter-spacing: -1px;
     margin-left: -40px;
 }
 
@@ -320,3 +438,45 @@ h4 [data-icon]:before{
     vertical-align: middle;
 }
 
+
+table {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    /*position:relative;
+    top: 20px;*/
+    float: right;
+    color: #938D8E;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+    /*width: 420px;*/
+}
+
+th {
+    text-transform: uppercase;
+    background-color: #332437;
+    color: #CECEC4; 
+    font-size: 13px;
+    letter-spacing: -0.1px;
+    font-family: "texgyreadventorbold";
+    padding: 5px 10px 6px 15px;
+    text-align: left;
+}
+
+td {
+    border-top: #392A3C solid 1px;
+    padding: 7px 15px 8px 15px;
+    line-height: 12px;
+}
+
+td.noBorder {
+    border-top: none;
+}
+
+td:first-child {
+    /*width: 205px;*/
+    font-family: "texgyreadventorbold";
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    
+}
