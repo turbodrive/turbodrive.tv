@@ -243,6 +243,7 @@ button .text-play {
     line-height: 16px
 }
 div.main-content {
+    transition: right 0.5s;
     background-color: #301E34;
     background-image: url(../images/smartphone/about_bg.jpg);
     background-repeat: no-repeat;
@@ -256,6 +257,7 @@ div.main-content {
     right: -100%;
 }
 div.main-content .header {
+    transition: right 0.5s, background-color 0.5s;
     border-bottom: 1px solid rgba(239, 236, 225, 0.1);
     /*margin: 0px 12px;*/
     height: 38px;
@@ -286,7 +288,7 @@ a.menu-button:hover {
     opacity: 1;
 }
 div.main-content .header .hire-me {
-    transition: 0.15s;
+    /*transition: 0.15s;*/
     cursor: pointer;
     color: #ECECE1;
     text-transform: uppercase;
