@@ -40,6 +40,7 @@ $(document).ready(function() {
     setMode(REEL_MODE);
     
     window.scrollTo(0,1);
+    //$(window).scrollTop(0);
 });
 
 var REEL_MODE = "reel mode";
@@ -121,9 +122,7 @@ var closeMenu = function() {
 }
 
 var scrollToSection = function(id){
-    var targetScroll = $("#"+id).offset().top - 70
-    console.log("targetScroll >> " + targetScroll);
-    
+    var targetScroll = $("#"+id).offset().top - 70    
     $('html, body').animate({scrollTop: targetScroll}, 500);
 }
 

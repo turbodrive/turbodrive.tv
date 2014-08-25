@@ -90,6 +90,7 @@ p {
     z-index: 1000;
 }
 .warning-mobile .warning-header {
+     -webkit-transition: 0.5s;
     transition: 0.5s;
     background-color: #D15F5F;
     padding: 11px 20px;
@@ -101,11 +102,13 @@ p {
 }
 
 .warning-mobile .warning-header[data-icon]:before {
+     -webkit-transition: 0.5s;
     transition: 0.5s;
     font-size: 32px;
     line-height: 48px;
 }
 .warning-mobile .warning-header h1 {
+     -webkit-transition: 0.5s;
     transition: 0.5s;
     max-width: 200px;
     font-size: 13px;
@@ -168,6 +171,7 @@ div.warning-mobile p {
 }
 
 .intro-reel .intro-button {
+     -webkit-transition: 0.15s;
     transition: 0.15s;
     cursor: pointer;
     text-transform: uppercase;
@@ -210,6 +214,7 @@ div.warning-mobile p {
     font-size: 32px;
 }
 button.play-reel {
+     -webkit-transition: 0.15s;
     transition: 0.15s;
     color: #8F7E7F;
     border: none;
@@ -222,7 +227,7 @@ button.play-reel {
     position: absolute;
     top: 0px;
     background-color: #000000;
-    background-image: url(../images/videoNoise.gif);
+    /*background-image: url(../images/videoNoise.gif);*/
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -243,8 +248,9 @@ button .text-play {
     line-height: 16px
 }
 div.main-content {
+     -webkit-transition: right 0.5s;
     transition: right 0.5s;
-    background-color: #301E34;
+    background-color: #2F1D33;
     background-image: url(../images/smartphone/about_bg.jpg);
     background-repeat: no-repeat;
     background-position: 0px -15px;
@@ -257,6 +263,7 @@ div.main-content {
     right: -100%;
 }
 div.main-content .header {
+     -webkit-transition: right 0.5s, background-color 0.5s;
     transition: right 0.5s, background-color 0.5s;
     border-bottom: 1px solid rgba(239, 236, 225, 0.1);
     /*margin: 0px 12px;*/
@@ -282,6 +289,7 @@ div.main-content .logo[data-icon]:before {
 a.menu-button {
     opacity: 0.3;
     text-decoration: none;
+    -webkit-transition: 0.15s;
     transition: 0.15s;
 }
 a.menu-button:hover {
@@ -315,11 +323,12 @@ div.main-content .header .hire-me span {
     top: 8px;
 }
 
-div.main-content .header .hire-me:hover {
-    color: #8F7E7F;
+div.main-content .header .hire-me:hover,
+div.main-content .header .hire-me:active {
+    opacity: 0.8;
 }
 
-div.main-content .header .hire-me .background {
+/*div.main-content .header .hire-me .background {
     
     background-color: #D15F5F;
     width: 100px;
@@ -330,7 +339,7 @@ div.main-content .header .hire-me .background {
     top: -90px;
     right: -90px;
     z-index: 2000;
-}
+}*/
 
 div.main-content .header .hire-me .background:hover {
     background-color: #ECECE1;
@@ -354,14 +363,10 @@ div.main-content .icon-menu[data-icon]:before {
     position: absolute;
     z-index: 100;
     overflow: hidden;
-
 }
 
 .section {
-    padding: 0px 25px;
-}
-
-.section {
+    padding: 0px 3% 0px 8%;
     margin-top: 40px;
 }
 
@@ -387,7 +392,10 @@ div.main-content .icon-menu[data-icon]:before {
     line-height: 18px;
 }
 
-.red-button {
+.red-button,
+.wireframe-button {
+    display: inline-block;
+    margin: 3px 2px;
     transition: 0.15s;
     -webkit-transition: 0.15s;
     -moz-transition: 0.15s;
@@ -395,7 +403,7 @@ div.main-content .icon-menu[data-icon]:before {
     color: #EFECE1;
     text-transform: uppercase;
     font-size: 12px;
-    padding: 2px 10px 4px 10px;
+    padding: 2px 10px 3px 10px;
     letter-spacing: -0.2px;
     line-height: 16px;
     font-family: "texgyreadventorbold";
@@ -406,13 +414,13 @@ div.main-content .icon-menu[data-icon]:before {
     float: right;
 }
 
-.red-button:after {
+.red-button:before {
     content: "\e60b";
     font-family: 'turbodrive';
     /* BYO icon font, mapped smartly */
     font-size: 11px;
     vertical-align: text-bottom;
-    padding-left: 7px;
+    padding-right : 7px;
     speak: none;
     /* Not to be trusted, but hey. */
     -webkit-font-smoothing: antialiased;
@@ -424,38 +432,75 @@ div.main-content .icon-menu[data-icon]:before {
     text-decoration: none;
 }
 
+.wireframe-button {
+    opacity: 0.35;
+    background-color: transparent;
+    border: 1px rgba(239, 236, 225, 0.44) solid;   
+    padding-right: 3px;
+    padding-left: 8px;
+    line-height: 14px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+    padding-top: 3px;
+}
+
+.wireframe-button .icon.linkedin {
+    padding-left: 0px;
+}
+
+.wireframe-button .icon.linkedin:after {
+    content: "\e60e";
+    font-family: 'turbodrive';
+    font-size: 19px;
+    vertical-align: top;
+    display: inline-block;
+    padding-top: 1px;
+    margin-bottom: 1px;
+    margin-top: 0px;
+    margin-left: 7px;
+    background-color: #EFECE1;
+    color: #200F24;
+    width: 17px;
+    letter-spacing: -10px;
+}
+
+.wireframe-button:hover{
+    opacity: 1;
+}
+
 .glass-background {
     overflow: hidden;
-    width: 1000px;
-    height: 250px;
-    -webkit-transform: rotate(-22deg);
-    transform: rotate(-22deg);
+    width: 1024px;
+    height: 800px;
     position: absolute;
-    background-color: rgba(34, 16, 38, 0.65);
-    left: -200px;
-    top: 160px;
+    left: 0px;
+    top: -130px;
+    background-image: url(../images/smartphone/glass_bg.png);
     z-index: -2;
 }
 
 .glass-background.skills {
-    height: 450px;
-    top: 1320px;
+    /*height: 450px;*/
+    top: 1100px;
+    height: 1440px;
+    background-size: 180%;
 }
 
 
 .section.timeline {
-    margin-top: 100px;
+    margin-top: 60px;
 }
 
 .grid-background {
     overflow: hidden;
-    width: 1000px;
+    width: 100%;
     height: 1000px;
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
     position: absolute;
     background-image: url(../images/smartphone/grid_bg.jpg);
-    left: -400px;
+    background-position: 0px 0px;
+    left: 0px;
     top: 400px;
     z-index: -10;
 }
@@ -464,10 +509,10 @@ h3 {
     font-family: "texgyreadventorbold";
     color: #CECEC4;
     margin-top: 30px;
-    margin-bottom: 30px;
+    /*margin-bottom: 30px;*/
     border-bottom: 1px solid #8F7E7F;
     display: inline-block;
-    padding-bottom: -5px;
+    /*padding-bottom: -5px;*/
     text-transform: uppercase;
     font-size: 26px;
     margin-left: 0px;
@@ -496,7 +541,7 @@ h3 > .digital {
     letter-spacing: -1px;
 }
 .global-timeline {
-    /*padding-left: 15px;*/
+    padding-left: 2%;
 }
 .timeline-blocks {
     margin-top: 25px;
@@ -605,29 +650,32 @@ h3 > .digital {
     font-size: 20px;
     color: #8F7E7F;
     display: block;
-    padding-left: 3px;
-    margin-top: 50px;
     letter-spacing: -1px;
     line-height: 5px;
+    width: 100%;
+    padding: 0px 0px 0px 11%;
+    margin: 50px -3% 0px -8%;
 }
 .skillsfield h4 [data-icon]:before {
     color: #8F7E7F;
     font-size: 28px;
     line-height: 24px;
-    padding-right: 10px;
+    /*padding-right: 10px;*/
     vertical-align: middle;
+    display: inline-block;
+}
+
+.skillsfield p {
+    padding: 0px 5px 0px 11%;
+    margin: 10px -3% 20px -8%;
 }
 
 table {
     margin-top: 25px;
     margin-bottom: 25px;
-    /*position:relative;
-    top: 20px;*/
-    float: right;
     color: #938D8E;
     font-size: 10.5px;
     letter-spacing: 0.5px;
-    /*width: 420px;*/
 }
 th {
     text-transform: uppercase;
@@ -655,6 +703,23 @@ td:first-child {
     letter-spacing: 0.3px;
 }
 
+.icons {
+    display: inline-block;
+    height: 0px;
+    width: 10%;
+    margin-left: -10%;
+    vertical-align: top;
+}
+
+.skill-title {
+    padding-left: 0px;
+    line-height: 17px;
+    display: inline-block;
+    height: 35px;
+    vertical-align: top;
+    white-space: normal;
+}
+
 /** MENU **/
 .menu {
     pointer-events: none;
@@ -663,7 +728,7 @@ td:first-child {
     top: 0px;
     right: -100%;
     width: 100%;
-    height: 500px;
+    height: 100%;
     z-index: 3000;
     background-image: url(../images/smartphone/menu_bg.png);
     background-position: -17px 0px;
@@ -694,6 +759,7 @@ ul {
 
 .main-nav li {    
     cursor: pointer;
+     -webkit-transition: 0.15s;
     transition: 0.15s;
     height: 36px;
     text-transform: uppercase;
@@ -704,6 +770,9 @@ ul {
     letter-spacing: -1px;
     padding-top: 0px;
     line-height: 35px;
+    background-repeat: no-repeat;
+    background-position: top left;
+    /*height: 100%;*/
 }
 
 .main-nav a {
@@ -711,11 +780,9 @@ ul {
     margin-left: 20px;
     color: inherit;
     text-decoration: none;
-}
-
-.main-nav a {
-    color: inherit;
-    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -757,14 +824,14 @@ a > .digital {
     letter-spacing: 0px;
     padding-left: 4px;
     vertical-align: middle;
+    /*background-position: -5px 0px;*/
 }
 
 .main-nav li.skill-button span.text {
     vertical-align: top;
     line-height: 20px;
-    height: 40px;
     display: inline-block;
-    padding-left: 5px;
+    padding-left: 0px;
 }
 
 .main-nav li:nth-child(2){
@@ -774,23 +841,25 @@ a > .digital {
     margin-left: 36px;
 }
 
+
+
 .main-nav ul.skills-list li:nth-child(1){
-    margin-left: 22px;
+    margin-left: 17px;
 }
 .main-nav ul.skills-list li:nth-child(2){
-    margin-left: 36px;
+    margin-left: 30px;
 }
 .main-nav ul.skills-list li:nth-child(3){
-    margin-left: 50px;
+    margin-left: 43px;
 }
 .main-nav ul.skills-list li:nth-child(4){
-    margin-left: 64px;
+    margin-left: 56px;
 }
 .main-nav ul.skills-list li:nth-child(5){
-    margin-left: 78px;
+    margin-left: 69px;
 }
 .main-nav ul.skills-list li:nth-child(6){
-    margin-left: 92px;
+    margin-left: 82px;
     border-bottom: 1px solid rgba(206, 206, 196, 0.10);
 }
  
@@ -801,10 +870,21 @@ a > .digital {
     display: inline-block;
 }
 
-.main-nav li:hover {
+.main-nav li:hover,
+.main-nav li:active  {
     /*background-color: #160E18;*/
     color: #EFEFE1;
     opacity: 1;
+    background-image: url(../images/smartphone/hover_menu_bg.png)
+}
+
+.main-nav li:hover .digital,
+.main-nav li:active .digital {
+    color: #EFEFE1;
+}
+
+.main-nav ul.skills-list a {
+    margin-left: 25px;
 }
 
 .menu .background {
@@ -884,12 +964,13 @@ a > .digital {
 
 .social-bar {
     width: 100%;
-    height: 38px;
+    height: 35px;
     margin: 0px;
     text-align: right;
 }
 
 .social-bar a {
+    -webkit-transition: 0.15s;
     transition: 0.15s;
     color: #584951;
     text-decoration: none;
@@ -913,10 +994,10 @@ a > .digital {
     font-size: 16px;
     line-height: 11px;
     background-color: rgba(0, 0, 0, 0.12);
-    height: 25px;
+    height: 24px;
     display: inline-block;
     vertical-align: middle;
-    padding: 12px 15px 0px 15px;
+    padding: 16px 15px 0px 12px;
     margin-top: -19px;
 }
 
