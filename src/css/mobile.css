@@ -34,13 +34,14 @@
 
 html {
     overflow-x: hidden;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
-/*html {
+html.lock-scroll {
     overflow-y: hidden;
-}*/
+    /*pointer-events: none;*/
+}
 
 html,
 body {
@@ -408,6 +409,8 @@ div.main-content .icon-menu[data-icon]:before {
     line-height: 16px;
     font-family: "texgyreadventorbold";
     text-decoration: none;
+    border: none;
+    min-width: 50px;
 }
 
 .red-button.right {
@@ -444,6 +447,7 @@ div.main-content .icon-menu[data-icon]:before {
     padding-top: 3px;
 }
 
+
 .wireframe-button .icon.linkedin {
     padding-left: 0px;
 }
@@ -462,6 +466,16 @@ div.main-content .icon-menu[data-icon]:before {
     color: #200F24;
     width: 17px;
     letter-spacing: -10px;
+}
+
+.wireframe-button.right {
+    margin-left: 78%;
+    padding-left: 3px;
+    min-height: 25px;
+}
+
+.wireframe-button.light-bg {
+    opacity: 0.6;   
 }
 
 .wireframe-button:hover{
@@ -1005,5 +1019,300 @@ a > .digital {
     color: #ECECE1;
 }
 
+/**CONTACT**/
+a {
+    color: #CECEC4;
+}
+
+.contact-panel {
+    background-color: #231426;
+    padding: 0px;
+    position: fixed;
+    top: 36px;
+    overflow: scroll;
+    height: 0px;
+    z-index: 3000;
+    left: 0px;
+    width: 100%;
+}
+
+.contact-panel .feedback-filter{
+    visibility: hidden;
+    transition: 0.5s;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.contact-panel .feedback-filter.open{
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 0.8;
+}
+
+.contact-panel .content {
+    clear: both;
+    padding: 5px 0px 10px 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0px 15px;
+}
+
+.contact-panel h1,
+.contact-panel h2 {
+    text-transform: uppercase;
+    font-size: 30px;
+    letter-spacing: -1px;
+    color: #CECEC4;
+}
+
+.contact-panel h2 {
+    font-family: "texgyreadventorbold";
+    font-size: 16px;
+}
+
+.hire-me-content {
+    background-color: #D15F5F;
+    color: #ECECE1;
+}
+
+.hire-me-content h1 {
+    font-size: 30px;    
+    color: #ECECE1;
+}
+
+.hire-me-content p {
+    color: #ECECE1;
+}
+
+.hire-me-content h1 .small {
+    font-size: 18px;
+    letter-spacing: -0.5px;
+}
+
+.hire-me-conten .content {
+    border-bottom: none;
+}
+
+.listContactContainer {
+    width: 100%;
+    height: 80px;
+    margin-top: 0px;
+}
+
+.listContact {
+    float: left;
+    width: 100px;
+    line-height: 15px;
+}
+.listContact2 {
+    float: left;
+    line-height: 15px;
+}
+
+.miniUpCase {
+    text-transform: uppercase;
+    font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
+    font-size: 10px;
+    padding-right: 10px;
+}
+
+input, textarea {
+    transition: 0.3s;
+    background-color: #3D2F3A;
+    border: 2px solid transparent;
+    padding: 3px 2% 4px 2%;
+    font-family:"texgyreadventorregular";
+    font-size: 12px;
+    font-weight: 300;
+    color: #ECECE1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-radius: 0px;
+}
+
+input:focus,
+textarea:focus, 
+input:active,
+textarea:active {
+    border-left-color: #D15F5F;
+}
+
+input.field-error,
+textarea.field-error {
+    background-color: #D15F5F;
+    border-color: #ECECE1;
+}
+
+fieldset {
+    border: none;
+    outline: none;
+    padding: 15px 5px 10px 0px ;
+    margin: 0px 0px 0px 0px;
+}
+
+textarea {    
+    height: 100px;
+}
 
 
+.form-feedback {
+    width: 70%;
+    padding: 5px 5px 10px 8px;
+    position: fixed;
+    left: 15%;
+    top: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    display: none;
+}
+
+.form-feedback.error {
+    background-color: #D15F5F;
+    color: #ECECE1;
+}
+
+.form-feedback h2 {
+    padding: 5px 10px;
+    color: #ECECE1;
+}
+
+.form-feedback p {
+    color: #ECECE1;
+    padding-left: 25px;
+    padding-top: 5px;
+}
+
+.form-feedback.success {
+    background-color: #3D2F3A;
+}
+
+.form-feedback button.wireframe-button {
+    display: block;
+    margin-left: auto;
+    margin-right: 20px;
+    min-height: 28px;
+    padding-top: 0px;
+}
+
+.share {
+    margin-bottom: 250px;
+}
+
+.share h1 {
+    margin-bottom: 10px;
+}
+
+.share p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+}
+
+.share p.icons-list {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding-top: 0px;
+}
+
+.screen-reader-text { /* Reusable, toolbox kind of class */
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+.menu-icon:before {
+    font-size: 30px;
+    pointer-events: none;
+}
+
+a.buttonShare {
+    transition: background-color 0.15s ease-out;
+    background-color: #3D2F3A;
+    color: #C4C0C3;
+    display: inline-block;
+    width: 30px;
+    height:30px;
+    text-decoration: none;
+    padding: 3px 1px 1px 2px;
+    margin: 0px 1px;
+    border: 2px solid transparent;
+}
+
+a.buttonShare:active {
+    opacity: 0.95;
+    border: 2px solid #C4C0C3;
+}
+
+a.facebook:hover,
+a.facebook:active {
+    background-color: #1E4389;
+}
+
+a.twitter:hover,
+a.twitter:active {
+    background-color: #28A9E0;
+}
+
+a.linkedin:hover,
+a.linkedin:active {
+    background-color: #156695;
+}
+
+a.googleplus:hover,
+a.googleplus:active {
+    background-color: #D5492C;
+}
+
+a.pinterest:hover,
+a.pinterest:active {
+    background-color: #CD152B;
+}
+
+a.vimeo:hover,
+a.vimeo:active {
+    background-color: #1EB8EB;
+}
+
+a.buttonShare:hover,
+a.buttonShare:active {
+    color: #FFF;
+    text-decoration: none;
+}
+
+a.github:hover,
+a.github:active {
+    background-color: #FFFFFF;
+    color: #000000;
+    text-decoration: none;
+}
+
+/** placeholders **/
+::-webkit-input-placeholder {
+    color: #ECECE1;
+    font-size: 10px;
+    font-family:"texgyreadventorbold";
+    font-weight: 300;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 1;
+    outline: none;
+    padding-top: 2px;
+}
+
+:-moz-placeholder {}
+::-moz-placeholder {}
+:-ms-input-placeholder {}
+
+:focus {
+    outline: none;
+}
