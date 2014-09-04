@@ -228,7 +228,7 @@ define(["signals"], function (signals)
         
         div_hireMeAbout:{position:pageInfo.RES_RC_P,  
             z:100, rrcX:0.30, rrcY:-0.45, rrcXOffset:10, rrcYOffset:35,
-            z:50,
+            z:-5,
             scale:{minL:0.4, maxL:0.88},
             width:300, height:250 
         },
@@ -345,7 +345,7 @@ define(["signals"], function (signals)
         div_hireMeSkills:{
             position:pageInfo.RES_RC_P,
             z:100, rrcX:0.30, rrcY:-0.45, rrcXOffset:10, rrcYOffset:35,
-            z:50,
+            z:-5,
             scale:{minL:0.4, maxL:0.88},
             width:360, height:250
         }
@@ -726,7 +726,7 @@ define(["signals"], function (signals)
             loaded:loadedDefault,
             built:false,
             layout:pageInfo.SKILLS_LAYOUT
-        },
+        }/*,
          {
             id: "moreprojects",
             project: false,
@@ -735,7 +735,7 @@ define(["signals"], function (signals)
             loaded:loadedDefault,
             built:false,
             layout:pageInfo.SKILLS_LAYOUT
-        }
+        }*/
     ]
     
     for(var i = 0; i<pageInfo.content.length; i++){

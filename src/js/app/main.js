@@ -11,7 +11,7 @@
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
 var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:true, volumeReel:0};
+hyperDriveTransition:false, volumeReel:0};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
 
@@ -90,6 +90,27 @@ UTILS.clone = function(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
+/** JavaScript eMail Encrypter ***/
+/* http://jumk.de/nospam/stopspam.html */
+
+UTILS.UnCryptMailto = function(s) {
+    var n = 0;
+    var r = "";
+    for( var i = 0; i < s.length; i++){
+        n = s.charCodeAt( i );
+        if( n >= 8364 ){
+            n = 128;
+        }
+        r += String.fromCharCode( n - 1 );
+    }
+    return r;
+}
+
+UTILS.linkTo_UnCryptMailto = function (s){
+    location.href = UTILS.UnCryptMailto( s );
+}
+
+
 var GLOBAL_ACCESS = this;
 
 if (!window.requestAnimationFrame) {
@@ -115,7 +136,7 @@ require.config({
         /*bootstrap: 'bootstrap.min',*/
         tooltips: 'tooltips.min',
         TweenMax:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenMax.min',
-        modernizr:'modernizr.custom.55142',
+        Modernizr:'modernizr',
         requestAnimationFrame:'RequestAnimationFrame',
         Sprite3D: 'Sprite3D',
         edgeCta: 'gmdpng_edgePreload',

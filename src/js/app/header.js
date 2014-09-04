@@ -53,7 +53,10 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         $(".contactPanel .contact").mouseover(function(event){
             highlightContactPanel("contact",0.3)
         });
-
+        
+        $("#submit_btn").on("click", submitMessage);
+        $("a.email").on("click", clickEmailLinkHandler);
+        
         TweenMax.set($(".menu3D"),{height:panelHeight, y:-panelHeight, autoAlpha:1})
         controlMenuState("",0)   
         header.resize();
@@ -61,6 +64,10 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
 
         /*$("[data-toggle='tooltip']").tooltip();*/
         //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
+    }
+    
+    var clickEmailLinkHandler = function() {
+        UTILS.linkTo_UnCryptMailto('nbjmup;jogpAuvscpesjwf/uw');
     }
     
     header.isOpen = function() {
@@ -326,6 +333,57 @@ define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, sig
         }
         
     }
+    
+    
+    var sentEmailHandler = function(response) { 
+        //load json data from server and output message
+    
+        var output;
+        if(response.type == 'error')
+        {
+            output = response.text;
+            $("#error-content").html(output)
+            $(".form-feedback.error").show();
+            $(".form-feedback.success").hide();
+            
+        }else{
+            //output = response.text;
+            //reset values in all input fields
+            $(".form-feedback.error").hide();
+            $(".form-feedback.success").show();
+        }
+    }
+
+
+
+    var submitMessage = function(e) { 
+            var user_email      = $('input[name=email]').val();
+            var user_message    = $('textarea[name=message]').val();
+            var user_subject    = "Message from Turbodrive Contact form [desktop]";
+
+            var proceed = true;
+            if(user_email==""){ 
+                $('input[name=email]').addClass("field-error");
+                $('input[name=email]').on("click", removeErrorClasses);
+                proceed = false;
+            }
+            if(user_message=="") {  
+                $('textarea[name=message]').addClass("field-error");
+                $('textarea[name=message]').on("click", removeErrorClasses);
+                proceed = false;
+            }
+
+            if(proceed) 
+            {
+                //data to be sent to server
+                var post_data = {'userEmail':user_email, 'userMessage':user_message, 'userSubject':user_subject};
+
+                //Ajax post data to server
+                $.post('php/contact.php', post_data, sentEmailHandler, 'json');
+
+            }
+    }
+    
     
     header.resize = function(){
         var wSc = Math.floor(((LAYOUT.viewportW-20)/8)) - 2 - 10;

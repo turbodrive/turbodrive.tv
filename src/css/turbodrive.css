@@ -45,7 +45,7 @@
     speak: none; /* Not to be trusted, but hey. */
     -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
+}.
 
 .icon-alone {
     -webkit-transition: 0.15s; /* For Safari 3.1 to 6.0 */
@@ -921,10 +921,6 @@ li.blog > a {
     left : 1px;
 }
 
-.contactPanel a{
-    color: #CECEC4;
-    text-decoration: underline;
-}
 
 .contactPanel .hireMe {
     background-image: url(../images/bgHireHeader.png);
@@ -1047,6 +1043,7 @@ a.github:active {
     opacity: 0.25;
     padding-left: 10px;
     padding-top: 45px;
+    clear: both;
 }
 
 .content h1 {
@@ -1062,22 +1059,44 @@ a.github:active {
     padding-left: 0px 0px;
     left: 350px;
     min-width: 290px;
+    height: 280px;
+    overflow: auto;
     /*width: 350px;
     height: 240px;
     background-color: #251927;*/
 }
 
+
+
+a.email {
+    transition: 0.15s;
+    color: #CECEC4;
+    text-decoration: none;
+    border-bottom:  1px dotted rgba(206, 206, 196, 0.7);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+a.email:hover {
+    color: #ECECE1;
+    background-color: #D15F5F;
+    border-bottom-color:  transparent;
+}
+
 .listContactContainer {
     width: 100%;
     margin-top: 20px;
+    height: 50px;
 }
 
 .listContact {
     float: left;
     width: 100px;
+    line-height: 17px;
 }
 .listContact2 {
     float: left;
+    line-height: 17px;
 }
 
 .miniUpCase {
@@ -1085,6 +1104,7 @@ a.github:active {
     font-family:"texgyreadventorbold", "helvetica neue", Arial, sans-serif;
     font-size: 10px;
     padding-right: 10px;
+    letter-spacing: -0.3px;
 }
 
 .share {
@@ -1276,6 +1296,7 @@ p.skills-icon a {
     border: 2px solid transparent;
     margin: 0px 10px 20px 0px;
     padding: 13px 0px 2px 0px;
+    color: #988888;
 }
 
 p.skills-icon a:hover {
@@ -1438,6 +1459,20 @@ button.icon-play:active {
     width: 1200px;
 }
 
+.about p>a {
+    transition: 0.15s;
+    color: #EFECE1;
+    border-bottom: 1px solid rgba(239, 236, 225, 0.47);
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.about p>a:hover,
+.about p>a:active {
+    border-bottom-color: transparent;
+    background-color: #d15f5f;
+}
+
 .about h2 {
     font-family: "texgyreadventorbold";
     text-transform: uppercase;
@@ -1447,7 +1482,7 @@ button.icon-play:active {
 }
 
 .about p {
-    width: 1130px;
+    width: 1330px;
     color: #CECEC4;
     line-height: 36px;
     font-size: 24px;
@@ -2208,13 +2243,13 @@ div.skill-section {
 }
 
 .skill-section table {
-    position:relative;
-    top: 20px;
+    /*position:relative;
+    top: 20px;*/
     float: right;
     color: #938D8E;
     font-size: 10.5px;
     letter-spacing: 0.5px;
-    width: 420px;
+    /*width: 420px;*/
 }
 
 .skill-section th {
@@ -2237,7 +2272,7 @@ div.skill-section {
 }
 
 .skill-section td:first-child {
-    width: 205px;
+    width: 190px;
     font-family: "texgyreadventorbold";
     text-transform: uppercase;
     font-size: 11px;
@@ -2257,7 +2292,7 @@ div.skill-section {
 }
 
 .colAndTable-content p {
-    width: 460px;
+    width: 360px;
 }
 
 .twocols-content {
@@ -2271,10 +2306,128 @@ div.skill-section {
     -moz-column-gap: 50px;
 }
 
+/**** FORM ****/
+button {
+    cursor: pointer;
+    border: none;
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
 
+input, textarea {
+    transition: 0.3s;
+    background-color: #2e222e ;
+    border: 1px solid transparent;
+    padding: 3px 2% 4px 2%;
+    font-family:"texgyreadventorregular";
+    font-size: 12px;
+    font-weight: 300;
+    color: #ECECE1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 96%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    border-radius: 0px;
+}
+
+input:hover,
+textarea:hover {
+   border-left-color: #cecec4 ; 
+}
+
+input:focus,
+textarea:focus, 
+input:active,
+textarea:active {
+    border-left-color: #D15F5F;
+    background-color: #463d46;
+}
+
+input.field-error,
+textarea.field-error {
+    background-color: #D15F5F;
+    border-color: rgba(236, 236, 225, 0.5);
+    box-shadow: 0px 0px 10px #D15F5F
+}
+
+textarea {    
+    height: 100px;
+    margin-bottom: 15px;
+}
+
+fieldset {
+    border: none;
+    outline: none;
+    padding: 15px 5px 10px 0px ;
+    margin: 0px 0px 0px 0px;
+}
+
+
+/** placeholders **/
+::-webkit-input-placeholder {
+    color: #ECECE1;
+    font-size: 10px;
+    font-family:"texgyreadventorbold";
+    font-weight: 300;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 1;
+    outline: none;
+    padding-top: 2px;
+}
+
+:-moz-placeholder {
+    color: #ECECE1;
+    font-size: 10px;
+    font-family:"texgyreadventorbold";
+    font-weight: 300;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 1;
+    outline: none;
+    padding-top: 2px;
+}
+::-moz-placeholder {
+    color: #ECECE1;
+    font-size: 10px;
+    font-family:"texgyreadventorbold";
+    font-weight: 300;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 1;
+    outline: none;
+    padding-top: 2px;
+}
+:-ms-input-placeholder {
+    color: #ECECE1;
+    font-size: 10px;
+    font-family:"texgyreadventorbold";
+    font-weight: 300;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    opacity: 1;
+    outline: none;
+    padding-top: 2px;
+}
+
+:focus {
+    outline: none;
+}
 
 /**BUTTONS***/
+.buttons-group {
+    clear: both;
+    display: block;
+}
 
+.wireframe-button,
 .red-button {
     transition: 0.15s;
     -webkit-transition:0.15s;
@@ -2287,35 +2440,92 @@ div.skill-section {
     letter-spacing: -0.4px;  
     line-height: 32px;
     font-family: "texgyreadventorbold";
+    font-weight: 300;
+    vertical-align: middle;
 }
 
+.wireframe-button:after,
 .red-button:after {
     content: "\e60b";
     font-family: 'turbodrive'; /* BYO icon font, mapped smartly */
     font-size: 22px;
     vertical-align:text-bottom;
-    padding-left: 14px;
-    
+    padding-left: 14px;    
     speak: none; /* Not to be trusted, but hey. */
     -webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.wireframe-button:hover,
 .red-button:hover {
     background-color: #EFECE1;
     color: #907F80;
     text-decoration: none;
 }
 
+.wireframe-button.half-scale,
 .red-button.half-scale {
     font-size: 12px;
     padding: 2px 10px 4px 10px;
     line-height: 16px;
     letter-spacing: -0.2px;
 }
+
+.wireframe-button.half-scale:after,
 .red-button.half-scale:after {
     font-size: 11px;
     padding-left: 7px;
+}
+
+.wireframe-button {
+    background-color: transparent;
+    border: 1px #392a3c solid;   
+    padding-right: 3px;
+    padding-left: 8px;
+    padding: 3px 19px 7px 19px;
+    /*vertical-align: middle;*/
+    color: #8f7e7f;
+}
+
+.wireframe-button:hover {
+    background-color: #312631;
+    color: #EFECE1;
+}
+
+
+.wireframe-button .icon.linkedin {
+    padding-left: 0px;
+}
+
+.wireframe-button .icon.linkedin:after {
+    transition: 0.15s;
+    content: "\e60e";
+    font-family: 'turbodrive';
+    font-size: 19px;
+    vertical-align: top;
+    display: inline-block;
+    padding-top: 1px;
+    margin-bottom: 1px;
+    margin-top: 0px;
+    margin-left: 7px;
+    background-color: #8f7e7f;
+    color: #200F24;
+    width: 17px;
+    letter-spacing: -10px;
+}
+
+.wireframe-button:hover .icon.linkedin:after {
+    color: #312631;
+    background-color: #EFECE1;
+}
+
+
+.wireframe-button.light-bg {
+    opacity: 0.6;   
+}
+
+.wireframe-button:hover{
+    opacity: 1;
 }
 
 .android-fix {

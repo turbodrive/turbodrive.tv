@@ -5,3 +5,8 @@ package.json
 Gruntfile.js
 node_modules/
 php/
+.png
+.jpg
+.jpeg
+.ico
+.gif

@@ -17,6 +17,21 @@
     <title>TURBODRIVE Mobile Beta - Interactive Showreel by Silvère Maréchal</title>
     <link rel="author" href="https://www.google.com/+SilvèreMaréchal"/>
     <link rel="publisher" href="https://www.google.com/+SilvèreMaréchal"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-196x196.png" sizes="196x196">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#27162f">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     
     <script type="text/javascript" src="js/Stats.js"></script>
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
@@ -121,14 +136,29 @@
                             </div>
                             <div class="listContact2">
                                 <p>
-                                    <a href="#">info@turbodrive.tv
+                                    <a class="email">info[at]turbodrive[dot]tv
                                         <img class="externalLink" src="images/picto_externalLink.svg">
                                     </a>
                                     <br/>Silvère Maréchal
                                     <br/>+1 347-982-7503</p>
                             </div>
                         </div>
+                        <p class="buttons-group">
+                            <a href="#" class="red-button half-scale">use contact form</a>
+                            <a href="#" class="wireframe-button half-scale">read credits</a>
+                        </p>
+                        
                     </div>
+                     <div class="content">
+                        <h1>Contact form</h1>
+                        <fieldset>
+                        <input name="email" type="text" placeholder="Your e-mail address" />
+                        <textarea name="message" placeholder="Your message"></textarea>
+                            <button id="submit_btn" type="button" class="red-button half-scale">Send Message</button>
+                            <button id="cancel_btn" type="button" class="wireframe-button  half-scale">Cancel</button>
+                        </fieldset>
+                    </div>
+                    
                 </div>
                 <div class="share">
                     <div class="content">
@@ -444,9 +474,7 @@
         <div class="page about" page-id="about">
             <h2 id3d="name" class="android-fix">Silvère Maréchal</h2>
             <h1 id3d="title" class="android-fix">Interactive Motion Designer</h1>
-            <p id3d="intro" class="android-fix">Hi! I'm Silvère, a self-taught french guy. As long I can remember, I have had a passion for giving life to interactive experiences and conveying the essence of an idea effectively through story telling. Enhance design by motion.
-                <br/>
-                <br/>You'll find here main things you should know about me. Feel free to send me an e-mail to know more!</p>
+            <p id3d="intro" class="android-fix">Hi! I'm Silvère, a guy specialized in front-end development and motion design. My passion is about bridging these both fields for giving life to concepts efficiently through interactive experiences.<br/>You’ll find here main things you should know about <a href="#/folio/timeline/">my professional path</a> and <a href="#/folio/skillsfield/">my skills</a>.<br/><br/>As well you can check out <a href="http://www.turbodrive.tv/blog/" target="_blank">my blog</a> where I share tips and experiments or <a href="https://www.linkedin.com/in/silveremarechal/" target="_blank">my profile on Linkedin</a>.<br/>Feel free to contact me if interested in any collaboration!</p>
             <div class="hireme-button" id3d="hireMeAbout"><!--<img src="images/timeline_helper02.png">-->Hire me!<span class="small">available now</span><div class="background"></div></div>
             
             <h3 id3d="skillsFieldTitle">Skills field</h3>
@@ -599,73 +627,71 @@
                 <h3>Skills Field</h3>
                 <h4>Editing / 3D Modeling</h4>
                 <div>
-                    <p>I used to be in charge of the almost entire production process on some projects. It's why I had the occasion to work on video editing and 3D modeling.</p>
-                    <p>For sure this fields are not my speciality, but they cross or approach my main skills such as motion design.
-                        <br/>It also give me a pretty good ability in collaborating with video editors and 3D artists / modelers. I can easily fit in a team which is pretty well film-production-oriented.</p>
+                    <p>Editing and 3D Modeling are 2 fields which are crossing my main skills such as motion design. Though they are less my speciality, I frequently work on or contribute to these as a part of the whole project production.<br/><br/>In this way I’m also pretty comfortable in collaborating with video editors and 3D artists.</p>
                 </div>
             </div>
             <div class="skill-section" id-section="research" id3d="researchSection">
                 <h3>Skills Field</h3>
                 <h4>Research and development</h4>
                 <div class="twocols-content">
-                    <p>Some projects require pushing the technology into uncharted territory. I can explore this, help to define the technical limits and if agreed upon, integrate the results of experimentation to the main production.</p>
-                    <p>Also, it just so happens that I developed my own tools to simplify the more tedious steps we had to deal with on particular projects.</p>
-                    <p>For instance, on I Kill A Friend and I Kill A Friend 2, [links] I developed a tool to check the position of the 3d mesh in space, the synch movement with the movie, the quality of the rotoscoping, and setup of the 3D lighting.
-                        <br/>Likewise, on 208 Greetings [Links], I built an app to record the animation display of the characters which are dynamically generated.</p>
+                    <p>As problem solver, I’m quite proactive in testing and exploring experimental techniques and fields. I create project prototypes and hand-made tools to enhance workflow when needed.<br/><br/>Check out my blog to read some technical tips and see experiments.</p>
                 </div>
             </div>
             <div class="skill-section" id-section="compositing" id3d="compositingSection">
                 <h3>Skills Field</h3>
                 <h4>Compositing</h4>
                 <div class="twocols-content">
-                    <p>Depending on the source material, I'm pretty comfortable with the following techniques: keying, rotoscoping and 2D/3D match moving.</p>
-                    <p>I often aimed interactive video and movie synchronization with personal data, such as facebook profile, uploaded pictures... So I have a good knowledge of the different ways to export, integrate videos (and tracking data when needed),
-                        then finally drive them by programming.</p>
-                    <p>I used to deal with quite bad quality footages and spend hours and days in retouching films frame by frame.
-                        <br/>To avoid tedious work and poor results I can advice and request good practices before the film shoot. I'm also open to try each new technique wich can improve the workflow and the quality of the post-production process.</p>
+                    <p>In the goal to synchronize and/or prepare videos for interactions, I’m pretty comfortable with the following compositing techniques:</p>
+                        <li>
+                            <ul>keying;</ul>
+                            <ul>rotoscoping;</ul>
+                            <ul>2D/3D match moving.</ul>
+                        </li>
+                        <p>
+As well, I have a good knowledge of video format and ways to export, integrate videos, track data and drive them by programming.</p>
                 </div>
             </div>
             <div class="skill-section" id-section="front" id3d="frontSection">
                 <h3>Skills Field</h3>
                 <h4>Front end development</h4>
-                <table>
-                    <tr>
-                        <th colspan="2">development knowledge summary</th>
-                    </tr>
-                    <tr>
-                        <td class="noBorder">Programming languages</td>
-                        <td class="noBorder">Actionscript 2 & 3, Javascript</td>
-                    </tr>
-                    <tr>
-                        <td>Frameworks and library</td>
-                        <td>PureMVC, Away3D, SwfAddress</td>
-                    </tr>
-                    <tr>
-                        <td>APPLICATION PROGRAMMING INTERFACE (API)</td>
-                        <td>Google Maps and Streetview, Facebook, Vimeo, Youtube...</td>
-                    </tr>
-                    <tr>
-                        <td>Revision Control</td>
-                        <td>Git, SVN</td>
-                    </tr>
-                </table>
+<table>
+                            <tr>
+                                <th colspan="2">development knowledge summary</th>
+                            </tr>
+                            <tr>
+                                <td class="noBorder">Programming languages</td>
+                                <td class="noBorder">Javascript (HTML5, CSS3),  Actionscript 3</td>
+                            </tr>
+                            <tr>
+                                <td>Frameworks and library</td>
+                                <td>JQuery, Bootstrap, PureMVC, Away3D</td>
+                            </tr>
+                            <tr>
+                                <td>Techniques</td>
+                                <td>AMD (Require.js), Routing, Font-icons, SVG</td>
+                            </tr>
+                            <tr>
+                                <td>API</td>
+                                <td>Google Maps and Streetview, Facebook, Vimeo, Youtube...</td>
+                            </tr>
+                            <tr>
+                                <td>Production Tools</td>
+                                <td>Git, SVN, Grunt, Webkit dev-tools, remote debugging</td>
+                            </tr>
+                        </table>
+
                 <div class="colAndTable-content">
-                    <p>As you guess, even I used to, coding data parsers it's not my favorite. I'm more interested in creating interaction and dynamic motion. Finally, in giving life to what the user will manipulate and see.</p>
-                    <p>I know Oriented Object, event-based and procedural programming. I'm pretty familiar with most of all Design and Coding patterns.
-                        <br/>Share tips, good coding practices and way to optimize applications is something I enjoy as well.</p>
+                    <p>My web-developer side is focused on contributing to the user experience by building what the user see and manipulate: interactions, programmatic motion, layout life and adaptation.<br/><br/>I’m not married with any tool or technologies. Those are means to translate ideas. In this way I offer the most appropriate solution for each project with regards to the targeted device(s), users, and available time and costs.</p></p>
                 </div>
+                
+                
 
             </div>
             <div class="skill-section" id-section="motion" id3d="motionSection">
                 <h3>Skills Field</h3>
                 <h4>Motion Design</h4>
                 <div class="twocols-content">
-                    <p>I'm deeply interested on each motion graphic technique. You know, not only the different way to create a tween, generate spritesheets or gather bunch of keyframes and ease equations in any software.</p>
-                    <p>I'd rather mean the way to make sense via movement and contribute to the mood in a project. I like to find the appropriate rythm or the right camera movement and try to offer the best transitions and rollovers to fit with the art director's
-                        vision.</p>
-                    <p>I'm familiar with programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics. Prerender or in realtime.</p>
-                    <p>I know particle systems (Trapcode Particular, the built-in engine in Away3D 4 for example) and used to work a bit with physics engine.
-                        <br/>Definitely not afraid to figure out and learn more.</p>
+                    <p>Since my childhood, I'm fascinated by all kind of animated stuff. I’ve been inspired as much by broadcast design, 3D simulations, SF aesthetics, video games UIs, as the first animated GIF and Flash animations on the internet… Motion design brings definitely a new level to the user experience.<br/><br/>In this way I'm deeply interested on all motion graphic techniques. I can offer to animate interactive experiences and UI by programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics, pre-rendered or in realtime.</p>
                 </div>
             </div>
         </div>

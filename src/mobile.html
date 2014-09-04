@@ -18,9 +18,25 @@
     
     <link rel="author" href="https://www.google.com/+SilvèreMaréchal"/>
     <link rel="publisher" href="https://www.google.com/+SilvèreMaréchal"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/favicon-196x196.png" sizes="196x196">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#27162f">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     
     <link type="text/css" rel="stylesheet" href="css/mobile.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/modernizr_m.js"></script>
     <script type="text/javascript" src="js/mobile.js"></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -45,12 +61,15 @@
     <div class="warning-mobile">
         <a href="#" data-id="mobile-info">
         <div class="warning-header"><span aria-hidden="true" data-icon="&#xe615;"></span><h1>Try out Turbodrive as interactive experience!</h1></div></a>
-        <div class="white-bg"><p>Turbodrive has been designed to run on bigger screens and on devices supporting recent features such as inline videos and CSS 3D transform.</p><p>Although, you'll find here essential information and links, try out this website on dektop or tablet for a better experience.</p></div>
+        <div class="white-bg"><p>Turbodrive has been designed to run on bigger screens and on devices supporting recent features such as inline videos and CSS 3D transform.</p><p>Though you'll find here essential information and links, try out this website on dektop or tablet for a better experience.</p></div>
     </div>
-    <div class="menu" role="navigation">
-        <a href="#" class="menu-button">
+    <div class="menu" role="navigation">        
+        <button class="lines-button x" type="button" role="button" aria-label="Toggle Navigation">
+          <span class="lines"></span>
+        </button>        
+        <!--<a href="#" class="menu-button">
             <span class="icon-menu" aria-hidden="true" data-icon="&#xe616;"></span>
-        </a>
+        </a>-->
         <div class="social-bar">
             <ul class="contact-social">
                 <li><a href="#" data-id="email"><span aria-hidden="true" data-icon="&#xe608;"></span></a></li>
@@ -104,29 +123,31 @@
         </button>
     </div>
     
-    
+    <div class="main-header">
+        <a href="#" class="menu-button">
+            <span class="icon-menu" aria-hidden="true" data-icon="&#xe616;"></span>
+        </a>
+        <div class="logo">
+            <span aria-hidden="true" data-icon="&#xe607;"></span>
+        </div>
+        <a href="#" data-id="hire-me">
+            <div class="hire-me">
+                <span>Hire me!</span>
+            </div>
+        </a>
+    </div>
     
     <div class="main-content">
-        <div class="header">
-            <a href="#" class="menu-button">
-                <span class="icon-menu" aria-hidden="true" data-icon="&#xe616;"></span>
-            </a>
-            <div class="logo">
-                <span aria-hidden="true" data-icon="&#xe607;"></span>
-            </div>
-            <a href="#" data-id="hire-me">
-                <div class="hire-me">
-                    <span>Hire me!</span>
-                </div>
-            </a>
-        </div>
+        
         <div class="scrollable-content">
             <div id="about" class="section about">
                 <h2 class="name">SILVÈRE MARÉCHAL</h2>
                 <h1 class="title">INTERACTIVE MOTION DESIGNER</h1>
-                <p class="intro">Hi ! I'm Silvère, a self-taught french guy. As long I can remember, I have had a passion for giving life to interactive experiences and conveying the essence of an idea effectively through story telling. Enhance design by motion.</p>
+                <p class="intro">Hi! I'm Silvère, a guy broadly specialized in front-end development and motion design. My passion is about bridging these both fields for giving life to concepts efficiently through interactive experiences.<br/><br/>
+You’ll find here main things you should know about me. As well you can check out <a href="http://www.turbodrive.tv/blog/">my blog</a> where I share tips and experiments.<br/><br/>
+Feel free to <a href="#" data-id="email">contact me</a> if interested in any collaboration!</p>
                 <a href="#skillsfield" data-section="skillsfield" class="red-button">find out my skills field</a><br/>
-                <a href="https://www.linkedin.com/in/silveremarechal" class="wireframe-button linkedin">View my profile on Linkedin<span class="icon linkedin"></span></a>
+                <a href="https://www.linkedin.com/in/silveremarechal" class="wireframe-button">View my profile on Linkedin<span class="icon linkedin"></span></a>
                 <div class="glass-background"></div>
             </div>
 
@@ -187,11 +208,10 @@
             <div class="section skillsfield">
                 <h3 id="skillsfield">Skills Field</h3>
                     <h4><span class="icons"><span aria-hidden="true" data-icon="&#xe605;"></span></span><span class="skill-title">Motion Design</span></h4>
-                    <p id="motion">I'm deeply interested on all motion graphic technique.<br/>I can offer to animate interactive experiences or UI by programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics. Prerender or in realtime.</p>
+                    <p id="motion">I'm deeply interested on all motion graphic technique.<br/>I can offer to animate interactive experiences or UI by programmed, timeline based, both mixed and/or synchronized 2D and 3D motion graphics. Prerendered or in realtime.</p>
                     <h4><span class="icons"><span aria-hidden="true" data-icon="&#xe600;"></span></span><span class="skill-title">Front-end development</span></h4>
-
-                    <p id="front">My web-developer side is focused to give life to what the user manipulate and see. Basically everything related to the technical aspect of the user experience : layout life and adaptation, interactions, programmatic motion.</p>
-                        <table>
+                    <p id="front">My web-developer side is focused on contributing to the user experience by building what the user see and manipulate: interactions, programmatic motion, layout life and adaptation.</p>
+                    <table>
                             <tr>
                                 <th colspan="2">development knowledge summary</th>
                             </tr>
@@ -218,18 +238,12 @@
                         </table>
                     <h4><span class="icons"><span aria-hidden="true" data-icon="&#xe606;"></span></span><span class="skill-title">Compositing</span></h4>
                     <p id="compositing">
-In the goal to synchronize and/or prepare videos for interaction, I’m pretty comfortable with the following compositing techniques: keying, rotoscoping and 2D/3D match moving.<br/>
-
+In the goal to synchronize and/or prepare videos for interactions, I’m pretty comfortable with the following compositing techniques: keying, rotoscoping and 2D/3D match moving.<br/><br/>
 As well, I have a good knowledge of video format and ways to export, integrate videos, track data and drive them by programming.</p>
                     <h4><span class="icons"><span aria-hidden="true" data-icon="&#xe604;"></span></span><span class="skill-title">Research and development</span></h4>
-                    <p id="research">Some projects require pushing the technology into uncharted territory. I can explore this, help to define the technical limits and if agreed upon, integrate the results of experimentation to the main production.</p>
-                            <p>Also, it just so happens that I developed my own tools to simplify the more tedious steps we had to deal with on particular projects.</p>
-                            <p>For instance, on I Kill A Friend and I Kill A Friend 2, [links] I developed a tool to check the position of the 3d mesh in space, the synch movement with the movie, the quality of the rotoscoping, and setup of the 3D lighting.
-                                <br/>Likewise, on 208 Greetings [Links], I built an app to record the animation display of the characters which are dynamically generated.</p>
+                    <p id="research">As problem solver, I’m quite proactive in testing and exploring experimental techniques and fields. I create project prototypes and hand-made tools to enhance workflow when needed.<br/><br/>Check out my blog to read some technical tips and see experiments.</p>
                     <h4><span class="icons"><span aria-hidden="true" data-icon="&#xe601;"></span><span aria-hidden="true" data-icon="&#xe603;"></span></span><span class="skill-title">Editing / 3D Modeling</span></h4>
-                    <p id="editing">I used to be in charge of the almost entire production process on some projects. It's why I had the occasion to work on video editing and 3D modeling.</p>
-                            <p>For sure this fields are not my speciality, but they cross or approach my main skills such as motion design.
-                                <br/>It also give me a pretty good ability in collaborating with video editors and 3D artists / modelers. I can easily fit in a team which is pretty well film-production-oriented.</p>
+                    <p id="editing">Editing and 3D Modeling are 2 fields which are crossing my main skills such as motion design. Though they are less my speciality, I frequently work on or contribute to these as a part of the whole project production.<br/><br/>In this way I’m also pretty comfortable in collaborating with video editors and 3D artists.</p>
                     <div class="glass-background skills"></div>            
                 </div>
             </div>
@@ -260,10 +274,10 @@ As well, I have a good knowledge of video format and ways to export, integrate v
                     </div>
                     <div class="listContact2">
                         <p>
-                            <a href="javascript:linkTo_UnCryptMailto('nbjmup;jogpAuvscpesjwf/uw');">info[at] turbodrive[dot]tv
+                            <a class="email" href="#">info[at]turbodrive[dot]tv
                                 <img class="externalLink" src="images/picto_externalLink.svg"></a>
                             <br/>Silvère Maréchal
-                            <br/>+1 347-982-7503</p>
+                            <br/><a class="tel" href="tel:+1 347-982-7503">+1 347-982-7503</a></p>
                     </div>
                 </div>
             </div>
@@ -294,7 +308,7 @@ As well, I have a good knowledge of video format and ways to export, integrate v
                 <h1 id="share-section">Share</h1>
                 <p class="share-block">Share this page on your favorite social network:</p>
                 <p class="icons-list">
-                    <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.turbodrive.tv/" target="_blank" class="buttonShare linkedin" title="Share Turbodrive on Facebook">
+                    <a href="http://www.facebook.com/sharer/sharer.php?u=http://www.turbodrive.tv/" target="_blank" class="buttonShare facebook" title="Share Turbodrive on Facebook">
                         <span class="menu-icon" aria-hidden="true" data-icon="&#xe612;"></span>
                         <span class="screen-reader-text">Share Turbodrive on Facebook</span>
                     </a>

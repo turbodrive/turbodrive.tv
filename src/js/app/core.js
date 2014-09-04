@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], function ($,TweenMax, Modernizr, crossroads, hasher, overlay){ 
+define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], function ($,TweenMax, Modernizr, crossroads, hasher, overlay){ 
     var viewportH = 0, viewportW = 0,
     DEFAULT_HASH = "reel/",
     REEL_ENV = "reel", FOLIO_ENV = "folio", currentEnv = "", currentPage = "",
@@ -10,11 +10,40 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
     MODULES = {}, timelineDiv;
     var touchEventsBinded = false;
     
+    var flashUrl = "http://flash.turbodrive.tv/";
+    var html5Url = "http://www.turbodrive.tv/";
+    var mobileUrl = "http://m.turbodrive.tv/";
+    var redirectEnabled = false;
+    
     if(CONFIG.debug){
         //DEFAULT_HASH = "folio/ikaf2/";
     }
 
     var initCore = function() {
+        Modernizr.addTest('ipad', function () {return !!navigator.userAgent.match(/iPad/i);});
+        Modernizr.addTest('iphone', function () {return !!navigator.userAgent.match(/iPhone/i);});
+        Modernizr.addTest('ipod', function () {return !!navigator.userAgent.match(/iPod/i);});
+        Modernizr.addTest('android', function () {return !!navigator.userAgent.match(/android/i);});
+        Modernizr.addTest('ieMobile', function () {return !!navigator.userAgent.match(/IEMobile/i);});
+        Modernizr.addTest('ie', function () {return !!navigator.userAgent.match(/MSIE/i);});
+        Modernizr.addTest('ie2', function () {return !!navigator.userAgent.match(/Trident/i);});
+        Modernizr.addTest('appleios', function () {return (Modernizr.ipad || Modernizr.ipod || Modernizr.iphone);});
+        Modernizr.addTest('mobile', function () {return (Modernizr.appleios || Modernizr.android || Modernizr.ieMobile);});
+        
+        if(redirectEnabled){
+            if(!Modernizr.video || Modernizr.ie || Modernizr.ie2){
+                alert("redirect to flash version")
+                window.location.href = flashUrl;
+            }else{
+                if(Modernizr.mobile && window.outerHeight < 1000 && window.outerWidth < 1000){
+                    alert("redirect to mobile version")
+                    window.location.href = mobileUrl;
+                }else {
+                    alert("no redirect - stay on html5 version")
+                }
+            }
+        }
+        
         Modernizr.addTest('highresdisplay', function(){ 
             if (window.matchMedia) { 
                 var mq = window.matchMedia("only screen and (-moz-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen  and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)");
@@ -23,13 +52,8 @@ define(["jquery","TweenMax","modernizr","crossroads", "hasher", "app/overlay"], 
                 } 
             }
         });
-    
-        Modernizr.addTest('ipad', function () {return !!navigator.userAgent.match(/iPad/i);});
-        Modernizr.addTest('iphone', function () {return !!navigator.userAgent.match(/iPhone/i);});
-        Modernizr.addTest('ipod', function () {return !!navigator.userAgent.match(/iPod/i);});
-        Modernizr.addTest('android', function () {return !!navigator.userAgent.match(/android/i);});
-        Modernizr.addTest('appleios', function () {return (Modernizr.ipad || Modernizr.ipod || Modernizr.iphone);});
-        Modernizr.addTest('mobile', function () {return (Modernizr.appleios || Modernizr.android);});
+        
+        
         Modernizr.addTest('firefox', function () {return (navigator.userAgent.toLowerCase().indexOf('firefox') > -1);});
         Modernizr.addTest('chrome36', function () {
             if(navigator.userAgent.toLowerCase().indexOf('chrome') == -1) return false;            
