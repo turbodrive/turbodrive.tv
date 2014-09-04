@@ -1912,29 +1912,19 @@ button.icon-play:active {
 }
 
 
-.timeline-info p.opendate {
+.timeline-info .opendate {
     color: #CECEC4;
     font-size: 12px;
     border: 2px solid #efece1;
-    padding: 14px 5px 20px 14px;
+    padding: 16px 20px 20px 20px;
     background-color: rgba(29, 16, 32, 0.9);
-    box-shadow: inset 0px 0px 30px #D15F5F,
+    /*box-shadow: inset 0px 0px 30px #D15F5F,
                 0px 0px 20px #D15F5F,
-                0px 0px 260px 160px rgba(29, 16, 32, 0.9);
-    max-width: 400px;
+                0px 0px 260px 160px rgba(29, 16, 32, 0.9);*/
+    max-width: 410px;
 }
 
-.timeline-info p.opendate .content {
-    margin-left: 70px;
-    display: block;
-    position: relative;
-    opacity: 1;
-    padding: 0px;
-    padding-left: 10px;
-    padding-right: 20px;
-}
-
-.timeline-info p.opendate .year {
+.timeline-info .opendate .year {
     font-family: "texgyreadventorbold";
     color: #CECEC4;
     padding: 0px;
@@ -1942,13 +1932,30 @@ button.icon-play:active {
     text-transform: uppercase;
     letter-spacing: -1px;
     margin: 0px;
-    display: block;
-    float: left;
+    display: inline-block;
+    /*float: left;
     position: relative;
     padding-left: 0px;
-    padding-top: 6px;
+    padding-top: 6px;*/
+    width: 65px;
+    vertical-align: top;
+    line-height: 26px;
     
 }
+
+.timeline-info .opendate .opendate-text {
+    display: inline-block;
+    width: 290px;
+    padding-left: 20px; 
+}
+
+.timeline-info .opendate .content {
+    display: block;
+    opacity: 1;
+    padding: 0px;
+}
+
+
 
 .timeline-info p.helper {
     margin: 0px;

@@ -238,7 +238,6 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         positionTmx.currentLabel(pageId);
         sourceTwPosition = objTmx.twMem = objTmx.twPos = Number(pageInfo.getPageIndex(pageId));
         updateWindowStatus(pageId, sectionId);
-        
         if(isIntro === null) isIntro = false;
         if(!isIntro) {        
             if(nextPrev) nextPrev.updateState(currentPage3D.getPageInfo());
@@ -1288,6 +1287,8 @@ define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/page
         loadSiblings(pageId);
         tmpSectionId = null;
         previousPage3D = null;
+        
+        setTimeout(stopRendering,2500);
     }
 
     level1Transition = function (page) {

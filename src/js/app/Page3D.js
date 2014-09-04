@@ -42,6 +42,7 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
     //Page3D.prototype.pictosInitialized = false;
     Page3D.prototype.projectPlayer = null;
     Page3D.prototype.secondaryElements = [];
+    Page3D.prototype.currentDatePanel = null;
     
     Page3D.prototype.setPageInfo = function(pageInfo)
     {
@@ -65,33 +66,64 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
         page.video.play();
     }
     
+    /** DATEPANELS **/
+    
     Page3D.prototype.openDatePanel = function(event)
     {   
+        
+        
         var page = event.currentTarget.self;
         var target = event.currentTarget;
-        console.log('clickPanel >> ' + target);
-        console.log('clickPanel >> ' + target.id);
-        console.log('this.secondaryElements >> ' + page.secondaryElements);
-        var nameOpenPanel = target.id+"_open";
+
+        page.closeDatePanel();
         
-        for(var i = 0; i < page.secondaryElements.length; i++){
-            //console.log("PRELOAD >>> " + this.secondaryElements[i].getId());
-            if(page.secondaryElements[i].id == nameOpenPanel){
-                var el = page.secondaryElements[i].element3d;
-                var info = page.secondaryElements[i].info;
-                
-                TweenMax.to(el.domElement, 0.3, {
-                   autoAlpha:1,
-                   onStartParams:[el, info, page],
-                   onStart:page.addChildAsSecondary
-               });
-                /*page.addChild(this.secondaryElements[i].element3d)*/
+        var panelObjectToOpen = page.getOpenPanel(target.id);
+        var el = panelObjectToOpen.element3d;
+        var info = panelObjectToOpen.info;
+        $(el.domElement).on("click", function(){page.closeDatePanel()});
+        
+        TweenMax.fromTo(el,
+            0.1,
+            {rotationX:90},
+            {rotationX:0,
+                onUpdate:function(el){
+                    el.update()
+                },
+                onUpdateParams:[el]
+            });
+        
+        TweenMax.to(el.domElement, 0.1, {
+                autoAlpha:1,
+                onStartParams:[el, info, page],
+                onStart:page.addChildAsSecondary
+        });
+        // hide init content
+        TweenMax.to(target, 0.1, {autoAlpha:0});  
+        page.currentDatePanel = target;
+    }
+    
+    Page3D.prototype.getOpenPanel = function(sourceName){
+        var divName = sourceName.replace("p_", "div_");
+        var nameOpenPanel = divName+"_open";
+        return this.getSecondaryObj(nameOpenPanel);
+    }
+    
+    Page3D.prototype.getSecondaryObj = function(nameElement){
+        for(var i = 0; i < this.secondaryElements.length; i++){
+            if(this.secondaryElements[i].id == nameElement){
+                return this.secondaryElements[i];
             }
         }
-        // hide init content
-        TweenMax.to(target.domElement, 0.3, {autoAlpha:0});
-        
-        
+    }
+    
+    Page3D.prototype.closeDatePanel = function(panelsource){
+        if(panelsource == null){
+            if(this.currentDatePanel == null) return
+            panelsource = this.currentDatePanel;
+        }
+        var openPanel = this.getOpenPanel(panelsource.id);
+        TweenMax.to(panelsource, 0.3, {autoAlpha:1});
+        TweenMax.to(openPanel.element3d.domElement, 0.3, {autoAlpha:0});
     }
     
     Page3D.prototype.onClickVideo = function(event) {
@@ -102,6 +134,8 @@ define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, Twe
             currentVideo.self.pauseVideo();
         }
     }
+    
+    /********************/
     
     var targetTouch;
     
