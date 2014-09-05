@@ -1,0 +1,29 @@
+{
+  "name": "Turbodrive",
+  "version": "0.8.0",
+  "description": "Silvère Maréchal's portfolio",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/turbodrive/turbodrive.tv.git"
+  },
+  "keywords": [
+    "Interactive Show Reel",
+    "Personal website",
+    "Motion design"
+  ],
+  "author": "Silvère Maréchal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/turbodrive/turbodrive.tv/issues"
+  },
+  "homepage": "https://github.com/turbodrive/turbodrive.tv",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-uncss": "^0.3.6"
+  }
+}

@@ -789,7 +789,7 @@ li.blog > a {
 .buttonSubMenu{
     margin-right: 2px;
     padding-left: 5px;
-    padding-top: 8.5%;
+    /*padding-top: 8.5%;*/
     font-size: 20px;
     float: left;
     height: 140px;
@@ -1274,7 +1274,7 @@ h3{
     padding: 30px;
 }
 
-p{
+p, .skill-section ul, .skill-section li{
     color: #CECEC4;
     font-family:"texgyreadventorregular", "helvetica neue", Arial, sans-serif;
     font-size: 12px;
@@ -1284,6 +1284,19 @@ p{
     margin: 0px;
     /*opacity: 0.8;*/
     /*width: 640px;*/
+}
+
+.skill-section ul, .skill-section li {
+    list-style: none;
+    padding-left: 20px;
+    text-transform: uppercase;
+    font-family: 'texgyreadventorbold';
+    font-size: 11px;
+    line-height: 17px;
+}
+
+.skill-section li {
+    margin-bottom: 20px;
 }
 
 p.skills-icon {
@@ -1911,6 +1924,16 @@ button.icon-play:active {
     opacity: 1;
 }
 
+.timeline-info p.simple {
+    transition: 0s;
+    cursor: auto;
+}
+
+
+.timeline-info p.simple:hover {
+    color: #8F7E7F;
+}
+
 
 .timeline-info .opendate {
     color: #CECEC4;
@@ -1918,8 +1941,8 @@ button.icon-play:active {
     border: 2px solid #efece1;
     padding: 16px 20px 20px 20px;
     background-color: rgba(29, 16, 32, 0.9);
-    /*box-shadow: inset 0px 0px 30px #D15F5F,
-                0px 0px 20px #D15F5F,
+    box-shadow: inset 0px 0px 30px #D15F5F,
+                0px 0px 20px #D15F5F;/*,
                 0px 0px 260px 160px rgba(29, 16, 32, 0.9);*/
     max-width: 410px;
 }
@@ -2290,7 +2313,7 @@ div.skill-section {
     color: #CECEC4;
     -webkit-font-smoothing: subpixel-antialiased;
 	-moz-osx-font-smoothing: auto;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     width: 550px;
 }
 

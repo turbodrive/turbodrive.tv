@@ -1,8 +1,6 @@
 .DS_Store
 images/
 videos/
-package.json
-Gruntfile.js
 node_modules/
 php/
 .png

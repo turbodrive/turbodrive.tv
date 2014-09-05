@@ -50,7 +50,9 @@ img {
   border: 0;
 }
 
-button {
+button,
+input,
+textarea {
   color: inherit;
   font: inherit;
   margin: 0;
@@ -73,6 +75,20 @@ button::-moz-focus-inner,
 input::-moz-focus-inner {
   border: 0;
   padding: 0;
+}
+
+input {
+  line-height: normal;
+}
+
+fieldset {
+  border: 1px solid silver;
+  margin: 0 2px;
+  padding: .35em .625em .75em;
+}
+
+textarea {
+  overflow: auto;
 }
 
 table {
@@ -158,7 +174,9 @@ body {
   background-color: #fff;
 }
 
-button {
+input,
+button,
+textarea {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -279,6 +297,13 @@ table {
 
 th {
   text-align: left;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  min-width: 0;
 }
 
 .form-control::-moz-placeholder {
@@ -628,6 +653,8 @@ th {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.
 
 .icon-alone {
   -webkit-transition: 0.15s;
@@ -1200,7 +1227,7 @@ li.blog > a {
 .buttonSubMenu {
   margin-right: 2px;
   padding-left: 5px;
-  padding-top: 8.5%;
+  /*padding-top: 8.5%;*/
   font-size: 20px;
   float: left;
   height: 140px;
@@ -1324,11 +1351,6 @@ li.blog > a {
   left: 1px;
 }
 
-.contactPanel a {
-  color: #CECEC4;
-  text-decoration: underline;
-}
-
 .contactPanel .hireMe {
   background-image: url(../images/bgHireHeader.png);
   background-position: top right;
@@ -1432,6 +1454,7 @@ a.github:active {
   opacity: 0.25;
   padding-left: 10px;
   padding-top: 45px;
+  clear: both;
 }
 
 .content h1 {
@@ -1447,23 +1470,43 @@ a.github:active {
   padding-left: 0px 0px;
   left: 350px;
   min-width: 290px;
+  height: 280px;
+  overflow: auto;
   /*width: 350px;
     height: 240px;
     background-color: #251927;*/
 }
 
+a.email {
+  transition: 0.15s;
+  color: #CECEC4;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(206, 206, 196, 0.7);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+a.email:hover {
+  color: #ECECE1;
+  background-color: #D15F5F;
+  border-bottom-color: transparent;
+}
+
 .listContactContainer {
   width: 100%;
   margin-top: 20px;
+  height: 50px;
 }
 
 .listContact {
   float: left;
   width: 100px;
+  line-height: 17px;
 }
 
 .listContact2 {
   float: left;
+  line-height: 17px;
 }
 
 .miniUpCase {
@@ -1471,6 +1514,7 @@ a.github:active {
   font-family: "texgyreadventorbold", "helvetica neue", Arial, sans-serif;
   font-size: 10px;
   padding-right: 10px;
+  letter-spacing: -0.3px;
 }
 
 .share {
@@ -1604,7 +1648,9 @@ h3 {
   padding: 30px;
 }
 
-p {
+p,
+.skill-section ul,
+.skill-section li {
   color: #CECEC4;
   font-family: "texgyreadventorregular", "helvetica neue", Arial, sans-serif;
   font-size: 12px;
@@ -1614,6 +1660,20 @@ p {
   margin: 0px;
   /*opacity: 0.8;*/
   /*width: 640px;*/
+}
+
+.skill-section ul,
+.skill-section li {
+  list-style: none;
+  padding-left: 20px;
+  text-transform: uppercase;
+  font-family: 'texgyreadventorbold';
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.skill-section li {
+  margin-bottom: 20px;
 }
 
 p.skills-icon {
@@ -1626,6 +1686,7 @@ p.skills-icon a {
   border: 2px solid transparent;
   margin: 0px 10px 20px 0px;
   padding: 13px 0px 2px 0px;
+  color: #988888;
 }
 
 p.skills-icon a:hover {
@@ -1759,6 +1820,20 @@ button.icon-play:active {
   width: 1200px;
 }
 
+.about p>a {
+  transition: 0.15s;
+  color: #EFECE1;
+  border-bottom: 1px solid rgba(239, 236, 225, 0.47);
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.about p>a:hover,
+.about p>a:active {
+  border-bottom-color: transparent;
+  background-color: #d15f5f;
+}
+
 .about h2 {
   font-family: "texgyreadventorbold";
   text-transform: uppercase;
@@ -1768,7 +1843,7 @@ button.icon-play:active {
 }
 
 .about p {
-  width: 1130px;
+  width: 1330px;
   color: #CECEC4;
   line-height: 36px;
   font-size: 24px;
@@ -1777,7 +1852,7 @@ button.icon-play:active {
   /*position:fixed;*/
   position: absolute;
   -webkit-font-smoothing: subpixel-antialiased;
-  -moz-osx-font-smoothing: none;
+  -moz-osx-font-smoothing: auto;
 }
 
 .about h3 {
@@ -2133,11 +2208,15 @@ button.icon-play:active {
 }
 
 .timeline-info p {
+  transition: 0.15s;
+  cursor: pointer;
   color: #8F7E7F;
   padding: 0px;
   /*max-width: 200px;*/
   font-size: 15px;
   line-height: 18px;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
   /*background: url(../images/timeline_placer.png);
     background-repeat: no-repeat;*/
   /*height:35px;*/
@@ -2151,20 +2230,69 @@ button.icon-play:active {
   margin-top: 0px;
 }
 
-.timeline-info p.limit-width {
-  text-overflow: ellipsis;
-  max-width: 300px;
+.timeline-info p [data-icon]:before {
+  font-size: 20px;
+  position: absolute;
+  right: -38px;
+  top: 2px;
+  opacity: 1;
 }
 
-.timeline-info p.open {
-  color: #EFECE1;
+.timeline-info p:hover {
+  color: #CECEC4;
+  opacity: 1;
+}
+
+.timeline-info p.simple {
+  transition: 0s;
+  cursor: auto;
+}
+
+.timeline-info p.simple:hover {
+  color: #8F7E7F;
+}
+
+.timeline-info .opendate {
+  color: #CECEC4;
+  font-size: 12px;
   border: 2px solid #efece1;
-  padding: 10px 10px 20px 130px;
-  background-color: rgba(36,19,34,0.8);
-  box-shadow: inset 0px 0px 20px #D15F5F,
-                0px 0px 20px #D15F5F,
-                0px 0px 160px 60px #1D1020;
-  max-width: 400px;
+  padding: 16px 20px 20px 20px;
+  background-color: rgba(29, 16, 32, 0.9);
+  box-shadow: inset 0px 0px 30px #D15F5F,
+                0px 0px 20px #D15F5F;
+  /*,
+                0px 0px 260px 160px rgba(29, 16, 32, 0.9);*/
+  max-width: 410px;
+}
+
+.timeline-info .opendate .year {
+  font-family: "texgyreadventorbold";
+  color: #CECEC4;
+  padding: 0px;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  margin: 0px;
+  display: inline-block;
+  /*float: left;
+    position: relative;
+    padding-left: 0px;
+    padding-top: 6px;*/
+  width: 65px;
+  vertical-align: top;
+  line-height: 26px;
+}
+
+.timeline-info .opendate .opendate-text {
+  display: inline-block;
+  width: 290px;
+  padding-left: 20px;
+}
+
+.timeline-info .opendate .content {
+  display: block;
+  opacity: 1;
+  padding: 0px;
 }
 
 .ready-now {
@@ -2374,13 +2502,13 @@ div.skill-section {
 }
 
 .skill-section table {
-  position: relative;
-  top: 20px;
+  /*position:relative;
+    top: 20px;*/
   float: right;
   color: #938D8E;
   font-size: 10.5px;
   letter-spacing: 0.5px;
-  width: 420px;
+  /*width: 420px;*/
 }
 
 .skill-section th {
@@ -2403,7 +2531,7 @@ div.skill-section {
 }
 
 .skill-section td:first-child {
-  width: 205px;
+  width: 190px;
   font-family: "texgyreadventorbold";
   text-transform: uppercase;
   font-size: 11px;
@@ -2413,8 +2541,8 @@ div.skill-section {
 .skill-section p {
   color: #CECEC4;
   -webkit-font-smoothing: subpixel-antialiased;
-  -moz-osx-font-smoothing: none;
-  margin-bottom: 15px;
+  -moz-osx-font-smoothing: auto;
+  margin-bottom: 5px;
   width: 550px;
 }
 
@@ -2423,7 +2551,7 @@ div.skill-section {
 }
 
 .colAndTable-content p {
-  width: 460px;
+  width: 360px;
 }
 
 .twocols-content {
@@ -2439,8 +2567,113 @@ div.skill-section {
   -moz-column-gap: 50px;
 }
 
+/**** FORM ****/
+
+button {
+  cursor: pointer;
+  border: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea {
+  transition: 0.3s;
+  background-color: #2e222e;
+  border: 1px solid transparent;
+  padding: 3px 2% 4px 2%;
+  font-family: "texgyreadventorregular";
+  font-size: 12px;
+  font-weight: 300;
+  color: #ECECE1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 96%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  border-radius: 0px;
+}
+
+input:hover,
+textarea:hover {
+  border-left-color: #cecec4;
+}
+
+input:focus,
+textarea:focus,
+input:active,
+textarea:active {
+  border-left-color: #D15F5F;
+  background-color: #463d46;
+}
+
+textarea {
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+fieldset {
+  border: none;
+  outline: none;
+  padding: 15px 5px 10px 0px;
+  margin: 0px 0px 0px 0px;
+}
+
+/** placeholders **/
+
+:-moz-placeholder {
+  color: #ECECE1;
+  font-size: 10px;
+  font-family: "texgyreadventorbold";
+  font-weight: 300;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 1;
+  outline: none;
+  padding-top: 2px;
+}
+
+::-moz-placeholder {
+  color: #ECECE1;
+  font-size: 10px;
+  font-family: "texgyreadventorbold";
+  font-weight: 300;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 1;
+  outline: none;
+  padding-top: 2px;
+}
+
+:-ms-input-placeholder {
+  color: #ECECE1;
+  font-size: 10px;
+  font-family: "texgyreadventorbold";
+  font-weight: 300;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 1;
+  outline: none;
+  padding-top: 2px;
+}
+
+:focus {
+  outline: none;
+}
+
 /**BUTTONS***/
 
+.buttons-group {
+  clear: both;
+  display: block;
+}
+
+.wireframe-button,
 .red-button {
   transition: 0.15s;
   -webkit-transition: 0.15s;
@@ -2453,8 +2686,11 @@ div.skill-section {
   letter-spacing: -0.4px;
   line-height: 32px;
   font-family: "texgyreadventorbold";
+  font-weight: 300;
+  vertical-align: middle;
 }
 
+.wireframe-button:after,
 .red-button:after {
   content: "\e60b";
   font-family: 'turbodrive';
@@ -2468,12 +2704,14 @@ div.skill-section {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.wireframe-button:hover,
 .red-button:hover {
   background-color: #EFECE1;
   color: #907F80;
   text-decoration: none;
 }
 
+.wireframe-button.half-scale,
 .red-button.half-scale {
   font-size: 12px;
   padding: 2px 10px 4px 10px;
@@ -2481,9 +2719,29 @@ div.skill-section {
   letter-spacing: -0.2px;
 }
 
+.wireframe-button.half-scale:after,
 .red-button.half-scale:after {
   font-size: 11px;
   padding-left: 7px;
+}
+
+.wireframe-button {
+  background-color: transparent;
+  border: 1px #392a3c solid;
+  padding-right: 3px;
+  padding-left: 8px;
+  padding: 3px 19px 7px 19px;
+  /*vertical-align: middle;*/
+  color: #8f7e7f;
+}
+
+.wireframe-button:hover {
+  background-color: #312631;
+  color: #EFECE1;
+}
+
+.wireframe-button:hover {
+  opacity: 1;
 }
 
 .android-fix {
