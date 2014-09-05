@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax", "CSSPlugin", "CSSRulePlugin", "signals", "app/pageInfo", "Sprite3D", "app/Page3D"], function ($, TweenMax, CSSPlugin, CSSRulePlugin, signals, pageInfo, Sprite3D, Page3D) {
+define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/Page3D"], function ($, TweenMax, signals, pageInfo, Sprite3D, Page3D) {
     var folio = {};
 
     const DEGREES_TO_RADIANS = Math.PI / 180;

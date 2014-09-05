@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["Sprite3D","app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, TweenMax) {
+define(["Sprite3D","../app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, TweenMax) {
     
     const USE_AEX_COORD = true;    
 

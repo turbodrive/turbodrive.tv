@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax", "signals", "tooltips"], function ($, TweenMax, signals, tooltips) {
+define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     
     var currentMenuState = "--";
     var header = {};

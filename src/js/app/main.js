@@ -10,10 +10,13 @@
 // jquery, jqueryUI (debug only), bootstrap (à supprimer par la suite, comme je ne l'utilise pas finalement), tweenmax, modernizr, core.js
 // puis : requestAnimationFrame (à garder ou remplacer ?), sprite3D
 // edgepreload, 
-var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:true, isFirefox:false,
-hyperDriveTransition:false, volumeReel:0};
+var CONFIG = {isRetina:false, isiOs:false, isMobile:false, volumeReel:100, loadEdgeAnimations:true, defaultSelectedCases:1, debug:false, isFirefox:false,
+hyperDriveTransition:true, volumeReel:1};
 
 var LAYOUT = {initW:1280, initH:720, minW:1024, minH:610, viewportW:1280,viewportH:720, vW2:640, vH2:360, currentEnv:"", ratioW:1, ratioH:1};
+
+
+CONFIG.hyperDriveTransition = !CONFIG.debug;
 
 
 LAYOUT.getRatioW = function(w){
@@ -131,19 +134,14 @@ require.config({
     waitSeconds: 30,
     baseUrl: 'js/',
     paths: {        
-        jquery: 'jquery.min',
-        /*jquery_ui: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min',*/
-        /*bootstrap: 'bootstrap.min',*/
-        tooltips: 'tooltips.min',
+        jquery: 'lib/jquery.min',
         TweenMax:'http://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/TweenMax.min',
-        Modernizr:'modernizr',
-        requestAnimationFrame:'RequestAnimationFrame',
-        Sprite3D: 'Sprite3D',
-        edgeCta: 'gmdpng_edgePreload',
-        crossroads: 'crossroads.min',
-        signals:'signals.min',
-        hasher:'hasher.min',
-        SwiffyRuntime:'https://www.gstatic.com/swiffy/v7.0/runtime'
+        Modernizr:'lib/modernizr',
+        Sprite3D: 'lib/Sprite3D',
+        edgeCta: 'lib/gmdpng_edgePreload',
+        crossroads: 'lib/crossroads.min',
+        signals:'lib/signals.min',
+        hasher:'lib/hasher.min'
     }
     
 });

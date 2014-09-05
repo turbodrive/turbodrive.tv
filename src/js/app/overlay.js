@@ -70,7 +70,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         startLoadGmd = true;
         if(gmdAnimation !== undefined) return;
 
-        require(["GmdEdge"], function(GmdEdge){
+        require(["assets/GmdEdge"], function(GmdEdge){
             console.log("GmdEdge - Loaded" + overlay.gmdLoaded() )
         });
     }

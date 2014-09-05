@@ -2,7 +2,7 @@
  * Author : Silvère Maréchal
  */
 
-define(["jquery", "TweenMax","signals", "app/pageInfo"], function ($, TweenMax, signals, pageInfo) {
+define(["jquery", "TweenMax","signals", "../app/pageInfo"], function ($, TweenMax, signals, pageInfo) {
     var main;
     var backToTheReel;
     var nextButton;
