@@ -11,7 +11,7 @@ Although the project is currently in production, the beta version is available o
 * [Turbodrive mobile beta](http://m.turbodrive.tv)
 
 
-Repo of the Mobile version fallback of this project available here : [https://github.com/turbodrive/turbdrive.tv-mobile/] (https://github.com/turbodrive/turbdrive.tv-mobile/)
+Repo of the Mobile version fallback of this project available here : [https://github.com/turbodrive/turbodrive.tv-mobile/] (https://github.com/turbodrive/turbodrive.tv-mobile/)
 
 Soon, I'd like to introduce the workflow I've created for managing CSS3D transition from Adobe After Effects.
 
