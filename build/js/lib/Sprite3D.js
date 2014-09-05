@@ -968,4 +968,3 @@ define([], function() {
         
     return Sprite3D;
 });
-.

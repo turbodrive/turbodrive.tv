@@ -720,6 +720,10 @@ body {
   background-position: center center;
 }
 
+body.texture-background {
+  background-image: url('../images/bgProjects.jpg');
+}
+
 div {
   pointer-events: auto;
 }
@@ -731,6 +735,24 @@ a:focus {
 
 button {
   background: transparent;
+}
+
+.timeline {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100px;
+  bottom: 0px;
+  z-index: 90500;
+}
+
+#timelineSvg {
+  position: absolute;
+  z-index: 410;
+}
+
+#bgProgress {
+  cursor: pointer;
 }
 
 .video-overlay {
@@ -1606,7 +1628,29 @@ a.email:hover {
 
 /***** HYPERDRIVE 3D ****/
 
+.hd-prtcle {
+  display: block;
+  width: 220px;
+  height: 15px;
+}
+
+.hd-prtcle-tex {
+  display: block;
+  background-image: url(../images/hyperdrive_beam.png);
+  background-size: 100% 100%;
+  width: 220px;
+  height: 15px;
+}
+
 /***** SPRITE 3D ****/
+
+.grid {
+  width: 1280px;
+  height: 1280px;
+  background: url('../images/cellRow_1280_addflat2.png');
+  background-repeat: repeat-y;
+  /*border:5px solid red;*/
+}
 
 .page {
   /*opacity: 0;
@@ -2314,6 +2358,59 @@ button.icon-play:active {
     font-size: 75px;
 }*/
 
+img.white-line {
+  width: 250px;
+  height: 5px;
+}
+
+div.block01 {
+  /*background-color: rgba(32, 16, 38, 0.65);*/
+  width: 2200px;
+  height: 7000px;
+  background: url(../images/timeline_title_bgblue.png);
+  background-size: contain;
+}
+
+div.block02 {
+  width: 500px;
+  height: 4000px;
+  background: #988888;
+  /* Old browsers */
+  background: -moz-linear-gradient(left,  #988888 43%, #beb4af 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(43%,#988888), color-stop(100%,#beb4af));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left,  #988888 43%,#beb4af 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left,  #988888 43%,#beb4af 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(left,  #988888 43%,#beb4af 100%);
+  /* IE10+ */
+  background: linear-gradient(to right,  #988888 43%,#beb4af 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#988888', endColorstr='#beb4af',GradientType=1 );
+  /* IE6-9 */
+}
+
+div.block03,
+div.block-corner {
+  background-color: #201523;
+  width: 200px;
+  height: 4000px;
+}
+
+div.block-corner {
+  background-color: #2A1F2E;
+}
+
+div.block04 {
+  background-color: transparent;
+  width: 2200px;
+  height: 4000px;
+  background-image: url(../images/timeline_title_face01.svg);
+  background-size: contain;
+}
+
 /***********************************************************************/
 
 /******************* SKILLS - Menu *************************/
@@ -2760,21 +2857,17 @@ fieldset {
   background-color: #D15F5F;
 }
 
-#debug {
-  pointer-events: none;
-  /*visibility: hidden;*/
-  color: #FFF;
-  position: absolute;
-  bottom: 20px;
-  left: 5px;
-  width: 410px;
-  padding: 5px;
-  text-align: left;
-  font-family: courier;
-  line-height: 10px;
-  font-size: 11px;
-  z-index: 30000000;
-  /*background-color: rgba(0, 0, 0, 0.6);*/
-  background-color: transparent;
-  height: 100px;
+.textPlane,
+.textPlane380 {
+  margin: 0px;
+  padding: 0px;
+  position: fixed;
+  width: 400px;
+  height: 5000px;
+  background-color: #201026;
+  opacity: 0.65;
+}
+
+.textPlane380 {
+  width: 380px;
 }
