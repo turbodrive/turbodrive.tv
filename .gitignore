@@ -4,6 +4,7 @@ videos/
 node_modules/
 tmp_tasks/
 php/
+favicon/
 .png
 .jpg
 .jpeg
