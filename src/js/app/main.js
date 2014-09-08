@@ -153,6 +153,7 @@ if(CONFIG.debug){
     var stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
-    document.getElementById("debug").appendChild(stats.domElement);
-
+    if(document.getElementById("debug")){
+        document.getElementById("debug").appendChild(stats.domElement);
+    }
 }

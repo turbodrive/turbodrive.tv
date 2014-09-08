@@ -27,7 +27,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
             var divEl = $(allListElements[i]);
             //var link = $(divEl).children("a");
             if(divEl.attr("folio-id")){
-                $(divEl).css("background-image", "url('images/menu/"+divEl.attr("folio-id")+".jpg')");
+                $(divEl).css("background-image", "url('images/menus/"+divEl.attr("folio-id")+".jpg')");
             }
         }
 

@@ -117,7 +117,7 @@ body {
 }
 
 body.texture-background {
-    background-image: url('../images/bgProjects.jpg');
+    background-image: url('../images/common/background.jpg');
 }
 
 body.active-filter {
@@ -319,7 +319,7 @@ button {
         width: 100%;
         height: 100%;
         z-index: 100000;
-        background-image: url(../images/vignettage.png);
+        background-image: url(../images/common/vignettage.png);
         background-size: 100% 100%;
         opacity: 0;
         visibility: hidden;
@@ -559,9 +559,6 @@ button.videoNoise:focus .cta-start-text {
 #folioContent {
     overflow: hidden;
 }
-
-/*a.contact-img { background: url('../images/menu_contact.svg');}
-a.share-img { background: url('../images/menu_share.svg');}*/
 
 .navbar-brand {
     padding-top: 12px!important;
@@ -873,7 +870,7 @@ li.blog > a {
 }
 
 .contactPanel {
-    background-image: url(../images/bgContactHeader.png);
+    background-image: url(../images/ui/contact_background.png);
     background-position: top right;
     background-repeat: no-repeat;
     position: absolute;
@@ -923,7 +920,7 @@ li.blog > a {
 
 
 .contactPanel .hireMe {
-    background-image: url(../images/bgHireHeader.png);
+    background-image: url(../images/ui/hireme_background.png);
     background-position: top right;
     background-repeat: no-repeat;
     position: absolute;
@@ -1218,7 +1215,7 @@ a.email:hover {
 
 .hd-prtcle-tex {
     display: block;
-    background-image: url(../images/hyperdrive_beam.png);
+    background-image: url(../images/common/hyperdrive_beam.png);
     background-size: 100% 100%;
     width: 220px;
     height: 15px;    
@@ -1228,7 +1225,7 @@ a.email:hover {
 .grid {
 	width: 1280px;
 	height: 1280px;
-    background: url('../images/cellRow_1280_addflat2.png');
+    background: url('../images/common/grid_row.png');
     background-repeat: repeat-y;
     /*border:5px solid red;*/
 }
@@ -1472,7 +1469,7 @@ button.icon-play:active {
     width: 1200px;
 }
 
-.about p>a {
+.about p>a, .skill-section a {
     transition: 0.15s;
     color: #EFECE1;
     border-bottom: 2px solid rgba(239, 236, 225, 0.47);
@@ -1481,7 +1478,9 @@ button.icon-play:active {
 }
 
 .about p>a:hover,
-.about p>a:active {
+.about p>a:active,
+.skill-section a:hover,
+.skill-section a:active {
     border-bottom-color: transparent;
     background-color: #d15f5f;
     text-decoration: none;
@@ -1664,7 +1663,7 @@ button.icon-play:active {
 
 .skill-bg-out {
     display: block;
-    background-image: url(../images/menu_about@2x.png);
+    background-image: url(../images/menus/menu_about@2x.png);
     background-size: 1200px 800px;
     z-index: -2;
     top: 0;
@@ -1676,7 +1675,7 @@ button.icon-play:active {
 
 .skill-bg-over {
     display: block;
-    background-image: url(../images/menu_about@2x.png);
+    background-image: url(../images/menus/menu_about@2x.png);
     background-image: 1200px 800px;
     z-index: -1;
     top: 0;
@@ -1867,9 +1866,6 @@ button.icon-play:active {
     font-size: 46px;
     text-transform: uppercase;
     letter-spacing: -1px;
-    /*margin: 20px 0px 0px 0px;
-    /*background: url(../images/timeline_placer.png);
-    background-repeat: no-repeat;*/
     margin: 0px;
 }
 
@@ -1880,7 +1876,6 @@ button.icon-play:active {
     width: 100px;
     height: 50px;
     display: block;
-    background: url(../images/timeline_helper01.png)
 }
 
 .timeline-info p {
@@ -1893,10 +1888,6 @@ button.icon-play:active {
     line-height: 18px;
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: auto;
-    /*background: url(../images/timeline_placer.png);
-    background-repeat: no-repeat;*/
-    /*height:35px;*/
-    /*margin-top: 15px;*/
     
 }
 
@@ -1990,7 +1981,6 @@ button.icon-play:active {
     width: 150px;
     height: 75px;
     display: block;
-    background: url(../images/timeline_helper02.png)
 }
 
 
@@ -2028,7 +2018,7 @@ div.block01 {
     /*background-color: rgba(32, 16, 38, 0.65);*/
     width: 2200px;
     height: 7000px;
-    background: url(../images/timeline_title_bgblue.png);
+    background: url(../images/pages/timeline/alpha_background.png);
     background-size: contain;
 }
 
@@ -2061,7 +2051,7 @@ div.block04 {
     background-color: transparent;
     width: 2200px;
     height: 4000px;
-    background-image: url(../images/timeline_title_face01.svg);
+    background-image: url(../images/pages/timeline/title_block_face.svg);
     background-size: contain;
 }
 
@@ -2105,12 +2095,12 @@ div.block04 {
 }
 
 .skillsfield-menu .skill-bg-out {
-    background-image: url(../images/menu_skills@2x.png);
+    background-image: url(../images/menus/menu_skills@2x.png);
     background-size: 1600px 800px;
 }
 
 .skillsfield-menu .skill-bg-over {
-    background-image: url(../images/menu_skills@2x.png);
+    background-image: url(../images/menus/menu_skills@2x.png);
     background-size: 1600px 800px;
 }
 
@@ -2636,7 +2626,7 @@ fieldset {
 }
 
 
-.panelLeft {
+/*.panelLeft {
     visibility: hidden;
     display: block;
     position: absolute;
@@ -2670,7 +2660,7 @@ fieldset {
     background-repeat:no-repeat;
     z-index: 101;
     cursor:pointer;
-}
+}*/
 
 #debug {
     pointer-events: none;

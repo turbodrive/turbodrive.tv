@@ -5,6 +5,7 @@
 define(["signals"], function (signals)
 {
     var pageInfo = {};
+    var MAIN_IMAGE = "mainImage";
     
     /*** EVENTS ***/
     pageInfo.on = {
@@ -58,6 +59,7 @@ define(["signals"], function (signals)
     /*** ASSETS LOADER ***/    
     pageInfo.loadImage = function(id, sectionId){
         var page = pageInfo.getPageInfo(id);
+        var mainImageName = page.mainImageName ? page.mainImageName : "main.png";
         page.mainImage = new Image();
         page.mainImage.id = id
         page.loadedHandler = function(event){
@@ -69,7 +71,7 @@ define(["signals"], function (signals)
             img.id = null;
         }
         page.mainImage.addEventListener("load", page.loadedHandler);
-        page.mainImage.src = "images/" + id + ".png";
+        page.mainImage.src = "images/pages/" + id + "/"+mainImageName;
     }
     
     pageInfo.isLoaded = function(id) {
@@ -124,7 +126,7 @@ define(["signals"], function (signals)
             secondary:true,
             z:0, rrcX:0.25, rrcY:0.24, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:MAIN_IMAGE,
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
             rPointX:0, rPointY:0, width:1280, height:720}
     };
@@ -165,7 +167,7 @@ define(["signals"], function (signals)
             secondary:true,
             z:0, rrcX:-0.35, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.9, src:"mainImage",
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.9, src:MAIN_IMAGE,
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
             rPointX:450, rPointY:-100, width:1280, height:720}
     };
@@ -291,7 +293,7 @@ define(["signals"], function (signals)
             secondary:true,
             extraScale:0.5},
         
-        img_trsBg:{html:"<img src='images/trsbgContentAbout.png'/>",
+        img_trsBg:{html:"<img src='images/pages/about/alpha_background.png'/>",
                    position:pageInfo.RES_RC_P,
                     z:-2000,
             rrcX:0, rrcY:0.05,  rrcXOffset:0, rrcYOffset:50,
@@ -299,7 +301,7 @@ define(["signals"], function (signals)
             scale:{minL:0.65, maxL:1.6},
         },
         
-        img_bgOpt:{html:"<img src='images/about_opt.png'/>",
+        img_bgOpt:{src:MAIN_IMAGE,
                    scale:"_scaleVisuel", position:pageInfo.RES_RC_P,
             z:-6000, rrcX:-0.28, rrcY:-0.27, rrcXOffset:70, rrcYOffset:50,
                 rPointX:0,rPointY:0,
@@ -308,7 +310,7 @@ define(["signals"], function (signals)
     
     pageInfo.SKILLS_LAYOUT = {
         id:"skills-layout",
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleAboutVisuel", src:"mainImage",
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleAboutVisuel", src:MAIN_IMAGE,
             z:-1500, rrcX:0, rrcY:0.05, rrcXOffset:-40, rrcYOffset:-40,
             rPointX:0, rPointY:0, width:1568, height:641,
             scale:{minL:0.7, maxL:1.3},           
@@ -371,10 +373,10 @@ define(["signals"], function (signals)
         
         
         img_timeline:{position:pageInfo.FREE3D_P,
-                html:"<img src='images/about_timeline.svg'/>",
+                src:MAIN_IMAGE,
                 x:-510, y:-1335, z:1280, rX:0, rY:90, rZ:180, scale:3.5},
         img_tmleBg:{position:pageInfo.FREE3D_P,
-                html:"<img src='images/timeline_0.png'/>",
+                html:"<img src='images/pages/timeline/alpha_dates.png'/>",
                 x:-450, y:-1070, z:860, rX:0, rY:90, rZ:180, scale:3.5},        
         div_block:{position:pageInfo.FREE3D_P,
                 html:"<div class='block01'></div>",
@@ -565,25 +567,25 @@ define(["signals"], function (signals)
             
         
         
-        img_line01:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line01:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.68},
                       x:-700, y:1253, z:1150, rX:60, rY:-40, rZ:0, scale:1},
-        img_line02:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line02:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.58},
                       x:-700, y:1002, z:1150, rX:60, rY:-40, rZ:0, scale:1},
-        img_line03:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line03:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.48},
                       x:-700, y:246, z:1150, rX:40, rY:-40, rZ:0, scale:1},
-        img_line04:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line04:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.38},
                       x:-700, y:-9, z:1150, rX:30, rY:-40, rZ:0, scale:1},
-        img_line05:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line05:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.28},
                       x:-700, y:-386, z:1150, rX:20, rY:-40, rZ:0, scale:1},
-        img_line06:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line06:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.18},
                       x:-700, y:-635, z:1150, rX:0, rY:-40, rZ:0, scale:1},
-        img_line07:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/white_line.png'/>",
+        img_line07:{position:pageInfo.FREE3D_P,html:"<img class='white-line' src='images/pages/timeline/white_line.png'/>",
                     secondary:{delay:0.08},
                       x:-700, y:-885, z:1150, rX:-20, rY:-40, rZ:0, scale:1},
     };
@@ -597,8 +599,8 @@ define(["signals"], function (signals)
             id: "tot",
             project: true,
             images: {
-                front:{html:"<img src='images/tot_front.png'/>", position:pageInfo.RES_RC_P, scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0, rPointX:0, rPointY:0, width:1280, height:720},
-                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+                front:{html:"<img src='images/pages/tot/front.png'/>", position:pageInfo.RES_RC_P, scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0, rPointX:0, rPointY:0, width:1280, height:720},
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:MAIN_IMAGE,
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
             rPointX:0, rPointY:0, width:1280, height:720}
             },
@@ -614,7 +616,7 @@ define(["signals"], function (signals)
             id: "ikaf",
             project: true,
             images: {
-                background:{src:"mainImage", position:pageInfo.RES_RC_P,
+                background:{src:MAIN_IMAGE, position:pageInfo.RES_RC_P,
                         scale:"_scaleVisuel", extraScale:0.95, z:-1000, rrcX:0.15, rrcY:0,
                         rPointX:150, rPointY:-50,
                         rrcXOffset:-130, rrcYOffset:0, width:1280, height:720},
@@ -665,7 +667,7 @@ define(["signals"], function (signals)
             id: "greetings",
             project: true,
             images: {
-                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:MAIN_IMAGE,
                         z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
                         rPointX:0, rPointY:0, width:1280, height:720}
             },
@@ -682,10 +684,10 @@ define(["signals"], function (signals)
             id: "ikaf2",
             project: true,
             images: {
-                front:{html:"<img src='images/ikaf2_front.png'/>", position:pageInfo.RES_RC_P,
+                front:{html:"<img src='images/pages/ikaf2/front.png'/>", position:pageInfo.RES_RC_P,
                        scale:"_scaleVisuel", z:-1000, rrcX:0, rrcY:0, rrcXOffset:0,
                        rrcYOffset:0, rPointX:380, rPointY:-85, width:343, height:582},
-                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:"mainImage",
+                background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", src:MAIN_IMAGE,
                         z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
                         rPointX:0, rPointY:0, width:1280, height:720}
             },
@@ -711,6 +713,7 @@ define(["signals"], function (signals)
          {
             id: "timeline",
             project: false,
+            mainImageName: "main.svg",
             info: {},
             x:-4200, y:-646, z:-1902, rotationX:-48.6, rotationY:-400, rotationZ:-94.8,
             loaded:loadedDefault,

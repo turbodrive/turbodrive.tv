@@ -32,14 +32,14 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         
         if(redirectEnabled){
             if(!Modernizr.video || Modernizr.ie || Modernizr.ie2){
-                alert("redirect to flash version")
+                //alert("redirect to flash version")
                 window.location.href = flashUrl;
             }else{
                 if(Modernizr.mobile && window.outerHeight < 1000 && window.outerWidth < 1000){
-                    alert("redirect to mobile version")
+                    //alert("redirect to mobile version")
                     window.location.href = mobileUrl;
                 }else {
-                    alert("no redirect - stay on html5 version")
+                    //alert("no redirect - stay on html5 version")
                 }
             }
         }
