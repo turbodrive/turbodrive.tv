@@ -1475,7 +1475,7 @@ button.icon-play:active {
 .about p>a {
     transition: 0.15s;
     color: #EFECE1;
-    border-bottom: 1px solid rgba(239, 236, 225, 0.47);
+    border-bottom: 2px solid rgba(239, 236, 225, 0.47);
     padding-left: 3px;
     padding-right: 3px;
 }
@@ -1484,6 +1484,7 @@ button.icon-play:active {
 .about p>a:active {
     border-bottom-color: transparent;
     background-color: #d15f5f;
+    text-decoration: none;
 }
 
 .about h2 {

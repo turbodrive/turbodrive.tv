@@ -2,6 +2,7 @@
 images/
 videos/
 node_modules/
+tmp_tasks/
 php/
 .png
 .jpg

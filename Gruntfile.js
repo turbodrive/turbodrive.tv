@@ -14,12 +14,22 @@ module.exports = function (grunt) {
                 },{
                   match: '<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">',
                   replacement: ''
+                },{
+                  match: 'debug:true,',
+                  replacement: 'debug:false,'
+                },{
+                  match: 'hyperDriveTransition:false,',
+                  replacement: 'hyperDriveTransition:true,'
+                },{
+                  match: 'volumeReel:0',
+                  replacement: 'volumeReel:1'
                 }
               ],
                 usePrefix: false
             },
             files: [
-              {expand: true, flatten:true, src: ['src/index.html'], dest: 'build/'}
+              {expand: true, flatten:true, src: ['src/index.html'], dest: 'build/'},
+              {expand: true, flatten:true, src: ['src/js/app/main.js'], dest: 'tmp_tasks/js/app/'}
             ]
           }
         },
@@ -29,6 +39,7 @@ module.exports = function (grunt) {
           main: {
             files: [
               {expand: true, cwd: 'src/', src: [
+                  '*.html','favicon/**','*.xml','*.ico',
                   'js/**/*.*',
                   '!js/app/**/*.*',
                   'php/*',
@@ -99,7 +110,13 @@ module.exports = function (grunt) {
                     cwd:'src/',
                     src:'js/assets/*.*',
                     dest:'build/'
+                },{
+                    expand:true,
+                    cwd:'tmp_tasks/',
+                    src:'js/app/*.*',
+                    dest:'build/'
                 }]
+                
             }
         },
     });

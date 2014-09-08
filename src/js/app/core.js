@@ -94,6 +94,21 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         
         overlay.loadGmd();
         overlay.on.gmdLoaded.add(startHasher);
+        
+        
+        /** GA Tracking ***/
+        $(".buttonShare, .trackSocial").on("click", function(event){
+            var network = $(this).attr("data-network");
+            var action = $(this).attr("data-action");
+            console.log("send SOCIAL track >> " + network + " - " + action)
+            ga('send', 'social', network, action, window.location);
+        })
+
+        $(".trackEvent").on("click", function(event){
+            var eventValues = $(this).attr("data-event").split(",");
+            console.log("send EVENT track >> " + eventValues[0] + " - " + eventValues[1] + " - " + eventValues[2]);
+            ga('send', 'event', eventValues[0], eventValues[1], eventValues[1]);
+        })        
     }
     
     var startHasher = function() {
@@ -143,7 +158,12 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         if(newHash == "") hasher.setHash(DEFAULT_HASH);
         if(newHash == "reel/") newHash = "reel/preintro/";
         if(newHash == "folio/") hasher.setHash("folio","ikaf2/");
+        
+       
+        
         //if(newHash == "about/") switchPage("about");
+        var pageView = "/"+newHash;
+        ga('send', 'pageview', {'page': pageView});
         crossroads.parse(newHash);
     }
     
