@@ -49,6 +49,19 @@ module.exports = function (grunt) {
               ],
                dest: 'build/'},
             ]
+          },
+          dev: {
+            files: [
+              {expand: true, cwd: 'src/', src: [
+                  '*.html','favicon/**','*.xml','*.ico',
+                  'js/**/*.*',
+                  '!js/app/**/*.*',
+                  'php/*',
+                  'css/**/*.*',
+                  'images/**'
+              ],
+               dest: 'build/'},
+            ]
           }
         },
         
@@ -74,6 +87,11 @@ module.exports = function (grunt) {
                         '#timelineMask',
                         '#timelineSvg',
                         '#bgProgress',
+                        '.navbar-stealth',
+                        '.navbar-stealth .container',
+                        '.navbar-stealth .navbar-header',
+                        '.navbar-stealth .highlightContainer',
+                        'html.ios7 > body',
                         ]
             }
           }
@@ -88,18 +106,19 @@ module.exports = function (grunt) {
 
         
         uglify: {
-            options: {
-                beautify:false,
-                compress: {                    
-                    global_defs: {
-                      DEBUG: false
-                    },
-                    dead_code: true,
-                    drop_console: true,
-                    drop_debugger: true,
-                }
-            },
             my_target: {
+                options: {
+                    beautify:false,
+                    compress: {                    
+                        global_defs: {
+                          DEBUG: false
+                        },
+                        dead_code: true,
+                        drop_console: true,
+                        drop_debugger: true,
+                    }
+                },
+                
                 files: [{
                     expand:true,
                     cwd:'src/',
@@ -115,8 +134,32 @@ module.exports = function (grunt) {
                     cwd:'tmp_tasks/',
                     src:'js/app/*.*',
                     dest:'build/'
-                }]
+                }]   
+            },
+            dev : {
+                options: {
+                    beautify:false,
+                    compress: {                    
+                        global_defs: {
+                          DEBUG: false
+                        },
+                        dead_code: false,
+                        drop_console: false,
+                        drop_debugger: false,
+                    }
+                },
                 
+                files: [{
+                    expand:true,
+                    cwd:'src/',
+                    src:'js/app/*.*',
+                    dest:'build/'
+                },{
+                    expand:true,
+                    cwd:'src/',
+                    src:'js/assets/*.*',
+                    dest:'build/'
+                }]                
             }
         },
     });
@@ -129,6 +172,7 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('css-optimisation', ['uncss','cssmin']);
-    grunt.registerTask('default', ['replace','copy','css-optimisation', 'uglify']);
+    grunt.registerTask('default', ['replace','copy:main','css-optimisation', 'uglify:my_target']);
+    grunt.registerTask('dev', ['copy:dev', 'uglify:dev']);
 
 }

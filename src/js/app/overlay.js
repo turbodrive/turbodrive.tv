@@ -65,13 +65,13 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     }
     
     overlay.loadGmd = function(){
-        console.log("GmdEdge - startLoad" + overlay.gmdLoaded() )
+        console.log("GmdEdge - startLoad 1" + overlay.gmdLoaded() )
         if(startLoadGmd) return;
         startLoadGmd = true;
         if(gmdAnimation !== undefined) return;
 
         require(["assets/GmdEdge"], function(GmdEdge){
-            console.log("GmdEdge - Loaded" + overlay.gmdLoaded() )
+            console.log("GmdEdge - startLoad 2 - Require" + overlay.gmdLoaded() )
         });
     }
     

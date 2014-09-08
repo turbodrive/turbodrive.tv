@@ -312,8 +312,8 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
     /*********************************/
 
     folio.onTouchClick = function (element) {        
-        if(!folio.contains(element)) return
-
+        if(!folio.contains(element)) return        
+                
         if($(element).parent().is("a")){
             var href = $(element).parent().attr("href");   
             window.location.hash = href;
@@ -873,7 +873,7 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
     }
     
     initSkillsMenu = function (idPage) {
-        $("." + idPage + "-menu li").mouseenter(function () {
+        /*$("." + idPage + "-menu li").mouseenter(function () {
             TweenMax.to($(this).find(".skill-bg-over"),0.3,{autoAlpha:1, ease:Power2.easeOut});
         }).mouseleave(function () {
             TweenMax.to($(this).find(".skill-bg-over"),0.5,{autoAlpha:0, ease:Power2.easeOut});
@@ -883,7 +883,7 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
             TweenMax.set($(this).find(".skill-bg-over"),{autoAlpha:1});
         }).click(function(){
             window.location.hash = $(this).children("a").attr("href");
-        })
+        })*/
     }
 
     getRatioPxPerfect = function (z) {

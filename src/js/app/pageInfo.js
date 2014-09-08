@@ -134,7 +134,7 @@ define(["signals"], function (signals)
     pageInfo.RIGHTBOTTOM_LAYOUT = {
         id:"right-bottom-layout",
         div_redLine:{position:pageInfo.RES_RC_P,
-            z:-1200, rrcX:0.41, rrcY:0.17, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
+            z:-1200, rrcX:0.40, rrcY:0.23, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
         div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
             parent : "div_redLine",
@@ -165,11 +165,11 @@ define(["signals"], function (signals)
             rotationZ:-3, width:100, height:100},
         button_playButton:{position:pageInfo.RES_RC_P,
             secondary:true,
-            z:0, rrcX:-0.35, rrcY:0.25, rrcXOffset:0, rrcYOffset:0,
+            z:0, rrcX:-0.35, rrcY:0.30, rrcXOffset:0, rrcYOffset:0,
             rotationZ:-3, width:620, height:250, clickHandler:"playVideo"},
-        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.9, src:MAIN_IMAGE,
+        img_background:{position:pageInfo.RES_RC_P, scale:"_scaleVisuel", extraScale:0.85, src:MAIN_IMAGE,
             z:-3500, rrcX:0, rrcY:0, rrcXOffset:0, rrcYOffset:0,
-            rPointX:450, rPointY:-100, width:1280, height:720}
+            rPointX:380, rPointY:-100, width:1280, height:720}
     };
     
     var cX = 0.33;
@@ -617,8 +617,8 @@ define(["signals"], function (signals)
             project: true,
             images: {
                 background:{src:MAIN_IMAGE, position:pageInfo.RES_RC_P,
-                        scale:"_scaleVisuel", extraScale:0.95, z:-1000, rrcX:0.15, rrcY:0,
-                        rPointX:150, rPointY:-50,
+                        scale:"_scaleVisuel", extraScale:0.90, z:-1000, rrcX:0.15, rrcY:0,
+                        rPointX:150, rPointY:-35,
                         rrcXOffset:-130, rrcYOffset:0, width:1280, height:720},
             },
             info: {},

@@ -13,7 +13,7 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
     var flashUrl = "http://flash.turbodrive.tv/";
     var html5Url = "http://www.turbodrive.tv/";
     var mobileUrl = "http://m.turbodrive.tv/";
-    var redirectEnabled = false;
+    var redirectEnabled = true;
     
     if(CONFIG.debug){
         //DEFAULT_HASH = "folio/ikaf2/";
@@ -30,20 +30,6 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         Modernizr.addTest('appleios', function () {return (Modernizr.ipad || Modernizr.ipod || Modernizr.iphone);});
         Modernizr.addTest('mobile', function () {return (Modernizr.appleios || Modernizr.android || Modernizr.ieMobile);});
         
-        if(redirectEnabled){
-            if(!Modernizr.video || Modernizr.ie || Modernizr.ie2){
-                //alert("redirect to flash version")
-                window.location.href = flashUrl;
-            }else{
-                if(Modernizr.mobile && window.outerHeight < 1000 && window.outerWidth < 1000){
-                    //alert("redirect to mobile version")
-                    window.location.href = mobileUrl;
-                }else {
-                    //alert("no redirect - stay on html5 version")
-                }
-            }
-        }
-        
         Modernizr.addTest('highresdisplay', function(){ 
             if (window.matchMedia) { 
                 var mq = window.matchMedia("only screen and (-moz-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen  and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 1.3dppx)");
@@ -52,6 +38,22 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
                 } 
             }
         });
+        
+        if(redirectEnabled){
+            
+            if(!Modernizr.video || Modernizr.ie || Modernizr.ie2){
+                window.location.href = flashUrl;
+            }else{
+                if(Modernizr.mobile && screen.height < 1000 && screen.width < 1000){
+                    //window.location.href = mobileUrl;
+                    console.log("redirect to mobile.")
+                }else {
+                    //alert("no redirect - stay on html5 version")
+                }
+            }
+        }
+        
+        
         
         
         Modernizr.addTest('firefox', function () {return (navigator.userAgent.toLowerCase().indexOf('firefox') > -1);});
@@ -254,7 +256,8 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
     }
     
     var hideFolioContent = function() {
-        $("#folioContent").css("visibility", "hidden");
+        //$("#folioContent").css("visibility", "hidden");
+        $("#folioContent").css("display", "none");
     }
         
     /******* FOLIO MODULE *******/
@@ -561,6 +564,7 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         
         if(target == targetTouch){
             console.log("onTouchClick - " + event.target)
+            console.dir(event.target)
             if(!processRegularLink(target)){
                 // regular link didn't work so, we try modules.
                 if(MODULES.header){
@@ -627,7 +631,9 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
         
         var isLandscape = ($(window).width() > $(window).height());
         if(orientationIsLandscape && !isLandscape){
+            console.log("SHOW ALERT");
             overlay.show(overlay.LANDSCAPE_ALERT);
+            
             if(MODULES.reel && MODULES.reel.isActive()){
                 MODULES.reel.pause()   
             }
@@ -639,6 +645,8 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
             }
         }
         orientationIsLandscape = isLandscape;
+        console.log("orientationIsLandscape >> " + isLandscape);
+        console.log("orientationCallBack >> " + orientationCallBack);
     }
     
     initCore();
