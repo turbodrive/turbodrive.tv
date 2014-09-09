@@ -1453,6 +1453,7 @@ button.icon-play:active {
     visibility: hidden;
     opacity: 0;
     cursor: pointer;
+    z-index: 400;
 }
 
 #project-video {
@@ -1530,7 +1531,7 @@ button.icon-play:active {
 }
 
 .hireme-button {
-    width: 360px;
+    width: 310px;
     height: 250px;
     position: absolute;
     font-size: 72px;
@@ -2271,6 +2272,10 @@ div.skill-section {
     width: 990px;
 }
 
+div.skill-section.front {
+    width: 970px;
+}
+
 .skill-section h3 {
     text-transform: uppercase;
     letter-spacing: 0.2px;
@@ -2295,7 +2300,8 @@ div.skill-section {
     color: #938D8E;
     font-size: 10.5px;
     letter-spacing: 0.5px;
-    /*width: 420px;*/
+    width: 440px;
+    margin-top: 10px;
 }
 
 .skill-section th {
@@ -2333,12 +2339,16 @@ div.skill-section {
     width: 550px;
 }
 
+.skill-section p.wide {
+    width: 650px;
+}
+
 .twocols-content p {
     width: 445px;
 }
 
 .colAndTable-content p {
-    width: 360px;
+    width: 480px;
 }
 
 .twocols-content {
@@ -2664,6 +2674,11 @@ fieldset {
     height : 4px;
     background-color: #D15F5F;
 }
+
+.redLine-sprite3d {
+   z-index: 200;
+}
+
 
 .textPlane, .textPlane380 {    
     margin: 0px;

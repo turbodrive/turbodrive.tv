@@ -195,7 +195,7 @@ define(["Sprite3D","../app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, 
         }
         
         if(this.videoContainer){
-            this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"></video>';
+            this.videoContainer.innerHTML = '<video id="project-video"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/mp4-32/'+this.pageInfo.id+'.mp4" type="video/mp4"><source src="https://vod.infomaniak.com/redirect/silvremarchal_1_vod/raw-12978/webm-32/'+this.pageInfo.id+'.webm" type="video/webm"></video>';
             this.video = this.videoContainer.firstElementChild;
             console.log("start Preloadvideo >> " + this.video);
             this.videoContainer.self = this;
@@ -259,6 +259,7 @@ define(["Sprite3D","../app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, 
     
     var addClassName = function(element, className){
         element.className += " " +className+ " ";
+        console.log(element.id + " - addClassName >> " + className);
         return element
     }
     
@@ -337,6 +338,12 @@ define(["Sprite3D","../app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, 
                     
                     if(elementInfo.secondary){
                         this.secondaryElements.push(objectElement);   
+                    }
+                    
+                    console.log(">> elementInfo.className >> " + elementInfo.className);
+                    
+                    if(elementInfo.className != null){
+                        addClassName(element3d.domElement, elementInfo.className)
                     }
                     
                     if(elementInfo.opacity != null){

@@ -1741,9 +1741,7 @@ h3 {
   padding: 30px;
 }
 
-p,
-.skill-section ul,
-.skill-section li {
+p {
   color: #CECEC4;
   font-family: "texgyreadventorregular", "helvetica neue", Arial, sans-serif;
   font-size: 12px;
@@ -1753,20 +1751,6 @@ p,
   margin: 0px;
   /*opacity: 0.8;*/
   /*width: 640px;*/
-}
-
-.skill-section ul,
-.skill-section li {
-  list-style: none;
-  padding-left: 20px;
-  text-transform: uppercase;
-  font-family: 'texgyreadventorbold';
-  font-size: 11px;
-  line-height: 17px;
-}
-
-.skill-section li {
-  margin-bottom: 20px;
 }
 
 p.skills-icon {
@@ -1901,6 +1885,25 @@ button.icon-play:active {
   visibility: hidden;
   opacity: 0;
   cursor: pointer;
+  z-index: 400;
+}
+
+#project-video {
+  top: 10px;
+  left: 10px;
+  /*width: 96%;
+    height: 96%;*/
+  position: absolute;
+  background-color: #000000;
+  padding: 0px;
+  margin: 0px;
+  transition: 0.3s;
+}
+
+#project-video.pause-video {
+  /*filter:brightness(0.5);
+    -webkit-filter:brightness(0.5);*/
+  opacity: 0.3;
 }
 
 /***********************************************************************/
@@ -1962,7 +1965,7 @@ button.icon-play:active {
 }
 
 .hireme-button {
-  width: 360px;
+  width: 310px;
   height: 250px;
   position: absolute;
   font-size: 72px;
@@ -2637,6 +2640,10 @@ div.skill-section {
   width: 990px;
 }
 
+div.skill-section.front {
+  width: 970px;
+}
+
 .skill-section h3 {
   text-transform: uppercase;
   letter-spacing: 0.2px;
@@ -2661,7 +2668,8 @@ div.skill-section {
   color: #938D8E;
   font-size: 10.5px;
   letter-spacing: 0.5px;
-  /*width: 420px;*/
+  width: 440px;
+  margin-top: 10px;
 }
 
 .skill-section th {
@@ -2699,25 +2707,12 @@ div.skill-section {
   width: 550px;
 }
 
-.twocols-content p {
-  width: 445px;
+.skill-section p.wide {
+  width: 650px;
 }
 
 .colAndTable-content p {
-  width: 360px;
-}
-
-.twocols-content {
-  height: 180px;
-  /*width: 920px;*/
-  -webkit-column-count: 2;
-  /* Chrome, Safari, Opera */
-  -moz-column-count: 2;
-  /* Firefox */
-  column-count: 2;
-  column-gap: 50px;
-  -webkit-column-gap: 50px;
-  -moz-column-gap: 50px;
+  width: 480px;
 }
 
 /**** FORM ****/
@@ -2941,6 +2936,10 @@ fieldset {
   width: 5000px;
   height: 4px;
   background-color: #D15F5F;
+}
+
+.redLine-sprite3d {
+  z-index: 200;
 }
 
 .textPlane,

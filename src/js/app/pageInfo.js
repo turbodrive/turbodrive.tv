@@ -92,7 +92,7 @@ define(["signals"], function (signals)
     
     pageInfo.LEFT_LAYOUT = {
         id:"left",
-        div_redLine:{position:pageInfo.RES_RC_P,
+        div_redLine:{position:pageInfo.RES_RC_P, className:"redLine-sprite3d",
             z:-1200, rrcX:-0.45, rrcY:-0.16, rrcXOffset:50, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
         div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
@@ -133,7 +133,7 @@ define(["signals"], function (signals)
     
     pageInfo.RIGHTBOTTOM_LAYOUT = {
         id:"right-bottom-layout",
-        div_redLine:{position:pageInfo.RES_RC_P,
+        div_redLine:{position:pageInfo.RES_RC_P, className:"redLine-sprite3d",
             z:-1200, rrcX:0.40, rrcY:0.23, rrcXOffset:-280, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
         div_bgContent:{html:"<div class='textPlane380'></div>", position:pageInfo.RES_RC_P,
@@ -177,7 +177,7 @@ define(["signals"], function (signals)
     
     pageInfo.RIGHT_LAYOUT = {
         id:"right-layout",
-        div_redLine:{position:pageInfo.RES_RC_P,
+        div_redLine:{position:pageInfo.RES_RC_P, className:"redLine-sprite3d",
             z:-1200, rrcX:cX, rrcY:cY, rrcXOffset:-320, rrcYOffset:0, rPointX:0, rPointY:-130,
             rotationZ:-3, width:5000, height:4},  // used has parent, so it has to be defined first
         div_bgContent:{html:"<div class='textPlane'></div>", position:pageInfo.RES_RC_P,
@@ -322,15 +322,15 @@ define(["signals"], function (signals)
             width:1424, height:150},
         
         _editingSection:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-245, rrcYOffset:-80,
+            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-295, rrcYOffset:-60,
             width:990, height:268, opacity:0, sectionId:"editing-3d",
             scale:{minL:0.8, maxL:1.2}},
         _researchSection:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-415, rrcYOffset:-80,
+            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-295, rrcYOffset:-60,
             width:990, height:268, opacity:0, sectionId:"research",
             scale:{minL:0.8, maxL:1.2}},
         _compositingSection:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-415, rrcYOffset:-80,
+            z:-100, rrcX:0, rrcY:-0.05, rrcXOffset:-295, rrcYOffset:-60,
             width:990, height:268, opacity:0, sectionId:"compositing",
             scale:{minL:0.8, maxL:1.2}},
         _frontSection:{position:pageInfo.RES_RC_P,
@@ -338,17 +338,17 @@ define(["signals"], function (signals)
             width:990, height:257, opacity:0, sectionId:"front",
             scale:{minL:0.8, maxL:1.2}},
         _motionSection:{position:pageInfo.RES_RC_P,
-            z:-100, rrcX:0, rrcY:-0.04, rrcXOffset:-415, rrcYOffset:-80,
+            z:-100, rrcX:0, rrcY:-0.04, rrcXOffset:-295, rrcYOffset:-100,
             width:990, height:268, opacity:1, sectionId:"motion",
             scale:{minL:0.8, maxL:1.2}
-            },
+        },
         
         
         div_hireMeSkills:{
             position:pageInfo.RES_RC_P,
-            z:100, rrcX:0.30, rrcY:-0.45, rrcXOffset:10, rrcYOffset:35,
+            rrcX:0.32, rrcY:-0.45, rrcXOffset:20, rrcYOffset:35,
             z:-5,
-            scale:{minL:0.4, maxL:0.88},
+            scale:{minL:0.3, maxL:0.88},
             width:360, height:250
         }
     };

@@ -21,7 +21,7 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
     };
     
     var currentElName = overlay.LOADER;
-    var gmdAnimation;
+    var gmdAnimation = window.gmdAnimation;
     var startLoadGmd = false;
     var bufferEmpty = false;
     var widthMaxProgressBar = 224;
@@ -58,21 +58,35 @@ define(["jquery","TweenMax", "signals"], function ($,TweenMax,signals){
         return null;
     }
     
+    var timeOutGMDEdge;
+    
+    var reloadGmdEdge = function() {
+        clearTimeout(timeOutGMDEdge);
+        window.AdobeEdge = null;
+        require.undef("assets/GmdEdge");
+        console.log("reloadGmdEdge !!");
+        overlay.loadGmd(true);
+    }
+    
     document.gmdReady = function(sym){
         gmdAnimation = sym;
+        clearTimeout(timeOutGMDEdge);
         console.log("GmdEdge - gmdReady " + overlay.gmdLoaded() )
         overlay.on.gmdLoaded.dispatch();
     }
     
-    overlay.loadGmd = function(){
+    overlay.loadGmd = function(force){
         console.log("GmdEdge - startLoad 1" + overlay.gmdLoaded() )
-        if(startLoadGmd) return;
+        force = force != null ? force : false
+        if(!force && startLoadGmd) return;
+        if(force) console.log("try reload");
         startLoadGmd = true;
         if(gmdAnimation !== undefined) return;
 
-        require(["assets/GmdEdge"], function(GmdEdge){
-            console.log("GmdEdge - startLoad 2 - Require" + overlay.gmdLoaded() )
-        });
+        /*require(["assets/gmdpng_edgePreload"], function(GmdEdge){
+            console.log("GmdEdge - startLoad 2 - Require" + overlay.gmdLoaded())
+            //timeOutGMDEdge = setTimeout(reloadGmdEdge, 50000);
+        });*/
     }
     
     overlay.gmdLoaded = function(){

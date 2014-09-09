@@ -92,6 +92,12 @@ module.exports = function (grunt) {
                         '.navbar-stealth .navbar-header',
                         '.navbar-stealth .highlightContainer',
                         'html.ios7 > body',
+                        '.redLine-sprite3d',
+                        '#project-video',
+                        '#project-video.pause-video',
+                        '.project-player',
+                        '.navbar-stealth .highlightContainer',
+                        '.highlight',
                         ]
             }
           }
