@@ -1554,7 +1554,8 @@ a.github:active {
     background-color: #251927;*/
 }
 
-a.email {
+a.email,
+a.tel {
   transition: 0.15s;
   color: #CECEC4;
   text-decoration: none;
@@ -1563,7 +1564,8 @@ a.email {
   padding-right: 0px;
 }
 
-a.email:hover {
+a.email:hover,
+a.tel:hover {
   color: #ECECE1;
   background-color: #D15F5F;
   border-bottom-color: transparent;
@@ -2431,15 +2433,15 @@ img.white-line {
 
 div.block01 {
   /*background-color: rgba(32, 16, 38, 0.65);*/
-  width: 2200px;
-  height: 7000px;
+  width: 1100px;
+  height: 3500px;
   background: url(../images/pages/timeline/alpha_background.png);
   background-size: contain;
 }
 
 div.block02 {
-  width: 500px;
-  height: 4000px;
+  width: 250px;
+  height: 1000px;
   background: #988888;
   /* Old browsers */
   background: -moz-linear-gradient(left,  #988888 43%, #beb4af 100%);
@@ -2461,8 +2463,8 @@ div.block02 {
 div.block03,
 div.block-corner {
   background-color: #201523;
-  width: 200px;
-  height: 4000px;
+  width: 50px;
+  height: 1000px;
 }
 
 div.block-corner {
@@ -2471,10 +2473,10 @@ div.block-corner {
 
 div.block04 {
   background-color: transparent;
-  width: 2200px;
-  height: 4000px;
-  /*background-image: url(../images/pages/timeline/title_block_face.svg);*/
-  background-color: red;
+  width: 550px;
+  height: 1000px;
+  background-image: url(../images/pages/timeline/title_block_face.svg);
+  /*background-color: red;*/
   background-size: contain;
 }
 
