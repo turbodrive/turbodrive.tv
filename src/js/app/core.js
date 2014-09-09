@@ -45,7 +45,7 @@ define(["jquery","TweenMax","Modernizr","crossroads", "hasher", "app/overlay"], 
                 window.location.href = flashUrl;
             }else{
                 if(Modernizr.mobile && screen.height < 1000 && screen.width < 1000){
-                    //window.location.href = mobileUrl;
+                    window.location.href = mobileUrl;
                     console.log("redirect to mobile.")
                 }else {
                     //alert("no redirect - stay on html5 version")
