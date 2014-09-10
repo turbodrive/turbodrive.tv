@@ -104,7 +104,9 @@ module.exports = function (grunt) {
                         ':-ms-input-placeholder',
                         ':focus',
                         '.form-feedback.success',
-                        '.form-feedback.error'
+                        '.form-feedback.error',
+                        'input.field-error',
+                        'textarea.field-error'
                         ]
             }
           }
