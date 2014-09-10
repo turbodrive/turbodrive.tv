@@ -55,12 +55,15 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         });
         
         $("#submit_btn").on("click", submitMessage);
+        $("#cancel_btn").on("click", cancelForm);
         $("a.email").on("click", clickEmailLinkHandler);
+        $(".contact-form-button").on("click", scrollToForm)
         
         TweenMax.set($(".menu3D"),{height:panelHeight, y:-panelHeight, autoAlpha:1})
         controlMenuState("",0)   
         header.resize();
         header.on.initialized.dispatch();
+        
 
         /*$("[data-toggle='tooltip']").tooltip();*/
         //setTimeout(function(){$('.googleplus').tooltip('show')},2500);
@@ -334,29 +337,58 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         
     }
     
+    var timerFeedback;
     
     var sentEmailHandler = function(response) { 
         //load json data from server and output message
-    
+        
+        console.log("sentEmailHandler >> " + response.type + " - " + response.text);
+        
         var output;
         if(response.type == 'error')
         {
             output = response.text;
-            $("#error-content").html(output)
-            $(".form-feedback.error").show();
-            $(".form-feedback.success").hide();
+            $(".form-feedback h1").html("Error")
+            $("#result-content").html(output)
+            
+            $(".form-feedback").addClass("error");
+            $(".form-feedback").removeClass("success");
             
         }else{
-            //output = response.text;
-            //reset values in all input fields
-            $(".form-feedback.error").hide();
-            $(".form-feedback.success").show();
+            resetFormContent();
+            $(".form-feedback h1").html("Thank you!");
+            $("#result-content").html("Your message has been sent successfully.");
+
+            $(".form-feedback").addClass("success");
+            $(".form-feedback").removeClass("error");
         }
+        TweenMax.fromTo($(".form-feedback"), 0.3, {top:-50}, {top:40});
+        timerFeedback = setTimeout(hideFormFeedback,5000);
+        //$("body").on("click", hideFormFeedback, true);
+        $(".form-feedback").on("click", hideFormFeedback);
+        $('textarea[name=message]').on("click", hideFormFeedback);
+        $('input[name=email]').on("click", hideFormFeedback);
     }
-
-
-
-    var submitMessage = function(e) { 
+    
+    var hideFormFeedback = function(e) {
+        console.log("hideFormFeedback !")
+        $('textarea[name=message]').off("click", hideFormFeedback);
+        $('input[name=email]').off("click", hideFormFeedback);
+        
+        clearTimeout(timerFeedback);
+        TweenMax.to($(".form-feedback"), 0.3,
+                       {
+                           top:-50,
+                           onComplete:function(){
+                                $(".form-feedback").removeClass("error");
+                                $(".form-feedback").removeClass("success");
+                           }
+                       })
+    }
+    
+    var submitMessage = function(e) {
+            hideFormFeedback();
+        
             var user_email      = $('input[name=email]').val();
             var user_message    = $('textarea[name=message]').val();
             var user_subject    = "Message from Turbodrive Contact form [desktop]";
@@ -379,9 +411,40 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
                 var post_data = {'userEmail':user_email, 'userMessage':user_message, 'userSubject':user_subject};
 
                 //Ajax post data to server
+                console.log("proceed >> " + post_data);
+                
                 $.post('php/contact.php', post_data, sentEmailHandler, 'json');
 
             }
+    }
+    
+     var removeErrorClasses = function(event) {
+        $(this).off("click", removeErrorClasses);
+        $(this).removeClass("field-error");
+    }
+    
+    var resetFormContent = function() {
+        hideFormFeedback();
+        $('input[name=email]').val("");
+        $('textarea[name=message]').val("");
+        $('input[name=email]').off("click", removeErrorClasses);
+        $('input[name=email]').removeClass("field-error");
+        $('textarea[name=message]').off("click", removeErrorClasses);
+        $('textarea[name=message]').removeClass("field-error");
+    }
+    
+    var scrollToForm = function(event) {
+        event.preventDefault();
+        var targetScroll = $("#contactform-title").position().top;     
+        $(".contactPanel .contact").animate({scrollTop: targetScroll}, 500); 
+    }
+    
+    var cancelForm = function(event) {
+        event.preventDefault();
+        resetFormContent()        
+        
+        var targetScroll = $("#contact-title").position().top;     
+        $(".contactPanel .contact").animate({scrollTop: targetScroll}, 500); 
     }
     
     

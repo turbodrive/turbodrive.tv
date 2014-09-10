@@ -96,6 +96,7 @@
     </div>
 
     <div class="menu3D">
+        <div class="form-feedback"><h1></h1><p id="result-content"></p></div>
         <div class="menuContent">
             <div class="menuSelectedCases">
                 <a href="#/reel/" class="buttonSubMenu backToReel" section-id="reel"><span class="med">Back</span> <span class="small">to the</span> reel</a>
@@ -122,7 +123,7 @@
                 </div>
                 <div class="contact">
                     <div class="content">
-                        <h1>Contact</h1>
+                        <h1 id="contact-title">Contact</h1>
                         <p>
                             <span class="miniUpCase">Current location:</span>Toulouse, FRANCE</p>
                         <div class="listContactContainer">
@@ -133,7 +134,7 @@
                             </div>
                             <div class="listContact2">
                                 <p>
-                                    <a class="email">info[at]turbodrive[dot]tv
+                                    <a class="email" href="#">info[at]turbodrive[dot]tv
                                         <span data-icon="&#xe619;" class="external-link-icon"></span>
                                     </a>
                                     <br/>Silvère Maréchal
@@ -141,18 +142,19 @@
                             </div>
                         </div>
                         <p class="buttons-group">
-                            <a href="#" class="red-button half-scale dble-bottom-icon">use contact form</a>
+                            <a href="#" class="red-button half-scale dble-bottom-icon contact-form-button">use contact form</a>
                             <a href="#" class="wireframe-button half-scale info-icon">read credits</a>
                         </p>
                         
                     </div>
                      <div class="content">
-                        <h1>Contact form</h1>
+                        <h1 id="contactform-title">Contact form</h1>
                         <fieldset>
                         <input name="email" type="text" placeholder="Your e-mail address" />
                         <textarea name="message" placeholder="Your message"></textarea>
+                            <p class="button-group-form">
                             <button id="submit_btn" type="button" class="red-button half-scale">Send Message</button>
-                            <button id="cancel_btn" type="button" class="wireframe-button half-scale cross-icon">Cancel</button>
+                            <button id="cancel_btn" type="button" class="wireframe-button half-scale cross-icon">Cancel</button></p>
                         </fieldset>
                     </div>
                     

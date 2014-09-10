@@ -955,6 +955,7 @@ li.blog > a {
     color: #EFECE1;
     font-size: 47px;
     margin-bottom: -6px;
+    width: auto;
     
 }
 
@@ -964,6 +965,7 @@ li.blog > a {
     font-size: 24px;
     letter-spacing: -1px;
     font-kerning:auto;
+    width: auto;
 }
 
 a.buttonShare {
@@ -2422,6 +2424,66 @@ fieldset {
     margin: 0px 0px 50px 0px;
 }
 
+p.button-group-form {
+    float: right;
+    /*padding-right: 10px;*/
+}
+
+p.button-group-form button {
+    margin-right: 10px;
+}
+
+.form-feedback {
+    display: block;
+    width: 130%;
+    height: 60px;
+    position: absolute;
+    z-index: 20;
+    top: -50px;
+    left: -15%;
+    vertical-align: bottom;
+    padding-top: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+    box-shadow:
+        inset 0px 10px 25px rgba(31, 23, 29, 0.6),
+        0px 15px 30px rgba(31,23,29,0.6);
+}
+
+.form-feedback.success {
+    background-color: #3D2F3A;
+}
+.form-feedback.success:hover,
+.form-feedback.success:active {
+    background-color: #3D2F3A;
+}
+
+.form-feedback.error {
+    background-color: #D15F5F;
+}
+.form-feedback.error:hover,
+.form-feedback.error:active {
+    background-color: #E07C7C;
+}
+
+.form-feedback h1 {
+    display: inline-block;
+    position: static;
+    width: auto;
+    height: auto;
+    font-size: 25px;
+    margin-right: 20px;
+    letter-spacing: -1px;
+}
+
+.form-feedback p {
+   display: inline-block;
+}
+
+.form-feedback.error p {
+    color: #EFECE1;
+}
+
 
 /** placeholders **/
 ::-webkit-input-placeholder {
@@ -2555,6 +2617,7 @@ fieldset {
     padding: 2px 9px 4px 10px;
     line-height: 17px;
     letter-spacing: -0.2px;
+    margin-right: 10px;
 }
 
 .wireframe-button.half-scale:after,
