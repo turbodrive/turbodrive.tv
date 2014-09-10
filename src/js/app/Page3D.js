@@ -339,9 +339,7 @@ define(["Sprite3D","../app/pageInfo", "TweenMax"], function(Sprite3D, pageInfo, 
                     if(elementInfo.secondary){
                         this.secondaryElements.push(objectElement);   
                     }
-                    
-                    console.log(">> elementInfo.className >> " + elementInfo.className);
-                    
+                                        
                     if(elementInfo.className != null){
                         addClassName(element3d.domElement, elementInfo.className)
                     }

@@ -1105,9 +1105,11 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
                     element.setRotation(elInfo.rX, elInfo.rY, elInfo.rZ);
                 }
 
-                if (elInfo.opacity !== null) {
-                    element.setOpacity(elInfo.opacity);
-                }
+                /*if (elInfo.opacity !== null) {
+                    if(elInfo.sectionId && currentSectionId == ){
+                    }
+                    //element.setOpacity(elInfo.opacity);
+                }*/
                 
                 element.update();
             }
@@ -1126,6 +1128,7 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
     
     var hideSection = function(sprite3d)
     {
+        console.log("hideSection");
         TweenMax.to(sprite3d.domElement, 0.3, {autoAlpha:0})
         TweenMax.to(sprite3d, 0.5,
                         {z:400,
@@ -1143,13 +1146,14 @@ define(["jquery", "TweenMax", "signals", "../app/pageInfo", "Sprite3D", "../app/
                         {delay:0, z:-100,
                             ease:Power2.easeOut,
                            onUpdate:function(){
-                                      sprite3d.update();                            
+                                      sprite3d.update();                   
                         }})
         
     }
 
-    updateSection = function (page3d, sectionId) {
+    updateSection = function (page3d, sectionId) {        
         
+        if(sectionId == currentSectionId) return;
         
         var sectionsList = page3d.getSections();
         console.log("UDPATE SECTION > " + sectionId + "nbrSections = " + sectionsList.length)

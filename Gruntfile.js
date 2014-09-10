@@ -98,6 +98,13 @@ module.exports = function (grunt) {
                         '.project-player',
                         '.navbar-stealth .highlightContainer',
                         '.highlight',
+                        '::-webkit-input-placeholder',
+                        ':-moz-placeholder',
+                        '::-moz-placeholder',
+                        ':-ms-input-placeholder',
+                        ':focus',
+                        '.form-feedback.success',
+                        '.form-feedback.error'
                         ]
             }
           }

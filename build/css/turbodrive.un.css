@@ -1450,8 +1450,9 @@ li.blog > a {
 .contactPanel .hireMe h1 {
   font-family: "texgyreadventorbold", "helvetica neue", Arial, sans-serif;
   color: #EFECE1;
-  font-size: 47px;
-  margin-bottom: -6px;
+  font-size: 54px;
+  margin-bottom: 0px;
+  width: auto;
 }
 
 .contactPanel .hireMe h2 {
@@ -1460,6 +1461,7 @@ li.blog > a {
   font-size: 24px;
   letter-spacing: -1px;
   font-kerning: auto;
+  width: auto;
 }
 
 a.buttonShare {
@@ -1470,7 +1472,7 @@ a.buttonShare {
   width: 32px;
   height: 32px;
   text-decoration: none;
-  padding: 6px 0px 0px 1px;
+  padding: 6px 0px 0px 0px;
   margin: 0px 1px;
   border: 2px solid transparent;
 }
@@ -1540,6 +1542,7 @@ a.github:active {
 
 .contact > .content > p {
   margin-top: 25px;
+  white-space: nowrap;
 }
 
 .contact {
@@ -2779,7 +2782,78 @@ fieldset {
   margin: 0px 0px 50px 0px;
 }
 
+p.button-group-form {
+  float: right;
+  /*padding-right: 10px;*/
+}
+
+p.button-group-form button {
+  margin-right: 10px;
+}
+
+.form-feedback {
+  cursor: pointer;
+  display: block;
+  width: 130%;
+  height: 60px;
+  position: absolute;
+  z-index: 20;
+  top: -50px;
+  left: -15%;
+  vertical-align: bottom;
+  padding-top: 13px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+  box-shadow: inset 0px 10px 25px rgba(31, 23, 29, 0.6),
+        0px 15px 30px rgba(31,23,29,0.6);
+}
+
+.form-feedback.success {
+  background-color: #3D2F3A;
+}
+
+.form-feedback.success:hover,
+.form-feedback.success:active {
+  background-color: #3D2F3A;
+}
+
+.form-feedback.error {
+  background-color: #D15F5F;
+}
+
+.form-feedback.error:hover,
+.form-feedback.error:active {
+  background-color: #E07C7C;
+}
+
+.form-feedback h1 {
+  display: inline-block;
+  position: static;
+  width: auto;
+  height: auto;
+  font-size: 25px;
+  margin-right: 20px;
+  letter-spacing: -1px;
+}
+
+.form-feedback p {
+  display: inline-block;
+}
+
 /** placeholders **/
+
+::-webkit-input-placeholder {
+  color: #ECECE1;
+  font-size: 10px;
+  font-family: "texgyreadventorbold";
+  font-weight: 300;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 1;
+  outline: none;
+  padding-top: 2px;
+}
 
 :-moz-placeholder {
   color: #ECECE1;
@@ -2868,7 +2942,7 @@ fieldset {
 
 .wireframe-button.half-scale.info-icon,
 .wireframe-button.half-scale.cross-icon {
-  padding-left: 5px;
+  padding-left: 8px;
 }
 
 .info-icon:after {
@@ -2905,6 +2979,7 @@ fieldset {
   padding: 2px 9px 4px 10px;
   line-height: 17px;
   letter-spacing: -0.2px;
+  margin-right: 10px;
 }
 
 .wireframe-button.half-scale:after,
@@ -3002,3 +3077,13 @@ fieldset {
     z-index: 101;
     cursor:pointer;
 }*/
+
+.content-filter {
+  display: block;
+  background-color: rgba(0,0,0,0.75);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 20000;
+  visibility: hidden;
+}

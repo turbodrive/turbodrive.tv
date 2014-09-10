@@ -57,7 +57,10 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         $("#submit_btn").on("click", submitMessage);
         $("#cancel_btn").on("click", cancelForm);
         $("a.email").on("click", clickEmailLinkHandler);
-        $(".contact-form-button").on("click", scrollToForm)
+        $(".contact-form-button").on("click", scrollToForm);
+        
+        $(".content-filter").on("click", header.close);
+        TweenMax.set($(".content-filter"),{autoAlpha:0});
         
         TweenMax.set($(".menu3D"),{height:panelHeight, y:-panelHeight, autoAlpha:1})
         controlMenuState("",0)   
@@ -161,7 +164,7 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
     }
     
     controlMenuState = function (idButton, duration) {
-        
+        hideFormFeedback();
         
         if(currentMenuState == "" && idButton == "") return
         if(idButton == "toggleTimeline"){
@@ -249,10 +252,12 @@ define(["jquery", "TweenMax", "signals"], function ($, TweenMax, signals) {
         }
         
         if(yTarget == -panelHeight){
+            TweenMax.to($(".content-filter"),0.3,{autoAlpha:0});
             header.on.close.dispatch();
             downLightContactPanel()
             isOpen = false;
         }else {
+            TweenMax.to($(".content-filter"),1,{autoAlpha:1, delay:0.3});
             header.on.open.dispatch();
             highlightContactPanel(currentMenuState, duration);
             isOpen = true;
